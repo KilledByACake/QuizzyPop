@@ -1,0 +1,19 @@
+# Visual Studio temporary files
+.vs/
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Binaries and object files
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+*.pdb
+*.dll
+
+# NuGet
+*.nupkg
+[Cc]ache/
+project.assets.json

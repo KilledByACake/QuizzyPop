@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {}
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {}
   },
   "projects": {
-    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
+        "projectUniqueName": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
         "projectName": "QuizzyPop",
-        "projectPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
+        "projectPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
         "packagesPath": "/Users/mathiasjudre/.nuget/packages/",
-        "outputPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop/obj/",
+        "outputPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/mathiasjudre/.nuget/NuGet/NuGet.Config"

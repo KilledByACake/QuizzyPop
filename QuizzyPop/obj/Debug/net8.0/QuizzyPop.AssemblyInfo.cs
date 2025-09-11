@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QuizzyPop")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ffd7285827600d739d2a0cbe5d16c26e5b74c1b7")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+437fe9eb049bae8b527368ffb75fdb01a71edeb2")]
 [assembly: System.Reflection.AssemblyProductAttribute("QuizzyPop")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QuizzyPop")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

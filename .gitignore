@@ -3,7 +3,9 @@
 .idea/
 
 # Visual Studio Code
-.vscode/
+QuizzyPop/.vscode/
+!QuizzyPop/.vscode/launch.json
+!QuizzyPop/.vscode/tasks.json
 
 # Binaries and object files
 [Dd]ebug/

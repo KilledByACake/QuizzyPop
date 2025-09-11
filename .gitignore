@@ -4,6 +4,8 @@
 
 # Visual Studio Code
 .vscode/
+!.vscode/launch.json
+!.vscode/tasks.json
 
 # Binaries and object files
 [Dd]ebug/

@@ -29,3 +29,34 @@
 /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/obj/Debug/net8.0/QuizzyPop.pdb
 /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/obj/Debug/net8.0/QuizzyPop.genruntimeconfig.cache
 /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/obj/Debug/net8.0/ref/QuizzyPop.dll
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\appsettings.Development.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\appsettings.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.staticwebassets.runtime.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.exe
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.deps.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.runtimeconfig.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.dll
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\bin\Debug\net8.0\QuizzyPop.pdb
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.AssemblyInfoInputs.cache
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.AssemblyInfo.cs
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.csproj.CoreCompileInputs.cache
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.MvcApplicationPartsAssemblyInfo.cache
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.RazorAssemblyInfo.cache
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.RazorAssemblyInfo.cs
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.sourcelink.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets.build.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets.development.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets\msbuild.QuizzyPop.Microsoft.AspNetCore.StaticWebAssets.props
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets\msbuild.build.QuizzyPop.props
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.QuizzyPop.props
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.QuizzyPop.props
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\staticwebassets.pack.json
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\scopedcss\bundle\QuizzyPop.styles.css
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\scopedcss\projectbundle\QuizzyPop.bundle.scp.css
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.dll
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\refint\QuizzyPop.dll
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.pdb
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\QuizzyPop.genruntimeconfig.cache
+c:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\obj\Debug\net8.0\ref\QuizzyPop.dll

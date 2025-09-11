@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj": {}
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj": {
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj",
+        "projectUniqueName": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
         "projectName": "QuizzyPop",
-        "projectPath": "c:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj",
-        "packagesPath": "C:\\Users\\Vincent Ngo\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\obj\\",
+        "projectPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/QuizzyPop.csproj",
+        "packagesPath": "/Users/mathiasjudre/.nuget/packages/",
+        "outputPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Vincent Ngo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mathiasjudre/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -61,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

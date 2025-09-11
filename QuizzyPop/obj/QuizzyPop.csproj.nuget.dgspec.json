@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj": {}
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop-1/QuizzyPop/QuizzyPop.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj": {
+    "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop-1/QuizzyPop/QuizzyPop.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj",
+        "projectUniqueName": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop-1/QuizzyPop/QuizzyPop.csproj",
         "projectName": "QuizzyPop",
-        "projectPath": "C:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\QuizzyPop.csproj",
-        "packagesPath": "C:\\Users\\Vincent Ngo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Vincent Ngo\\Downloads\\QuizzyPop\\QuizzyPop\\obj\\",
+        "projectPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop-1/QuizzyPop/QuizzyPop.csproj",
+        "packagesPath": "/Users/mathiasjudre/.nuget/packages/",
+        "outputPath": "/Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/Quizzy Pop Project/QuizzyPop/QuizzyPop-1/QuizzyPop/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Vincent Ngo\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "/Users/mathiasjudre/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
@@ -61,7 +61,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.413/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.414/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

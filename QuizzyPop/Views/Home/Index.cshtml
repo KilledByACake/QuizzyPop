@@ -1,9 +1,22 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Welcome to Quizzy Pop!";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    
-    <h2>Get started with Quizzy pop today!!!!!</h2>
-</div>
+<section class="home-hero">
+    <h1 class="arc-title">WELCOME TO QUIZZY POP!</h1>
+
+    <div class="cloud c1"></div>
+    <div class="cloud c2"></div>
+    <div class="cloud c3"></div>
+    <div class="cloud c4"></div>
+
+    <div class="mascot-wrap">
+        <img src="~/images/QuizzyMascot.png" alt="A blueberry with hands used as a Quizzy Pop Mascot" class="mascot" />
+        <div class="speech">Let’s play and learn together!</div>
+    </div>
+
+    <div class="cta">
+        <a class="btn-cta" asp-controller="Quizzes" asp-action="Index">Take Quiz!</a>
+        <a class="btn-cta" asp-controller="Quizzes" asp-action="Create">Make Quiz!</a>
+    </div>
+</section>

@@ -1,108 +1,89 @@
-html {
-  font-size: 14px;
-}
-
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
-body {
-  margin-bottom: 60px;
-}
-/* global reset */
-* { box-sizing: border-box }
-html, body { height: 100%; margin: 0; font-family: system-ui, 'Segoe UI', Roboto, Arial, sans-serif; }
-.container-body { min-height: 100vh; }
-
-/* Home hero */
+/* --- LAYOUT --- */
 .home-hero {
   position: relative;
   min-height: 100vh;
-  background: #dff3ff;        /* light blue */
+  background: #dff3ff;
   display: grid;
   grid-template-rows: 170px 1fr 160px;
   overflow: hidden;
 }
 
-/* Curved heading via SVG fallback (simple centered) */
-.arc-title {
-  margin: 32px auto 0;
-  width: min(900px, 95vw);
-  text-align: center;
-  font-weight: 800;
-  font-size: clamp(28px, 6vw, 56px);
-  color: #f59e0b;
-  text-shadow: 0 6px 0 rgba(0,0,0,.25);
-  letter-spacing: 4px;
+/* Put clouds behind everything */
+.clouds {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
 }
 
-/* Clouds (CSS blobs) */
+/* Foreground stuff stays above */
+.arc-title, .mascot-wrap, .cta { position: relative; z-index: 2; }
+
+/* --- CURVED TITLE (SVG) --- */
+.arc-title {
+  width: min(900px, 95vw);
+  margin: 24px auto 0;
+  display: block;
+}
+.arc-text {
+  font-weight: 800;
+  font-size: clamp(28px, 6vw, 56px);
+  letter-spacing: 4px;
+  fill: #f59e0b;                  /* orange fill */
+  paint-order: stroke;
+  stroke: rgba(0,0,0,.35);        /* shadow/outline */
+  stroke-width: 8px;
+}
+
+/* --- CLOUD SHAPES --- */
 .cloud {
   position: absolute;
-  background: #eaeef2;
-  width: 260px; height: 120px; border-radius: 60px;
+  width: 260px; height: 120px;
+  background: #ffffff;
+  border-radius: 60px;
   filter: drop-shadow(0 6px 0 rgba(0,0,0,.08));
+  /* animation */
+  animation: cloudFall var(--dur, 22s) linear infinite;
+  /* random-ish sizes/left/offset via nth-child */
 }
+
 .cloud::before, .cloud::after {
-  content: ""; position: absolute; background: inherit; border-radius: 50%;
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
 }
 .cloud::before { width: 120px; height: 120px; top: -40px; left: 30px; }
 .cloud::after  { width: 160px; height: 160px; top: -70px; left: 110px; }
-.c1 { top: 90px; left: 40px; }
-.c2 { top: 140px; right: 60px; }
-.c3 { bottom: 120px; left: 80px; }
-.c4 { bottom: 80px; right: 120px; }
 
-/* Mascot + bubble */
-.mascot-wrap {
-  position: relative;
-  justify-self: center;
-  align-self: end;
-  display: grid;
-  place-items: center;
+/* Give each cloud its own lane, speed, and start offset */
+.clouds .cloud:nth-child(1) { left: 3%;  transform: translateY(-140%); --dur: 24s; animation-delay: -4s; }
+.clouds .cloud:nth-child(2) { left: 18%; transform: translateY(-180%); --dur: 28s; animation-delay: -12s; }
+.clouds .cloud:nth-child(3) { left: 33%; transform: translateY(-160%); --dur: 20s; animation-delay: -6s; }
+.clouds .cloud:nth-child(4) { left: 48%; transform: translateY(-200%); --dur: 26s; animation-delay: -16s; }
+.clouds .cloud:nth-child(5) { left: 63%; transform: translateY(-150%); --dur: 22s; animation-delay: -9s; }
+.clouds .cloud:nth-child(6) { left: 76%; transform: translateY(-190%); --dur: 30s; animation-delay: -2s; }
+.clouds .cloud:nth-child(7) { left: 85%; transform: translateY(-170%); --dur: 25s; animation-delay: -11s; }
+.clouds .cloud:nth-child(8) { left: 92%; transform: translateY(-210%); --dur: 32s; animation-delay: -18s; }
+
+/* Falling with a gentle sideways drift */
+@keyframes cloudFall {
+  0%   { transform: translateY(-220px) translateX(0); opacity: .95; }
+  100% { transform: translateY(120vh) translateX(40px); opacity: .95; }
 }
+
+/* --- MASCOT + BUBBLE + CTAs (unchanged—keep yours) --- */
+.mascot-wrap { position: relative; justify-self: center; align-self: end; display: grid; place-items: center; }
 .mascot { width: min(360px, 70vw); height: auto; filter: drop-shadow(0 10px 0 rgba(0,0,0,.15)); }
-
-.speech {
-  position: absolute;
-  right: -140px; top: -40px;
-  max-width: 260px; background: #fff;
-  padding: 14px 16px; border-radius: 16px; font-weight: 700;
-  box-shadow: 0 8px 0 rgba(0,0,0,.12);
-}
-.speech::after {
-  content: "";
-  position: absolute; left: -16px; top: 38px;
-  width: 0; height: 0; border: 12px solid transparent;
-  border-right-color: white; transform: rotate(20deg);
-}
-
-/* Buttons */
-.cta {
-  display: flex; gap: 24px; justify-content: center; align-items: start; padding-bottom: 48px;
-}
-.btn-cta {
-  display: inline-block;
-  font-size: clamp(18px, 2.2vw, 24px);
-  font-weight: 800; text-decoration: none;
-  padding: 18px 32px; color: #fff; background: #f59e0b;
-  border-radius: 18px; box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset;
-  transition: transform .05s ease-in-out;
-}
+.speech { position: absolute; right: -140px; top: -40px; max-width: 260px; background: #fff; padding: 14px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
+.speech::after { content: ""; position: absolute; left: -16px; top: 38px; width: 0; height: 0; border: 12px solid transparent; border-right-color: white; transform: rotate(20deg); }
+.cta { display: flex; gap: 24px; justify-content: center; align-items: start; padding-bottom: 48px; }
+.btn-cta { display: inline-block; font-size: clamp(18px, 2.2vw, 24px); font-weight: 800; text-decoration: none; padding: 18px 32px; color: #fff; background: #f59e0b; border-radius: 18px; box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset; transition: transform .05s ease-in-out; }
 .btn-cta:active { transform: translateY(3px); box-shadow: 0 6px 0 #b86a00, 0 0 0 4px #fff inset; }
-.btn-cta:focus-visible { outline: 4px solid #1e40af; outline-offset: 2px; }
 
-@media (max-width: 600px) {
-  .speech { right: -10px; top: -70px; }
+/* Accessibility: stop motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cloud { animation: none; }
 }
+

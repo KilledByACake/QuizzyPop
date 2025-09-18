@@ -3,18 +3,39 @@
 }
 
 <section class="home-hero">
-    <h1 class="arc-title">WELCOME TO QUIZZY POP!</h1>
 
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
-    <div class="cloud c4"></div>
+    <!-- Clouds background -->
+    <div class="clouds" aria-hidden="true">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
 
+    <!-- Decorative curved title -->
+    <svg class="arc-title" viewBox="0 0 900 280" aria-hidden="true" width="900" height="280">
+        <defs>
+            <!--  curve the text will follow -->
+            <path id="titlePath" d="M80,220 C300,40 600,40 820,220" />
+        </defs>
+        <text class="arc-text" style="font-size: 2.2rem;">
+            <textPath href="#titlePath" startOffset="50%" text-anchor="middle">
+                WELCOME TO QUIZZY POP!
+            </textPath>
+        </text>
+    </svg>
+
+    <!-- Mascot with speech bubble -->
     <div class="mascot-wrap">
-        <img src="~/images/QuizzyMascot.png" alt="A blueberry with hands used as a Quizzy Pop Mascot" class="mascot" />
+        <img src="~/images/QuizzyMascot.png" alt="Quizzy Pop mascot" class="mascot" />
         <div class="speech">Let’s play and learn together!</div>
     </div>
 
+    <!-- Buttons -->
     <div class="cta">
         <a class="btn-cta" asp-controller="Quizzes" asp-action="Index">Take Quiz!</a>
         <a class="btn-cta" asp-controller="Quizzes" asp-action="Create">Make Quiz!</a>

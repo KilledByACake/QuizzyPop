@@ -18,7 +18,7 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult CreateQuiz()
+     public IActionResult CreateQuiz()
     {
         return View();
     }

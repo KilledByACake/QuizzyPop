@@ -18,12 +18,12 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult CreateQuizIndex()
+    public IActionResult CreateQuiz()
     {
         return View();
     }
 
-    public IActionResult Privacy()
+    public IActionResult TakeQuiz()
     {
         return View();
     }

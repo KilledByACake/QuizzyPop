@@ -105,10 +105,12 @@
   box-shadow: 0 4px 0 rgba(0,0,0,.15);
 }
 .topbar .brand img {
-  width: 44px; height: 44px; object-fit: contain;
-  border-radius: 8px;
-  background: #e6f3ff;
-  padding: 4px;
+    width: 80px;      /* Increase size as needed */
+    height: auto;     /* Maintain aspect ratio */
+    object-fit: contain; /* Ensures image is not cropped */
+    border-radius: 50%;  /* Makes it round if the image isn't already */
+    background: none;    /* Remove any background if present */
+    box-shadow: none;    /* Remove any box-shadow if present */
 }
 .main-nav {
   display: flex; gap: 24px; align-items: center;

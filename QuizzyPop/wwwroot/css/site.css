@@ -8,17 +8,28 @@
   overflow: hidden;
 }
 
-/* Put clouds behind everything */
-.clouds {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  overflow: hidden;
+/* Clouds should be behind everything */
+.create-quiz-page {
+    position: relative; /* Needed for absolute positioning of clouds */
+    background: #dff3ff; /* or your preferred blue */
+    min-height: 100vh;
+    padding-bottom: 48px;
+    overflow: hidden;
 }
 
-/* Foreground stuff stays above */
-.arc-title, .mascot-wrap, .cta { position: relative; z-index: 2; }
+.create-quiz-page .clouds {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Make sure all main content is above clouds */
+.create-quiz-page > *:not(.clouds) {
+    position: relative;
+    z-index: 1;
+}
 
 /* --- CURVED TITLE (SVG) --- */
 .arc-title {

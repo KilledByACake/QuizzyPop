@@ -67,11 +67,12 @@
 }
 .arc-text {
   font-weight: 800;
+  font-family: 'Baby', Arial, sans-serif;
   font-size: clamp(28px, 6vw, 56px);
-  letter-spacing: 4px;
+  letter-spacing: 8px;
   fill: #f59e0b;                  /* orange fill */
   paint-order: stroke;
-  stroke: rgba(0,0,0,.35);        /* shadow/outline */
+  stroke: rgba(77, 73, 73, 0.35);        /* shadow/outline */
   stroke-width: 8px;
 }
 

@@ -1,3 +1,18 @@
+/* --- Custom fonts import --- */
+@font-face {
+  font-family: 'Baby';
+  src: url('/fonts/Baby.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SuperBalloon';
+  src: url('/fonts/Super-Balloon-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* --- LAYOUT --- */
 .home-hero {
   position: relative;

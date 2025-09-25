@@ -1,0 +1,45 @@
+@model QuizzyPop.ViewModels.QuizMetaDataViewModel
+
+<div class="card">
+    <div class="card-title">Quiz Details</div>
+    <div class="form-row">
+        <label asp-for="Title">Title</label>
+        <input asp-for="Title" class="i-text" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="Description">Description</label>
+        <textarea asp-for="Description" class="i-text"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="Category">Category</label>
+        <input asp-for="Category" class="i-text" />
+        <span asp-validation-for="Category" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="Difficulty">Difficulty</label>
+        <select asp-for="Difficulty" class="i-text">
+            <option value="">Select difficulty</option>
+            <option value="Easy">Easy</option>
+            <option value="Medium">Medium</option>
+            <option value="Hard">Hard</option>
+        </select>
+        <span asp-validation-for="Difficulty" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="TimeLimit">Time Limit (minutes)</label>
+        <input asp-for="TimeLimit" type="number" min="0" class="i-text" />
+        <span asp-validation-for="TimeLimit" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="Tags">Tags (comma separated)</label>
+        <input asp-for="Tags" class="i-text" />
+        <span asp-validation-for="Tags" class="text-danger"></span>
+    </div>
+    <div class="form-row">
+        <label asp-for="IsPublic">Publicly Visible?</label>
+        <input asp-for="IsPublic" type="checkbox" />
+    </div>
+    <!-- Add more fields as needed -->
+</div>

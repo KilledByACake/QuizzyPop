@@ -1,3 +1,4 @@
+@model QuizzyPop.ViewModels.QuizMetaDataViewModel
 @{
     ViewData["Title"] = "Create Quiz";
 }
@@ -15,31 +16,7 @@
         <div class="cloud"></div>
     </div>
 
-    <!-- Top bar (page-local, not global) -->
-    <header class="topbar">
-        <a class="brand" asp-controller="Home" asp-action="Index" aria-label="Home">
-            <img src="~/images/QuizzyNoArms.png" alt="logo consiting of a blueberry with eyes" />
-        </a>
-
-        <nav class="main-nav" aria-label="Primary">
-            <a asp-controller="Home" asp-action="Index">HOME</a>
-            <a asp-controller="Quizzes" asp-action="Index">TAKE QUIZ</a>
-            <a class="active" asp-controller="Quizzes" asp-action="Create">MAKE QUIZ</a>
-        </nav>
-
-        <div class="topbar-actions">
-            <button type="button" class="btn btn-save">Save</button>
-            <button type="button" class="btn btn-publish">Publish</button>
-
-            <div class="search">
-                <input type="search" placeholder="Search…" aria-label="Search" />
-            </div>
-
-            <a href="#" class="pill pill-green">Log In</a>
-            <a href="#" class="pill pill-green">Sign Up</a>
-        </div>
-    </header>
-
+   
     <!-- Page title row -->
     <div class="title-row">
         <h1>Create new Quiz</h1>

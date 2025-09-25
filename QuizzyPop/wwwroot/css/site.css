@@ -134,52 +134,108 @@
   padding-bottom: 48px;
 }
 
-/* top bar */
-.topbar {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: center;
-  gap: 16px;
-  padding: 8px 16px;
-  background: #f59e0b;
-  box-shadow: 0 4px 0 rgba(0,0,0,.15);
-}
-.topbar .brand img {
-    width: 80px;      /* Increase size as needed */
-    height: auto;     /* Maintain aspect ratio */
-    object-fit: contain; /* Ensures image is not cropped */
-    border-radius: 50%;  /* Makes it round if the image isn't already */
-    background: none;    /* Remove any background if present */
-    box-shadow: none;    /* Remove any box-shadow if present */
-}
-.main-nav {
-  display: flex; gap: 24px; align-items: center;
-}
-.main-nav a {
-  font-weight: 800;
-  text-decoration: none;
-  color: #fff;
-  text-shadow: 0 3px 0 rgba(0,0,0,.25);
-  letter-spacing: 2px;
-}
-.main-nav a.active { text-decoration: underline; text-underline-offset: 4px; }
-
-.topbar-actions {
-  display: flex; gap: 12px; align-items: center;
-}
-.search input[type="search"]{
-  width: 220px; padding: 8px 12px;
-  border-radius: 20px; border: 2px solid #111;
+/* NAVBAR BASE */
+.navbar {
   background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,.08);
+  box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  position: sticky; top: 0; z-index: 1000;
+}
+.navbar-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-right: 0;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 
-/* log in sign up buttons */
-.pill {
-  padding: 8px 14px; border-radius: 20px; text-decoration: none; font-weight: 700;
-  border: 2px solid #0f3a1a;
-  color: #fff; background: #2e7d32;
+/* Brand */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  font-family: 'SuperBalloon', Arial, sans-serif;
+  font-size: 24px;
+  color: #0b5d8a;
 }
-.pill-green { background: #2e7d32; }
+.navbar-brand img {
+  width: 60px; height: 60px;
+}
+.brand-text {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #0b5d8a;
+}
+
+/* Nav links */
+.navbar-nav {
+  display: flex;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+
+.navbar-nav a {
+  text-decoration: none;
+  font-weight: 700;
+  padding: 0.5rem 0.8rem;
+  border-radius: 10px;
+  color: #0b5d8a;
+}
+.navbar-nav a:hover,
+.navbar-nav a[aria-current="page"] {
+  background: #f0f6ff;
+}
+
+/* Actions (right side) */
+.navbar-actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Search */
+.navbar-search input {
+  padding: 0.4rem 0.8rem;
+  border-radius: 999px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+}
+
+/* Buttons */
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 0.5rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  color: #fff;
+}
+.btn-primary { background: #1ea672; }
+.btn-secondary { background: #6c8cff; }
+.btn:hover { opacity: .9; }
+
+/* Link buttons (log in / sign up) */
+.btn-link {
+  border: 2px solid #1ea672;
+  border-radius: 12px;
+  padding: 0.4rem 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: #1ea672;
+}
+.btn-link:hover { background: rgba(30,166,114,.1); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .navbar-inner { flex-wrap: wrap; }
+  .navbar-nav { flex: 1 1 100%; justify-content: space-around; }
+  .navbar-actions { flex: 1 1 100%; justify-content: flex-end; }
+}
+
 
 /* header row under bar */
 .title-row{
@@ -191,12 +247,15 @@
 /* grid */
 .cq-grid{
   display:grid;
-  grid-template-columns: 1fr 320px;
-  gap: 20px;
-  padding: 12px 16px;
+  grid-template-columns: 1fr 340px; /* slightly narrower sidebar */
+  gap: 32px;                        /* more space between columns */
+  max-width: 900px;                 /* limit overall width */
+  margin: 0 auto;                   /* center on page */
+  padding: 24px 12px;
+  align-items: start;
 }
 @media (max-width: 980px){
-  .cq-grid{ grid-template-columns: 1fr; }
+  .cq-grid{ grid-template-columns: 1fr; max-width: 98vw; gap: 20px; }
   .sidebar{ order:-1; }
 }
 
@@ -205,7 +264,9 @@
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 6px 0 rgba(0,0,0,.08);
-  padding: 18px;
+  padding: 16px 18px;   /* slightly less padding */
+  margin-bottom: 24px;  /* space between stacked cards */
+  max-width: 100%;      /* prevent overflow */
 }
 .card.small { padding: 16px; }
 .card-title{ margin: 0 0 12px 0; font-size: 18px; }

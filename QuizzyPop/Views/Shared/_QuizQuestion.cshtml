@@ -1,0 +1,55 @@
+@model QuizzyPop.ViewModels.QuizQuestionViewModel
+
+<div class="card">
+    <div class="card-title-row">
+        <h2 class="card-title">Question @Model.QuestionNumber</h2>
+    </div>
+    <div class="form-row">
+        <label asp-for="Text">Question Text</label>
+        <input asp-for="Text" class="i-text" />
+        <span asp-validation-for="Text" class="text-danger"></span>
+    </div>
+    <div class="form-row upload-row">
+        <div class="upload-box" role="group" aria-label="Upload image">
+            <input asp-for="Image" type="file" hidden />
+            <label for="Image" class="upload-label">Upload image</label>
+        </div>
+    </div>
+    @* Render options here, e.g. a loop over Model.Options *@
+    @for (int i = 0; i < Model.Options.Count; i++)
+    {
+        <div class="form-row">
+            <label class="sr-only" for="Options_@i">Option @(i+1)</label>
+            <input id="Options_@i" name="Options[@i]" value="@Model.Options[i]" placeholder="Option @(i+1)" class="i-text" />
+        </div>
+    }
+    <div class="form-row">
+        <button type="button" class="link-btn" data-add-option="#q@Model.QuestionNumber-options">Add Option</button>
+    </div>
+    <div class="form-row form-row-2">
+        <div>
+            <label asp-for="Points">Points</label>
+            <input asp-for="Points" class="i-text i-small" inputmode="numeric" />
+        </div>
+        <div>
+            <label asp-for="TimeLimit">Time limit</label>
+            <input asp-for="TimeLimit" class="i-text i-small" placeholder="None" />
+        </div>
+    </div>
+    <div class="form-row">
+        <label asp-for="Explanation">Answer explained:</label>
+        <textarea asp-for="Explanation" rows="3" class="i-text"></textarea>
+    </div>
+    <div class="toggles">
+        <label class="switch">
+            <input asp-for="ShuffleAnswers" type="checkbox" />
+            <span class="slider"></span>
+            <span class="switch-text">Shuffle answers</span>
+        </label>
+        <label class="switch">
+            <input asp-for="Required" type="checkbox" />
+            <span class="slider"></span>
+            <span class="switch-text">Required question</span>
+        </label>
+    </div>
+</div>

@@ -8,8 +8,18 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
+    @{
+        var showNav = !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
+                     && ViewContext.RouteData.Values["action"]?.ToString() == "Index");
+    }
+    @if (showNav)
+    {
+        <partial name="_NavBar" />
+    }
     <div class="container-body">
-        @RenderBody()
+        <main role="main" class="page-body">
+            @RenderBody()
+        </main>
     </div>
 
     @RenderSection("Scripts", required: false)

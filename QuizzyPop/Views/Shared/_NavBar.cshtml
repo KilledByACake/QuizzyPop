@@ -1,0 +1,26 @@
+<header class="navbar">
+    <div class="navbar-inner">
+        <!-- Brand -->
+        <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+            <img src="~/images/QuizzyNoArms.png" alt="Blueberry mascot logo" />
+            <span class="brand-text">QuizzyPop</span>
+        </a>
+
+        <!-- Main navigation -->
+        <nav class="navbar-nav" aria-label="Main navigation">
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Quizzes" asp-action="Index">Take Quiz</a>
+            <a asp-controller="Quizzes" asp-action="Create" aria-current="page">Make Quiz</a>
+        </nav>
+
+        <!-- Right side actions -->
+        <div class="navbar-actions">
+            <form class="navbar-search" role="search">
+                <input type="search" placeholder="Search…" aria-label="Search quizzes" />
+            </form>
+
+            <a href="#" class="btn-link">Log In</a>
+            <a href="#" class="btn-link">Sign Up</a>
+        </div>
+    </div>
+</header>

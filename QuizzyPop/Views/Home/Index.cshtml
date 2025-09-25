@@ -29,15 +29,13 @@
         </text>
     </svg>
 
-    <!-- Mascot with speech bubble -->
-    <div class="mascot-wrap">
-        <img src="~/images/QuizzyMascot.png" alt="Quizzy Pop mascot" class="mascot" />
-        <div class="speech">Let’s play and learn together!</div>
-    </div>
-
-    <!-- Buttons -->
-    <div class="cta">
+    <!-- Buttons and mascot -->
+    <div class="cta-row">
         <a class="btn-cta" asp-controller="Home" asp-action="TakeQuiz">Take Quiz!</a>
+        <div class="mascot-wrap">
+            <img src="~/images/QuizzyBlueberry.png" alt="Quizzy Pop mascot" class="mascot" />
+            <div class="speech">Let’s play and learn together!</div>
+        </div>
         <a class="btn-cta" asp-controller="Home" asp-action="CreateQuiz">Make Quiz!</a>
     </div>
 </section>

@@ -1,4 +1,4 @@
-@model QuizzyPop.ViewModels.QuizMetaDataViewModel
+@model QuizzyPop.ViewModels.CreateQuizViewModel
 @{
     ViewData["Title"] = "Create Quiz";
 }
@@ -161,6 +161,19 @@
             </div>
         </aside>
     </div>
+
+    <div>
+        @await Html.PartialAsync("_QuizMetaData", Model.MetaData)
+    </div>
+    <div>
+        <div id="questions-list">
+            @for (int i = 0; i < Model.Questions.Count; i++)
+            {
+                @await Html.PartialAsync("_QuizQuestion", Model.Questions[i])
+            }
+        </div>
+        <button type="button" id="add-question-btn" class="btn btn-secondary">Add Question</button>
+    </div>
 </section>
 
 @section Scripts {
@@ -179,6 +192,22 @@ document.addEventListener('click', (e) => {
   row.innerHTML = `<label class="sr-only" for="${id}">Option ${count}</label>
                    <input id="${id}" name="Questions[0].Options[]" placeholder="Option ${count}" class="i-text" />`;
   list.appendChild(row);
+});
+
+document.getElementById('add-question-btn').addEventListener('click', function () {
+    const questionsList = document.getElementById('questions-list');
+    const questionCount = questionsList.children.length + 1;
+
+    // Simple template for a new question (for demo/demo purposes)
+    const newQuestionDiv = document.createElement('div');
+    newQuestionDiv.innerHTML = `<div class="card quiz-question-card">
+        <div class="card-title">Question ${questionCount}</div>
+        <div class="form-row">
+            <label>Question Text</label>
+            <input name="Questions[${questionCount - 1}].Text" class="i-text" />
+        </div>
+    </div>`;
+    questionsList.appendChild(newQuestionDiv);
 });
 </script>
 }

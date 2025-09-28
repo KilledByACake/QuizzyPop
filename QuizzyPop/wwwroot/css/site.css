@@ -116,11 +116,22 @@
 /* --- MASCOT + BUBBLE + CTAs --- */
 .mascot-wrap { position: relative; justify-self: center; align-self: end; display: grid; place-items: center; }
 .mascot { width: min(575px, 70vw); height: auto; filter: drop-shadow(0 10px 0 rgba(0,0,0,.15)); }
-.speech { position: absolute; right: -140px; top: -40px; max-width: 260px; background: #fff; padding: 14px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
+.speech { position: absolute; right: -140px; top: 40px;           /* <-- was -40px, now moves bubble lower */    max-width: 260px; background: #fff; padding: 14px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
 .speech::after { content: ""; position: absolute; left: -16px; top: 38px; width: 0; height: 0; border: 12px solid transparent; border-right-color: white; transform: rotate(20deg); }
 .cta { display: flex; gap: 24px; justify-content: center; align-items: start; padding-bottom: 48px; }
-.btn-cta { display: inline-block; font-size: clamp(18px, 2.2vw, 24px); font-weight: 800; text-decoration: none; padding: 18px 25px; color: #fff; background: #f59e0b; border-radius: 180px; box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset; transition: transform .05s ease-in-out; }
-.btn-cta:active { transform: translateY(3px); box-shadow: 0 6px 0 #b86a00, 0 0 0 4px #fff inset; }
+.btn-cta { 
+    display: inline-block;
+    font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 800;
+    text-decoration: none;
+    padding: 18px 25px;
+    color: #fff;
+    background: #f59e0b;
+    border-radius: 180px;
+    box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset;
+    transition: transform .05s ease-in-out;
+    text-align: center; /* <-- Add this line */
+}
 
 /* Accessibility: stop motion for users who prefer reduced motion */
 @media (prefers-reduced-motion: reduce) {

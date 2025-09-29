@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Collections.Generic;
 
 namespace QuizzyPop.ViewModels
 {
@@ -22,5 +23,7 @@ namespace QuizzyPop.ViewModels
         public string Tags { get; set; }
 
         public bool IsPublic { get; set; }
+
+        public List<QuizQuestionViewModel> Questions { get; set; } = new List<QuizQuestionViewModel>();
     }
 }

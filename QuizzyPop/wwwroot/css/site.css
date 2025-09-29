@@ -692,29 +692,3 @@
 
 
 
-.qp-btn { 
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: 2px solid #0a5b8f;
-  background: #fff;
-  color: #0a5b8f;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.qp-btn:hover { background: #0a5b8f; color: #fff; }
-
-.qp-btn--primary {
-  background: #f5a623;
-  color: #fff;
-  border: none;
-}
-.qp-btn--primary:hover { background: #e38f16; }
-
-.qp-btn--secondary {
-  background: #fff;
-  color: #0a5b8f;
-  border: 2px solid #0a5b8f;
-}
-.qp-btn--secondary:hover { background: #0a5b8f; color: #fff; }

@@ -3,7 +3,6 @@
     ViewData["Title"] = "Create Quiz";
 }
 
-
 <section class="create-quiz-page">
     <div class="clouds" aria-hidden="true">
         <div class="cloud"></div>
@@ -16,169 +15,60 @@
         <div class="cloud"></div>
     </div>
 
-   
-    <!-- Page title row -->
     <div class="title-row">
         <h1>Create new Quiz</h1>
-        <div class="title-actions">
-            <button type="button" class="btn btn-save">Save</button>
-            <button type="button" class="btn btn-publish">Publish</button>
-        </div>
     </div>
 
-    <!-- Two-column layout -->
-    <div class="cq-grid">
-        <!-- LEFT: form column -->
-        <div class="form-col">
-            <form asp-controller="Quizzes" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
-                <!-- Quiz info card -->
-                <div class="card">
-                    <h2 class="card-title">Quiz information</h2>
-
-                    <div class="form-row">
-                        <label for="Title">Quiz Title:</label>
-                        <input id="Title" name="Title" type="text" class="i-text" />
-                    </div>
-
-                    <div class="form-row">
-                        <label for="Description">Description</label>
-                        <textarea id="Description" name="Description" rows="2" class="i-text"></textarea>
-                    </div>
-
-                    <div class="form-row form-row-2">
-                        <div>
-                            <label for="Category">Category</label>
-                            <input id="Category" name="Category" type="text" class="i-text" />
-                        </div>
-                        <div>
-                            <label for="Difficulty">Difficulty</label>
-                            <input id="Difficulty" name="Difficulty" type="text" class="i-text" />
-                        </div>
-                    </div>
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+        <div class="cq-grid">
+            <!-- Box 1: Quiz Details -->
+            <div class="card quiz-details">
+                @await Html.PartialAsync("_QuizMetaData", Model)
+            </div>
+            <!-- Box 2: Questions -->
+            <div class="card questions-box">
+                <h2>Questions</h2>
+                <div id="questions" class="stack">
+                    @if (Model.Questions != null && Model.Questions.Count > 0)
+                    {
+                        @for (int i = 0; i < Model.Questions.Count; i++)
+                        {
+                            @await Html.PartialAsync("_QuizQuestion", Model.Questions[i])
+                        }
+                    }
+                    else
+                    {
+                        <p>No questions yet. Click "Add question" to start!</p>
+                    }
                 </div>
-
-                <!-- Question card -->
-                <div class="card">
-                    <div class="card-title-row">
-                        <h2 class="card-title">Question 1</h2>
-                    </div>
-
-                    <div class="form-row">
-                        <label for="Q1Text">Question Text</label>
-                        <input id="Q1Text" name="Questions[0].Text" type="text" class="i-text" />
-                    </div>
-
-                    <div class="form-row upload-row">
-                        <div class="upload-box" role="group" aria-label="Upload image">
-                            <input type="file" id="Q1Image" name="Questions[0].Image" hidden />
-                            <label for="Q1Image" class="upload-label">Upload image</label>
-                        </div>
-                    </div>
-
-                    <div id="q1-options">
-                        <div class="form-row">
-                            <label class="sr-only" for="Q1Opt1">Option 1</label>
-                            <input id="Q1Opt1" name="Questions[0].Options[0]" placeholder="Option 1" class="i-text" />
-                        </div>
-                        <div class="form-row">
-                            <label class="sr-only" for="Q1Opt2">Option 2</label>
-                            <input id="Q1Opt2" name="Questions[0].Options[1]" placeholder="Option 2" class="i-text" />
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <button type="button" class="link-btn" data-add-option="#q1-options">Add Option</button>
-                    </div>
-
-                    <div class="form-row form-row-2">
-                        <div>
-                            <label for="Q1Points">Points</label>
-                            <input id="Q1Points" name="Questions[0].Points" class="i-text i-small" inputmode="numeric" />
-                        </div>
-                        <div>
-                            <label for="Q1Time">Time limit</label>
-                            <input id="Q1Time" name="Questions[0].TimeLimit" class="i-text i-small" placeholder="None" />
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <label for="Q1Explain">Answer explained:</label>
-                        <textarea id="Q1Explain" name="Questions[0].Explanation" rows="3" class="i-text"></textarea>
-                    </div>
-
-                    <div class="toggles">
-                        <label class="switch">
-                            <input type="checkbox" name="Questions[0].ShuffleAnswers" />
-                            <span class="slider"></span>
-                            <span class="switch-text">Shuffle answers</span>
-                        </label>
-
-                        <label class="switch">
-                            <input type="checkbox" name="Questions[0].Required" />
-                            <span class="slider"></span>
-                            <span class="switch-text">Required question</span>
-                        </label>
-                    </div>
+                <div class="add-question-container">
+                    <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
+                        + Add question
+                    </button>
                 </div>
-
-                <!-- bottom publish (mobile-friendly) -->
+            </div>
+            <!-- Box 3: Actions/Sidebar -->
+            <aside class="card sidebar">
+                <h2>Actions</h2>
+                <div class="toggles">
+                    @* Add your slider switches/toggles here *@
+                </div>
                 <div class="publish-bottom">
-                    <button type="submit" class="btn btn-giant">Publish</button>
+                    <button type="submit" name="action" value="save" class="btn btn-save">Save</button>
+                    <button type="submit" name="action" value="publish" class="btn btn-publish">Publish</button>
                 </div>
-            </form>
+            </aside>
         </div>
-
-        <!-- RIGHT: sidebar -->
-        <aside class="sidebar" aria-label="Quiz summary and settings">
-            <div class="card small">
-                <ul class="stats">
-                    <li><span>Total questions</span><strong>1</strong></li>
-                    <li><span>Total points</span><strong>1</strong></li>
-                    <li><span>Estimated time</span><strong>2 min</strong></li>
-                </ul>
-            </div>
-
-            <div class="card small">
-                <div class="settings">
-                    <label class="switch">
-                        <input type="checkbox" name="RandomizeQuestionOrder" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Randomize question order</span>
-                    </label>
-
-                    <label class="switch">
-                        <input type="checkbox" name="AllowBackNavigation" />
-                        <span class="slider"></span>
-                        <span class="switch-text">Allow back navigation</span>
-                    </label>
-
-                    <label class="switch">
-                        <input type="checkbox" name="GiveAwards" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Give awards for right answers</span>
-                    </label>
-                </div>
-            </div>
-        </aside>
-    </div>
+    </form>
 </section>
 
-@section Scripts {
-<script>
-document.addEventListener('click', (e) => {
-  const btn = e.target.closest('[data-add-option]');
-  if (!btn) return;
-  const listSel = btn.getAttribute('data-add-option');
-  const list = document.querySelector(listSel);
-  if (!list) return;
+<template id="question-template">
+  <div class="card question-card" data-index="__INDEX__">
+    <!-- Question template content here -->
+  </div>
+</template>
 
-  const count = list.querySelectorAll('.form-row input.i-text').length + 1;
-  const id = `Q1Opt${count}`;
-  const row = document.createElement('div');
-  row.className = 'form-row';
-  row.innerHTML = `<label class="sr-only" for="${id}">Option ${count}</label>
-                   <input id="${id}" name="Questions[0].Options[]" placeholder="Option ${count}" class="i-text" />`;
-  list.appendChild(row);
-});
-</script>
+@section Scripts {
+    @* Your JavaScript for adding questions goes here *@
 }

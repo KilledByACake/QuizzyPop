@@ -25,6 +25,7 @@
             <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
                 <!-- Quiz info card -->
                 <div class="card">
+                    <h2 class="card-title">Quiz information</h2>
                     @await Html.PartialAsync("_QuizMetaData", Model)
                 </div>
 
@@ -34,7 +35,7 @@
                     <div id="questions">
                         @for (int i = 0; i < Model.Questions.Count; i++)
                         {
-                            @await Html.PartialAsync("_QuizQuestion", Model.Questions[i])
+                            @await Html.PartialAsync("_QuizQuestion", Model.Questions[i], new ViewDataDictionary(ViewData) { { "QuestionNumber", i + 1 } })
                         }
                     </div>
                     <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
@@ -80,11 +81,6 @@
                         <span class="switch-text">Give awards for right answers</span>
                     </label>
                 </div>
-            </div>
-            <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
-                <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
-                    + Add question
-                </button>
             </div>
         </aside>
     </div>

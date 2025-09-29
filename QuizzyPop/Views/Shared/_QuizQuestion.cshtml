@@ -1,8 +1,11 @@
 @model QuizzyPop.ViewModels.QuizQuestionViewModel
 
+@{
+    var questionNumber = ViewData["QuestionNumber"] ?? 1;
+}
 <div class="card">
     <div class="card-title-row">
-        <h2 class="card-title">Question @Model.QuestionNumber</h2>
+        <h2 class="card-title">Question @questionNumber</h2>
     </div>
     <div class="form-row">
         <label asp-for="Text">Question Text</label>
@@ -54,16 +57,3 @@
     </div>
 </div>
 
-<div>
-    <h3>Question @Model.QuestionNumber</h3>
-    <p>@Model.Text</p>
-    <ul>
-        @foreach (var option in Model.Options)
-        {
-            <li>@option</li>
-        }
-    </ul>
-    <p>Points: @Model.Points</p>
-    <p>Time Limit: @Model.TimeLimit</p>
-    <p>Explanation: @Model.Explanation</p>
-</div>

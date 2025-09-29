@@ -53,3 +53,17 @@
         </label>
     </div>
 </div>
+
+<div>
+    <h3>Question @Model.QuestionNumber</h3>
+    <p>@Model.Text</p>
+    <ul>
+        @foreach (var option in Model.Options)
+        {
+            <li>@option</li>
+        }
+    </ul>
+    <p>Points: @Model.Points</p>
+    <p>Time Limit: @Model.TimeLimit</p>
+    <p>Explanation: @Model.Explanation</p>
+</div>

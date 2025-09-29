@@ -19,48 +19,75 @@
         <h1>Create new Quiz</h1>
     </div>
 
-    <form asp-action="Create" method="post">
-        @Html.AntiForgeryToken()
-        <div class="cq-grid">
-            <!-- Box 1: Quiz Details -->
-            <div class="card quiz-details">
-                @await Html.PartialAsync("_QuizMetaData", Model)
-            </div>
-            <!-- Box 2: Questions -->
-            <div class="card questions-box">
-                <h2>Questions</h2>
-                <div id="questions" class="stack">
-                    @if (Model.Questions != null && Model.Questions.Count > 0)
-                    {
+    <div class="cq-grid">
+        <!-- LEFT: form column -->
+        <div class="form-col">
+            <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
+                <!-- Quiz info card -->
+                <div class="card">
+                    @await Html.PartialAsync("_QuizMetaData", Model)
+                </div>
+
+                <!-- Questions card(s) -->
+                <div class="card" style="margin-top:2rem;">
+                    <h2>Questions</h2>
+                    <div id="questions">
                         @for (int i = 0; i < Model.Questions.Count; i++)
                         {
                             @await Html.PartialAsync("_QuizQuestion", Model.Questions[i])
                         }
-                    }
-                    else
-                    {
-                        <p>No questions yet. Click "Add question" to start!</p>
-                    }
+                    </div>
+                    <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
+                        <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
+                            + Add question
+                        </button>
+                    </div>
                 </div>
-                <div class="add-question-container">
-                    <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
-                        + Add question
-                    </button>
+
+                <!-- Publish button at the bottom -->
+                <div class="publish-bottom" style="margin-top:2rem;">
+                    <button type="submit" class="btn btn-giant">Publish</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- RIGHT: sidebar -->
+        <aside class="sidebar" aria-label="Quiz summary and settings">
+            <div class="card small">
+                <ul class="stats">
+                    <li><span>Total questions</span><strong>@Model.Questions.Count</strong></li>
+                    <li><span>Total points</span><strong>1</strong></li>
+                    <li><span>Estimated time</span><strong>2 min</strong></li>
+                </ul>
+            </div>
+            <div class="card small" style="margin-top:1rem;">
+                <div class="settings">
+                    <label class="switch">
+                        <input type="checkbox" name="RandomizeQuestionOrder" checked />
+                        <span class="slider"></span>
+                        <span class="switch-text">Randomize question order</span>
+                    </label>
+
+                    <label class="switch">
+                        <input type="checkbox" name="AllowBackNavigation" />
+                        <span class="slider"></span>
+                        <span class="switch-text">Allow back navigation</span>
+                    </label>
+
+                    <label class="switch">
+                        <input type="checkbox" name="GiveAwards" checked />
+                        <span class="slider"></span>
+                        <span class="switch-text">Give awards for right answers</span>
+                    </label>
                 </div>
             </div>
-            <!-- Box 3: Actions/Sidebar -->
-            <aside class="card sidebar">
-                <h2>Actions</h2>
-                <div class="toggles">
-                    @* Add your slider switches/toggles here *@
-                </div>
-                <div class="publish-bottom">
-                    <button type="submit" name="action" value="save" class="btn btn-save">Save</button>
-                    <button type="submit" name="action" value="publish" class="btn btn-publish">Publish</button>
-                </div>
-            </aside>
-        </div>
-    </form>
+            <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
+                <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
+                    + Add question
+                </button>
+            </div>
+        </aside>
+    </div>
 </section>
 
 <template id="question-template">

@@ -35,19 +35,9 @@ public class HomeController : Controller
         {
             Questions = new List<QuizQuestionViewModel>
             {
-                new QuizQuestionViewModel
-                {
-                    QuestionNumber = 1,
-                    Text = "Sample question?",
-                    Options = new List<string> { "Option 1", "Option 2" },
-                    Points = 1,
-                    TimeLimit = 30,
-                    Explanation = "",
-                    ShuffleAnswers = false,
-                    Required = false
-                }
+                new QuizQuestionViewModel() // Empty question object
             }
         };
-        return View("CreateQuiz", model); // explicitly use CreateQuiz.cshtml
+        return View("CreateQuiz", model);
     }
 }

@@ -126,9 +126,9 @@
     text-decoration: none;
     padding: 18px 25px;
     color: #fff;
-    background: #f59e0b;
+    background: #0F766E;
     border-radius: 180px;
-    box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset;
+    box-shadow: 0 9px 0 #0F766E, 0 0 0 4px #fff inset;
     transition: transform .05s ease-in-out;
     text-align: center; /* <-- Add this line */
 }
@@ -697,10 +697,10 @@
   transition: background 0.2s;
 }
 .qp-btn--primary {
-  background: #f5a623;
+  background: #0F766E;
   color: #fff;
 }
-.qp-btn--primary:hover { background: #e38f16; }
+.qp-btn--primary:hover { background: #0F766E; }
 .qp-btn { background: #fff; color: #0a5b8f; border: 2px solid #0a5b8f; }
 .qp-btn:hover { background: #0a5b8f; color: #fff; }
 

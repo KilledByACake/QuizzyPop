@@ -13,6 +13,13 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Baloo 2';
+  src: url('/fonts/Baloo2-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 /* --- LAYOUT --- */
 .home-hero {
   position: relative;
@@ -70,7 +77,7 @@
   font-family: 'Baby', Arial, sans-serif;
   font-size: clamp(28px, 6vw, 56px);
   letter-spacing: 8px;
-  fill: #f59e0b;                  /* orange fill */
+  fill:#0F766E ;                  /* green fill */
   paint-order: stroke;
   stroke: rgba(255, 255, 255, 0.35);        /* shadow/outline */
   stroke-width: 8px;
@@ -116,7 +123,7 @@
 /* --- MASCOT + BUBBLE + CTAs --- */
 .mascot-wrap { position: relative; justify-self: center; align-self: end; display: grid; place-items: center; }
 .mascot { width: min(575px, 70vw); height: auto; filter: drop-shadow(0 10px 0 rgba(0,0,0,.15)); }
-.speech { position: absolute; right: -140px; top: 40px;           /* <-- was -40px, now moves bubble lower */    max-width: 260px; background: #fff; padding: 14px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
+.speech { position: absolute; right: -140px; top: 40px; font-family: 'Baloo 2', cursive;           /* <-- was -40px, now moves bubble lower */    max-width: 260px; background: #fff; padding: 14px 16px; border-radius: 16px; font-weight: 700; box-shadow: 0 8px 0 rgba(0,0,0,.12); }
 .speech::after { content: ""; position: absolute; left: -16px; top: 38px; width: 0; height: 0; border: 12px solid transparent; border-right-color: white; transform: rotate(20deg); }
 .btn-cta { 
     display: inline-block;
@@ -125,11 +132,12 @@
     text-decoration: none;
     padding: 18px 25px;
     color: #fff;
-    background: #f59e0b;
+    background: #0F766E;
     border-radius: 180px;
-    box-shadow: 0 9px 0 #b86a00, 0 0 0 4px #fff inset;
+    box-shadow: 0 9px 0 #09514a, 0 0 0 4px #fff inset;
     transition: transform .05s ease-in-out;
     text-align: center; /* <-- Add this line */
+    font-family: 'Baloo 2', cursive;
 }
 
 /* Accessibility: stop motion for users who prefer reduced motion */
@@ -172,7 +180,7 @@
   color: #0b5d8a;
 }
 .navbar-brand img {
-  width: 60px; height: 60px;
+  width: 57px; height: 57px;
 }
 .brand-text {
   font-weight: 800;
@@ -298,7 +306,7 @@
 .form-row-2{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
 .i-text{
   padding: 10px 12px;
-  border: 2px solid #f59e0b; border-radius: 6px; background: #fff;
+  border: 2px solid #0F766E; border-radius: 6px; background: #fff;
   font-size: 15px;
 }
 .i-small{ max-width: 160px; }
@@ -325,13 +333,13 @@
 .switch input{ position:absolute; opacity:0; }
 .slider{
   width: var(--w); height: var(--h); border-radius: 999px;
-  background:#f0f0f0; border: 2px solid #f59e0b; position: relative;
+  background:#f0f0f0; border: 2px solid #0F766E; position: relative;
   transition: background .15s ease;
 }
 .slider::after{
   content:""; position:absolute; top: 2px; left: 2px;
   width: calc(var(--h) - 6px); height: calc(var(--h) - 6px);
-  border-radius:50%; background:#f59e0b; transition: transform .15s ease;
+  border-radius:50%; background:#0F766E; transition: transform .15s ease;
 }
 .switch input:checked + .slider{ background:#ffe7c2; }
 .switch input:checked + .slider::after{ transform: translateX(calc(var(--w) - var(--h))); }
@@ -351,7 +359,7 @@
   padding: 10px 18px; box-shadow: 0 4px 0 rgba(0,0,0,.15);
 }
 .btn-giant{
-  background:#f59e0b; font-size: 22px; padding: 18px 32px; border-radius: 24px;
+  background:#0F766E; font-size: 22px; padding: 18px 32px; border-radius: 24px;
   box-shadow: 0 8px 0 rgba(0,0,0,.15);
 }
 
@@ -391,10 +399,10 @@
 /* --- Footer --- */
 /* ===== Wavy Footer (Sky theme) ===== */
 :root{
-  --qp-sky:#eaf7ff;            /* your page sky */
+  --qp-sky:#eaf7ff;            /*  page sky */
   --qp-deep:#0a5b8f;           /* deep blueberry/sea */
   --qp-deeper:#094b77;
-  --qp-accent:#f5a623;         /* your orange buttons */
+  --qp-accent:#0F766E;         /*  green buttons */
   --qp-white:#ffffff;
 }
 
@@ -459,7 +467,7 @@
 }
 
 .footer-nav a:hover {
-    color: #f59e0b;
+    color: #0F766E;
 }
 
 .footer-copy {
@@ -588,7 +596,7 @@
   transition: background 0.2s;
 }
 .qp-btn--primary {
-  background: #f5a623;
+  background: #0F766E;
   color: #fff;
 }
 .qp-btn--primary:hover { background: #e38f16; }
@@ -596,9 +604,18 @@
 .qp-btn:hover { background: #0a5b8f; color: #fff; }
 
 #addQuestionBtn {
-    background-color: orange;
+    background-color: #0F766E;
     color: #fff;
     border: none;
+}
+
+section h1,
+aside h1,
+nav h1,
+article h1 {
+    font-size: 2.25rem; /* or whatever size you prefer */
+    font-weight: 700;
+    margin-bottom: 1rem;
 }
 
 

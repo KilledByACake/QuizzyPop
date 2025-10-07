@@ -16,46 +16,48 @@ namespace QuizzyPop.Controllers
             _logger = logger;
         }
 
-        // -------------------- HOME PAGE --------------------
+        // ==================== HOME PAGE ====================
         public IActionResult Index()
         {
             return View();
         }
 
-        // -------------------- CREATE QUIZ --------------------
+        // ==================== CREATE QUIZ (GET) ====================
         public IActionResult CreateQuiz()
         {
+            // Create a new quiz model with one empty question
             var model = new QuizMetaDataViewModel
             {
                 Questions = new List<QuizQuestionViewModel>
                 {
-                    new QuizQuestionViewModel() // Start med ett tomt spørsmål
+                    new QuizQuestionViewModel()
                 }
             };
+
             return View(model);
         }
 
-        // -------------------- POST: CREATE QUIZ --------------------
+        // ==================== CREATE QUIZ (POST) ====================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create(QuizMetaDataViewModel model)
         {
             if (!ModelState.IsValid)
             {
-                // Valideringsfeil – vis siden igjen
+                // Validation failed — reload the same page with errors
                 return View("CreateQuiz", model);
             }
 
-            // TODO: Lagre quiz til database her senere
+            // TODO: Save quiz to database here later
 
-            // Etter lagring, send brukeren til publisert-siden
+            // After saving, show the “quiz published” page
             return View("QuizPublished", model);
         }
 
-        // -------------------- TAKE QUIZ --------------------
+        // ==================== TAKE QUIZ PAGE ====================
         public IActionResult TakeQuiz()
         {
-            // Eksempeldata – dette vil senere hentes fra databasen
+            // Example quiz data (to be fetched from a database later)
             var quizzes = new List<QuizMetaDataViewModel>
             {
                 new QuizMetaDataViewModel
@@ -75,7 +77,7 @@ namespace QuizzyPop.Controllers
                 new QuizMetaDataViewModel
                 {
                     Title = "Geometry",
-                    Description = "Shapes and formulas quiz",
+                    Description = "Shapes and formulas quiz.",
                     Difficulty = "Medium",
                     Questions = new List<QuizQuestionViewModel>()
                 },
@@ -95,19 +97,18 @@ namespace QuizzyPop.Controllers
                 }
             };
 
-            // Logg til terminal for å bekrefte at metoden kjører
+            // Log confirmation to console for debugging
             Console.WriteLine($"TakeQuiz() called — loaded {quizzes.Count} quizzes");
 
             return View(quizzes);
         }
 
-        // -------------------- START QUIZ --------------------
+        // ==================== START QUIZ ====================
         public IActionResult StartQuiz(string id)
         {
-            // Her kan du senere hente riktig quiz fra database basert på ID
+            // This method will later fetch a specific quiz by its ID
             ViewData["QuizId"] = id;
             return Content($"Starting quiz: {id}");
         }
-
     }
 }

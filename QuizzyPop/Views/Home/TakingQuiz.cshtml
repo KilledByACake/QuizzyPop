@@ -1,0 +1,197 @@
+@model QuizzyPop.ViewModels.TakingQuizViewModel
+
+<section class="taking-quiz-page">
+    <div class="taking-container">
+        <header class="taking-header">
+            <h1>@Model.Title</h1>
+            <p>Question @Model.CurrentQuestionNumber of @Model.TotalQuestions</p>
+        </header>
+
+        <form asp-controller="Home" asp-action="SubmitQuiz" method="post">
+    <input type="hidden" name="Title" value="@Model.Title" />
+    <input type="hidden" name="CurrentQuestionIndex" value="@Model.CurrentQuestionIndex" />
+
+    <div class="quiz-card">
+        <h2>@Model.CurrentQuestion.Text</h2>
+
+        <div class="answers">
+            @for (int i = 0; i < Model.CurrentQuestion.Choices.Count; i++)
+            {
+                <label class="answer-option">
+                    <input type="radio" name="SelectedAnswer" value="@i" required />
+                    <span>@Model.CurrentQuestion.Choices[i]</span>
+                </label>
+            }
+        </div>
+    </div>
+
+    <div class="nav-buttons">
+    @if (Model.HasPrevious)
+    {
+        <button type="submit" name="action" value="previous" class="btn-nav btn-prev">← Previous</button>
+    }
+
+    @if (Model.HasNext)
+    {
+        <button type="submit" name="action" value="next" class="btn-nav btn-next">Next →</button>
+    }
+    else
+    {
+        <button type="submit" name="action" value="finish" class="btn-finish">Finish Quiz 🎉</button>
+    }
+</div>
+
+</form>
+
+    </div>
+</section>
+
+<!-- ===================== STYLES ===================== -->
+<style>
+.taking-quiz-page {
+    background: #d9f1ff;
+    min-height: 85vh;
+    padding: 3rem 2rem 5rem;
+    font-family: 'Baloo 2', system-ui, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+/* === Clouds === */
+.clouds {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    z-index: 0;
+}
+.cloud {
+    position: absolute;
+    background: #fff;
+    border-radius: 50%;
+    opacity: 0.7;
+}
+.cloud:nth-child(1){ width:180px; height:90px; top:15%; left:10%; }
+.cloud:nth-child(2){ width:200px; height:100px; top:35%; left:70%; }
+.cloud:nth-child(3){ width:160px; height:85px; top:65%; left:35%; }
+.cloud:nth-child(4){ width:220px; height:110px; top:75%; left:5%; }
+
+.taking-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* === Header === */
+.taking-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    text-align: center;
+}
+.taking-header .mascot { width: 100px; height: auto; }
+.taking-header h1 { font-size: 2.2rem; color: #004b74; margin-top: 0.5rem; }
+.subtitle { font-size: 1.1rem; color: #ff9900; font-weight: 700; }
+
+/* === Question Card === */
+.quiz-card {
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.question-title {
+    color: #004b74;
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+.question-text {
+    font-size: 1.2rem;
+    color: #111827;
+    margin-bottom: 1.5rem;
+}
+
+/* === Answer Options === */
+.answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+.answer-option {
+    display: flex;
+    align-items: center;
+    background: #f9fafb;
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 600;
+}
+.answer-option:hover {
+    background: #fffef2;
+    border-color: #ff9900;
+}
+.answer-option input {
+    margin-right: 10px;
+    transform: scale(1.3);
+}
+
+/* === Navigation Buttons === */
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.btn-nav,
+.btn-finish {
+    font-family: 'Baloo 2', system-ui, sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* Previous (left side, gray) */
+.btn-prev {
+    background: #9ca3af;
+    color: #fff;
+}
+.btn-prev:hover {
+    background: #b0b6bd;
+    transform: translateY(-2px);
+}
+
+/* Next (right side, orange) */
+.btn-next {
+    background: #ff9900;
+    color: #fff;
+    box-shadow: 0 4px 0 #cc7a00;
+}
+.btn-next:hover {
+    background: #ffae33;
+    transform: translateY(-2px);
+}
+
+/* Finish (green) */
+.btn-finish {
+    background: #10b981;
+    color: #fff;
+    box-shadow: 0 4px 0 #0e8f65;
+}
+.btn-finish:hover {
+    background: #13d198;
+    transform: translateY(-2px);
+}
+</style>

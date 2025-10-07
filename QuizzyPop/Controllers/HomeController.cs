@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
 using QuizzyPop.ViewModels;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace QuizzyPop.Controllers
 {
@@ -25,7 +26,7 @@ namespace QuizzyPop.Controllers
         // ==================== CREATE QUIZ (GET) ====================
         public IActionResult CreateQuiz()
         {
-            // Create a new quiz model with one empty question
+            // Initialize a new quiz model with one empty question
             var model = new QuizMetaDataViewModel
             {
                 Questions = new List<QuizQuestionViewModel>
@@ -48,7 +49,7 @@ namespace QuizzyPop.Controllers
                 return View("CreateQuiz", model);
             }
 
-            // TODO: Save quiz to database here later
+            // TODO: Save quiz to database later
 
             // After saving, show the “quiz published” page
             return View("QuizPublished", model);
@@ -63,7 +64,7 @@ namespace QuizzyPop.Controllers
         // ==================== TAKE QUIZ PAGE ====================
         public IActionResult TakeQuiz()
         {
-            // Example quiz data (to be fetched from a database later)
+            // Example quiz data (will later come from a database)
             var quizzes = new List<QuizMetaDataViewModel>
             {
                 new QuizMetaDataViewModel
@@ -103,18 +104,99 @@ namespace QuizzyPop.Controllers
                 }
             };
 
-            // Log confirmation to console for debugging
-            Console.WriteLine($"TakeQuiz() called — loaded {quizzes.Count} quizzes");
+            _logger.LogInformation($"TakeQuiz() called — loaded {quizzes.Count} quizzes");
 
             return View(quizzes);
         }
 
         // ==================== START QUIZ ====================
-        public IActionResult StartQuiz(string id)
+        public IActionResult StartQuiz(string id, int questionIndex = 0)
         {
-            // This method will later fetch a specific quiz by its ID
-            ViewData["QuizId"] = id;
-            return Content($"Starting quiz: {id}");
+            // Temporary in-memory quiz data (mocked until DB integration)
+            var sampleQuiz = new QuizMetaDataViewModel
+            {
+                Title = id,
+                Questions = new List<QuizQuestionViewModel>
+                {
+                    new QuizQuestionViewModel
+                    {
+                        Text = "What is the capital of France?",
+                        Choices = new List<string>{ "Paris", "Rome", "London", "Madrid" },
+                        CorrectAnswerIndex = 0
+                    },
+                    new QuizQuestionViewModel
+                    {
+                        Text = "Which animal is known as the King of the Jungle?",
+                        Choices = new List<string>{ "Tiger", "Lion", "Elephant", "Bear" },
+                        CorrectAnswerIndex = 1
+                    },
+                    new QuizQuestionViewModel
+                    {
+                        Text = "How many continents are there on Earth?",
+                        Choices = new List<string>{ "5", "6", "7", "8" },
+                        CorrectAnswerIndex = 2
+                    }
+                }
+            };
+
+            var totalQuestions = sampleQuiz.Questions.Count;
+            if (questionIndex < 0) questionIndex = 0;
+            if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
+
+            var model = new TakingQuizViewModel
+            {
+                Title = sampleQuiz.Title,
+                CurrentQuestionIndex = questionIndex,
+                TotalQuestions = totalQuestions,
+                CurrentQuestion = sampleQuiz.Questions[questionIndex]
+            };
+
+            return View("TakingQuiz", model);
+        }
+
+        // ==================== SUBMIT QUIZ ====================
+        [HttpPost]
+        public IActionResult SubmitQuiz(TakingQuizViewModel model, string action)
+        {
+            // Determine navigation logic based on button pressed
+            int nextIndex = model.CurrentQuestionIndex;
+
+            if (action == "next") nextIndex++;
+            else if (action == "previous") nextIndex--;
+            else if (action == "finish")
+            {
+                // TODO: Calculate score and display result page
+                return RedirectToAction("QuizCompleted");
+            }
+
+            // Redirect to the same quiz with updated question index
+            return RedirectToAction("StartQuiz", new { id = model.Title, questionIndex = nextIndex });
+        }
+
+        // ==================== QUIZ COMPLETED PAGE ====================
+        public IActionResult QuizCompleted()
+        {
+            var result = new QuizResultViewModel
+            {
+                QuizTitle = "Animals of Savanna",
+                TotalQuestions = 3,
+                CorrectAnswers = 2,
+                Difficulty = "Easy",
+                FeedbackMessages = new List<string>
+                {
+                    "Great job! You know your animals!",
+                    "Keep practicing geography to score even higher next time!"
+                }
+            };
+
+            return View(result);
+        }
+
+        // ==================== ERROR PAGE ====================
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

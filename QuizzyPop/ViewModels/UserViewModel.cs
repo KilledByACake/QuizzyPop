@@ -2,6 +2,10 @@ using QuizzyPop.Models;
 
 namespace QuizzyPop.ViewModels
 {
+    public class QuizListViewModel
+    {
+        public List<QuizMetaDataViewModel> Quizzes { get; set; } = new();
+    }
     public class ItemsViewModel
     {
         public IEnumerable<User>? Users;

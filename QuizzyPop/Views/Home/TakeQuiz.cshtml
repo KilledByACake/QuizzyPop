@@ -1,4 +1,6 @@
 @model List<QuizzyPop.ViewModels.QuizMetaDataViewModel>
+<p style="color:red; font-weight:bold;">LOADED VIEW: Views/Home/TakeQuiz.cshtml</p>
+
 @{
     ViewData["Title"] = "Take Quiz";
 }
@@ -51,30 +53,26 @@
 
     <!-- Grid med quiz-kort -->
     <div class="qp-grid">
-        @if (Model != null && Model.Count > 0)
+    @if (Model != null && Model.Count > 0)
+    {
+        @foreach (var quiz in Model)
         {
-            @foreach (var quiz in Model)
-            {
-                <article class="qp-card">
-                    <div class="qp-thumb" aria-hidden="true"></div>
-                    <h3 class="qp-title">@quiz.Title</h3>
-                    <p class="qp-meta">Difficulty @quiz.Difficulty?.ToLower()</p>
-                    <p class="qp-meta">@((quiz.Questions?.Count ?? 0)) Questions</p>
-
-                    <a class="qp-cta"
-                       asp-controller="Home"
-                       asp-action="StartQuiz"
-                       asp-route-id="@quiz.Title">
-                        Take quiz
-                    </a>
-                </article>
-            }
+            <article class="qp-card">
+                <div class="qp-thumb"></div>
+                <h3 class="qp-title">@quiz.Title</h3>
+                <p class="qp-meta">Difficulty @quiz.Difficulty</p>
+                <p class="qp-meta">@((quiz.Questions?.Count ?? 0)) Questions</p>
+                <a class="qp-cta" asp-controller="Home" asp-action="StartQuiz" asp-route-id="@quiz.Title">
+                    Take quiz
+                </a>
+            </article>
         }
-        else
-        {
-            <p class="qp-empty">No quizzes available right now.</p>
-        }
-    </div>
+    }
+    else
+    {
+        <p class="qp-empty">No quizzes available right now.</p>
+    }
+</div>
 </section>
 
 <style>

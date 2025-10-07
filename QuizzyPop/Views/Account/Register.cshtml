@@ -1,0 +1,35 @@
+@model dynamic
+
+<section style="position:relative; min-height:100vh; background:#e3f6fd;">
+    <div class="clouds" aria-hidden="true">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
+    <div class="center-card-container">
+        <div class="card shadow-lg"
+             style="min-width:380px; max-width:480px; width:100%; padding:2.5rem 2.5rem 2rem 2.5rem; border-radius:2rem; box-shadow:0 12px 36px rgba(15,118,110,0.16); border: 5px solid #fff;">
+            <h2 class="mb-5 text-center" style="font-weight:900; color:#0F766E; font-size:2.5rem;">Sign Up</h2>
+            <form>
+                <div class="mb-4">
+                    <label for="Email" class="form-label" style="font-size:1.2rem;">Email address</label>
+                    <input type="email" class="form-control form-control-lg" id="Email" name="Email" required style="font-size:1.2rem;">
+                </div>
+                <div class="mb-4">
+                    <label for="Password" class="form-label" style="font-size:1.2rem;">Password</label>
+                    <input type="password" class="form-control form-control-lg" id="Password" name="Password" required style="font-size:1.2rem;">
+                </div>
+                <div class="mb-4">
+                    <label for="ConfirmPassword" class="form-label" style="font-size:1.2rem;">Confirm Password</label>
+                    <input type="password" class="form-control form-control-lg" id="ConfirmPassword" name="ConfirmPassword" required style="font-size:1.2rem;">
+                </div>
+                <button type="submit" class="btn btn-giant">Sign Up</button>
+            </form>
+        </div>
+    </div>
+</section>

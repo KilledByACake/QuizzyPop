@@ -15,7 +15,7 @@ namespace QuizzyPop.ViewModels
         public string Category { get; set; }
 
         [Required]
-        public string Difficulty { get; set; }   
+        public string Difficulty { get; set; }
 
         [Range(0, 600)]
         public int? TimeLimit { get; set; }

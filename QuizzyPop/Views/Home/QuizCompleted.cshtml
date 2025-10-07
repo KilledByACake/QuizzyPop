@@ -42,72 +42,83 @@
     <!-- Actions -->
     <div class="qp-publish__actions">
         <a asp-controller="Home" asp-action="TakeQuiz" class="qp-btn qp-btn--primary">Take another quiz</a>
-        <a asp-controller="Home" asp-action="StartQuiz" asp-route-id="@Model.QuizTitle" class="qp-btn">Retake quiz 🔁</a>
+        <a asp-controller="Home" asp-action="StartQuiz" asp-route-id="@Model.QuizTitle" class="qp-btn">Retake quiz
+            🔁</a>
     </div>
 </section>
 
 <style>
-.qp-publish-success {
-    background: #d9f1ff;
-    min-height: 85vh;
-    padding: 3rem 2rem 5rem;
-    font-family: 'Baloo 2', system-ui, sans-serif;
-    text-align: center;
-}
-.qp-publish__header h1 {
-    font-size: 2.4rem;
-    color: #004b74;
-    margin-bottom: 0.5rem;
-}
-.qp-publish__header p {
-    color: #ff9900;
-    font-weight: 700;
-    font-size: 1.2rem;
-}
-.qp-publish__mascot img {
-    width: 150px;
-    margin: 2rem 0;
-}
-.qp-quiz-card {
-    background: #fff;
-    border-radius: 20px;
-    box-shadow: 0 6px 14px rgba(0,0,0,0.1);
-    padding: 2rem;
-    max-width: 600px;
-    margin: 0 auto;
-}
-.qp-quiz__meta {
-    display: flex;
-    flex-direction: column;
-    gap: .5rem;
-    font-size: 1.1rem;
-    color: #1f2937;
-}
-.qp-feedback ul {
-    margin-top: 1rem;
-    padding-left: 1.5rem;
-    text-align: left;
-}
-.qp-publish__actions {
-    margin-top: 2.5rem;
-}
-.qp-btn {
-    display: inline-block;
-    padding: .8rem 1.6rem;
-    border-radius: 999px;
-    background: #fff;
-    color: #1f2937;
-    text-decoration: none;
-    font-weight: 700;
-    border: 3px solid #ffa726;
-    margin: 0 .5rem;
-}
-.qp-btn--primary {
-    background: #ff9900;
-    color: #fff;
-    box-shadow: 0 4px 0 #cc7a00;
-}
-.qp-btn:hover {
-    filter: brightness(1.05);
-}
+    .qp-publish-success {
+        background: #d9f1ff;
+        min-height: 85vh;
+        padding: 3rem 2rem 5rem;
+        font-family: 'Baloo 2', system-ui, sans-serif;
+        text-align: center;
+    }
+
+    .qp-publish__header h1 {
+        font-size: 2.4rem;
+        color: #004b74;
+        margin-bottom: 0.5rem;
+    }
+
+    .qp-publish__header p {
+        color: #ff9900;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .qp-publish__mascot img {
+        width: 150px;
+        margin: 2rem 0;
+    }
+
+    .qp-quiz-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .qp-quiz__meta {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        font-size: 1.1rem;
+        color: #1f2937;
+    }
+
+    .qp-feedback ul {
+        margin-top: 1rem;
+        padding-left: 1.5rem;
+        text-align: left;
+    }
+
+    .qp-publish__actions {
+        margin-top: 2.5rem;
+    }
+
+    .qp-btn {
+        display: inline-block;
+        padding: .8rem 1.6rem;
+        border-radius: 999px;
+        background: #fff;
+        color: #1f2937;
+        text-decoration: none;
+        font-weight: 700;
+        border: 3px solid #ffa726;
+        margin: 0 .5rem;
+    }
+
+    .qp-btn--primary {
+        background: #ff9900;
+        color: #fff;
+        box-shadow: 0 4px 0 #cc7a00;
+    }
+
+    .qp-btn:hover {
+        filter: brightness(1.05);
+    }
 </style>

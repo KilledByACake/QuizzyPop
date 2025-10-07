@@ -181,16 +181,25 @@ namespace QuizzyPop.Controllers
                 QuizTitle = "Animals of Savanna",
                 TotalQuestions = 3,
                 CorrectAnswers = 2,
-                Difficulty = "Easy",
-                FeedbackMessages = new List<string>
-                {
-                    "Great job! You know your animals!",
-                    "Keep practicing geography to score even higher next time!"
-                }
+                Difficulty = "Easy"
             };
+
+            // Calculate the percentage score
+            double percentage = (double)result.CorrectAnswers / result.TotalQuestions * 100;
+
+            // Choose feedback based on score
+            if (percentage >= 80)
+            {
+                result.FeedbackMessages = new List<string> { "🎉 Great job! You know your stuff!" };
+            }
+            else
+            {
+                result.FeedbackMessages = new List<string> { "💪 Keep practicing to score even higher next time!" };
+            }
 
             return View(result);
         }
+
 
         // ==================== ERROR PAGE ====================
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

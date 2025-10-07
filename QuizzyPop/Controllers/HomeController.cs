@@ -54,6 +54,12 @@ namespace QuizzyPop.Controllers
             return View("QuizPublished", model);
         }
 
+        // ==================== ABOUT PAGE ====================
+        public IActionResult About()
+        {
+            return View();
+        }
+
         // ==================== TAKE QUIZ PAGE ====================
         public IActionResult TakeQuiz()
         {

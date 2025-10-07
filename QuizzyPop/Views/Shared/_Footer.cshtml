@@ -1,4 +1,3 @@
-@* Views/Shared/_Footer.cshtml *@
 <footer class="site-footer">
     <div class="footer-content">
         <div class="footer-brand">
@@ -6,15 +5,15 @@
             <span class="footer-title">Quizzy Pop</span>
         </div>
         <nav class="footer-nav">
-            <a href="/">Home</a>
-            <a href="/Quizzes">Quizzes</a>
-            <a href="/Quizzes/Create">Create Quiz</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Home" asp-action="TakeQuiz">Quizzes</a>
+            <a asp-controller="Home" asp-action="CreateQuiz">Create Quiz</a>
             <a asp-controller="Home" asp-action="About">About</a>
         </nav>
         <div class="footer-copy">
-            <span>Created with <b>.NET</b></span> &mdash; &copy; @DateTime.Now.Year Quizzy Pop. All rights reserved.
+            <span>Created with <b>.NET</b></span> —
+            &copy; @DateTime.Now.Year Quizzy Pop. All rights reserved.
         </div>
     </div>
     <div class="footer-confetti"></div>
 </footer>
-

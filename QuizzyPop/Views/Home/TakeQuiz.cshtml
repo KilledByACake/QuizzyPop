@@ -1,7 +1,272 @@
+@model List<QuizzyPop.ViewModels.QuizMetaDataViewModel>
 @{
     ViewData["Title"] = "Take Quiz";
 }
 
-<h1>@ViewData["Title"]</h1>
+<section class="qp-take">
+    <!-- Tittel + søk -->
+    <div class="qp-topbar">
+        <h1>Explore quizzes</h1>
+        <input class="qp-search" type="search" placeholder="Search by keyword or topic" aria-label="Search quizzes">
+    </div>
 
-<p>Select a quiz with QuizzyPop!</p>
+    <!-- Custom dropdown-filtre -->
+    <div class="qp-filters" aria-label="Filters">
+        <div class="qp-dropdown">
+            <button class="qp-dropdown-btn">Category ▼</button>
+            <ul class="qp-dropdown-menu">
+                <li>Science</li>
+                <li>History</li>
+                <li>Geography</li>
+            </ul>
+        </div>
+
+        <div class="qp-dropdown">
+            <button class="qp-dropdown-btn">Grade level ▼</button>
+            <ul class="qp-dropdown-menu">
+                <li>1–4</li>
+                <li>5–7</li>
+                <li>8–10</li>
+            </ul>
+        </div>
+
+        <div class="qp-dropdown">
+            <button class="qp-dropdown-btn">Popular ▼</button>
+            <ul class="qp-dropdown-menu">
+                <li>Newest</li>
+                <li>Oldest</li>
+                <li>Most played</li>
+            </ul>
+        </div>
+
+        <div class="qp-dropdown">
+            <button class="qp-dropdown-btn">Difficulty ▼</button>
+            <ul class="qp-dropdown-menu">
+                <li>Easy</li>
+                <li>Medium</li>
+                <li>Hard</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Grid med quiz-kort -->
+    <div class="qp-grid">
+        @if (Model != null && Model.Count > 0)
+        {
+            @foreach (var quiz in Model)
+            {
+                <article class="qp-card">
+                    <div class="qp-thumb" aria-hidden="true"></div>
+                    <h3 class="qp-title">@quiz.Title</h3>
+                    <p class="qp-meta">Difficulty @quiz.Difficulty?.ToLower()</p>
+                    <p class="qp-meta">@((quiz.Questions?.Count ?? 0)) Questions</p>
+
+                    <a class="qp-cta"
+                       asp-controller="Home"
+                       asp-action="StartQuiz"
+                       asp-route-id="@quiz.Title">
+                        Take quiz
+                    </a>
+                </article>
+            }
+        }
+        else
+        {
+            <p class="qp-empty">No quizzes available right now.</p>
+        }
+    </div>
+</section>
+
+<style>
+/* === Layout og bakgrunn === */
+.qp-take {
+    background:#d9f1ff;
+    min-height:70vh;
+    padding:32px 40px;
+}
+
+.qp-topbar {
+    display:flex;
+    gap:16px;
+    align-items:center;
+    flex-wrap:wrap;
+}
+
+.qp-topbar h1 {
+    margin:0;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    font-size:28px;
+    font-weight:800;
+    color:#1f2937;
+}
+
+.qp-search {
+    flex:1;
+    min-width:280px;
+    height:48px;
+    border:3px solid #ffa726;
+    border-radius:999px;
+    padding:0 18px;
+    outline:none;
+    background:#fff;
+    font-size:16px;
+    font-family:'Baloo 2', system-ui, sans-serif;
+}
+
+/* === Custom dropdowns === */
+.qp-filters {
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+    margin:14px 0 26px;
+}
+
+.qp-dropdown {
+    position:relative;
+    display:inline-block;
+}
+
+.qp-dropdown-btn {
+    background:#fff;
+    border:3px solid #ffa726;
+    border-radius:999px;
+    padding:10px 22px;
+    font-weight:700;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    font-size:16px;
+    cursor:pointer;
+    color:#1f2937;
+    transition:all 0.2s ease;
+}
+
+.qp-dropdown-btn:hover {
+    background:#fffaf3;
+}
+
+.qp-dropdown.open .qp-dropdown-btn {
+    background:#ffecb3;
+}
+
+/* Dropdown-menyen */
+.qp-dropdown-menu {
+    display:none;
+    position:absolute;
+    top:110%;
+    left:0;
+    background:#fff;
+    border-radius:14px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+    list-style:none;
+    padding:8px 0;
+    margin:0;
+    min-width:180px;
+    z-index:10;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    font-size:15px;
+}
+
+.qp-dropdown.open .qp-dropdown-menu {
+    display:block;
+}
+
+.qp-dropdown-menu li {
+    padding:10px 18px;
+    cursor:pointer;
+    font-weight:600;
+    transition:background 0.15s ease, color 0.15s ease;
+    color:#1f2937;
+}
+
+.qp-dropdown-menu li:hover {
+    background:#fff6e5;
+    color:#d97706;
+}
+
+/* === Quiz-kort (grid) === */
+.qp-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(260px, 1fr));
+    gap:28px;
+}
+
+.qp-card {
+    background:#fff;
+    border-radius:16px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 8px 18px rgba(0,0,0,.08);
+    transition:transform .15s ease, box-shadow .15s ease;
+}
+
+.qp-card:hover {
+    transform:translateY(-2px);
+    box-shadow:0 12px 26px rgba(0,0,0,.12);
+}
+
+.qp-thumb {
+    height:140px;
+    border-radius:12px;
+    background:#e5e7eb;
+    margin-bottom:14px;
+}
+
+.qp-title {
+    font-family:'Baloo 2', system-ui, sans-serif;
+    font-size:22px;
+    font-weight:800;
+    margin:6px 0 4px;
+    color:#111827;
+}
+
+.qp-meta {
+    margin:0;
+    color:#6b7280;
+    font-size:14px;
+}
+
+.qp-cta {
+    display:inline-block;
+    margin-top:12px;
+    padding:12px 20px;
+    border-radius:24px;
+    background:#ff9900;
+    color:#fff;
+    text-decoration:none;
+    font-weight:800;
+    box-shadow:0 4px 0 #cc7a00;
+    font-family:'Baloo 2', system-ui, sans-serif;
+    font-size:16px;
+}
+
+.qp-cta:hover {
+    filter:brightness(1.05);
+}
+
+.qp-empty {
+    color:#374151;
+    font-weight:600;
+    font-family:'Baloo 2', system-ui, sans-serif;
+}
+
+</style>
+
+<script>
+// === Enkel JS for dropdown ===
+document.querySelectorAll('.qp-dropdown-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+        const parent = e.currentTarget.parentElement;
+        // Lukk alle andre
+        document.querySelectorAll('.qp-dropdown').forEach(d => {
+            if (d !== parent) d.classList.remove('open');
+        });
+        parent.classList.toggle('open');
+    });
+});
+
+// Klikk utenfor lukker dropdown
+document.addEventListener('click', e => {
+    if (!e.target.closest('.qp-dropdown')) {
+        document.querySelectorAll('.qp-dropdown').forEach(d => d.classList.remove('open'));
+    }
+});
+</script>

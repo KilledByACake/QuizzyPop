@@ -10,9 +10,4 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.*" />
   </ItemGroup>
 
-  <!-- 👇 Legg til denne delen -->
-  <ItemGroup>
-    <Compile Include="ViewModels\**\*.cs" />
-  </ItemGroup>
-
 </Project>

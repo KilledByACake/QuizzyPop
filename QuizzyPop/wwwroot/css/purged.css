@@ -341,7 +341,7 @@
   width: calc(var(--h) - 6px); height: calc(var(--h) - 6px);
   border-radius:50%; background:#0F766E; transition: transform .15s ease;
 }
-.switch input:checked + .slider{ background:#ffe7c2; }
+.switch input:checked + .slider{ background:#90e3dc; }
 .switch input:checked + .slider::after{ transform: translateX(calc(var(--w) - var(--h))); }
 .switch-text{ font-weight:600; }
 

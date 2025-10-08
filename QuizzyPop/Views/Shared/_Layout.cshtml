@@ -9,6 +9,16 @@
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="clouds" aria-hidden="true">
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+        <div class="cloud"></div>
+    </div>
     @{
         var showNav = !(ViewContext.RouteData.Values["controller"]?.ToString() == "Home"
                      && ViewContext.RouteData.Values["action"]?.ToString() == "Index");

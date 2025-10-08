@@ -21,6 +21,7 @@
 }
 
 /* --- LAYOUT --- */
+/*
 .home-hero {
   position: relative;
   min-height: 100vh;
@@ -29,7 +30,7 @@
   grid-template-rows: 170px 1fr 160px;
   overflow: hidden;
 }
-
+/*
 .home-hero .clouds {
   position: absolute;
   inset: 0;
@@ -42,16 +43,20 @@
   position: relative;
   z-index: 1;
 }
-
+.home-hero {
+  position: relative;
+  z-index: 1;
+}
 /* Clouds should be behind everything */
 .create-quiz-page {
-    position: relative; /* Needed for absolute positioning of clouds */
+    position: relative; 
     background: #dff3ff; 
     min-height: 100vh;
     padding-bottom: 48px;
     overflow: hidden;
+    z-index: 1;
 }
-
+/*
 .create-quiz-page .clouds {
     position: absolute;
     inset: 0;
@@ -61,6 +66,7 @@
 }
 
 /*  all main content is above clouds */
+/*
 .create-quiz-page > *:not(.clouds) {
     position: relative;
     z-index: 1;
@@ -629,6 +635,19 @@ article h1 {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
+}
+.home-hero,
+.create-quiz-page,
+.take-quiz-page,
+.taking-quiz-page,
+.about-page,
+.qp_publish_success,
+.signup-page,
+.login-page {
+    position: relative;
+    z-index: 1;
+    background: #dff3ff;
+    min-height: 100vh;
 }
 
 

@@ -1,0 +1,6 @@
+2025-10-09 12:05:25.250 +02:00 [INF] User profile is available. Using '/Users/mathiasjudre/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-10-09 12:05:25.493 +02:00 [INF] Now listening on: https://localhost:7037
+2025-10-09 12:05:25.494 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-09 12:05:25.496 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-09 12:05:25.497 +02:00 [INF] Hosting environment: Development
+2025-10-09 12:05:25.497 +02:00 [INF] Content root path: /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop

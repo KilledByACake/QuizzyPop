@@ -27,6 +27,9 @@ namespace QuizzyPop.Controllers
         public IActionResult CreateQuiz()
         {
             // Initialize a new quiz model with one empty question
+            _logger.LogInformation("This is an information message.");
+        _logger.LogWarning("This is a warning message");
+        _logger.LogError("This is an error message.");
             var model = new QuizMetaDataViewModel
             {
                 Questions = new List<QuizQuestionViewModel>

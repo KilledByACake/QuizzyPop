@@ -1,0 +1,42 @@
+2025-10-09 11:55:15.570 +02:00 [INF] User profile is available. Using '/Users/mathiasjudre/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-10-09 11:55:15.589 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-09 11:55:15.591 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-09 11:55:15.591 +02:00 [INF] Hosting environment: Development
+2025-10-09 11:55:15.591 +02:00 [INF] Content root path: /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop
+2025-10-09 11:55:18.024 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-09 11:55:18.032 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-09 11:55:18.040 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-09 11:55:18.055 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-09 11:55:18.062 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-09 11:55:18.089 +02:00 [INF] Executed ViewResult - view Index executed in 27.0786ms.
+2025-10-09 11:55:18.092 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 37.1517ms
+2025-10-09 11:55:18.093 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-09 11:55:18.098 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 73.901ms
+2025-10-09 11:55:25.737 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-09 11:55:25.744 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:55:25.751 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-09 11:55:25.753 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-09 11:55:25.802 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 49.5003ms.
+2025-10-09 11:55:25.802 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 50.9873ms
+2025-10-09 11:55:25.802 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:55:25.802 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 66.5674ms
+2025-10-09 11:55:31.354 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-09 11:55:31.358 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:55:31.359 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-09 11:55:31.359 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-09 11:55:31.366 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 7.1375ms.
+2025-10-09 11:55:31.367 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 7.6675ms
+2025-10-09 11:55:31.367 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:55:31.367 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 12.5793ms
+2025-10-09 11:55:34.037 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Account/Login - null null
+2025-10-09 11:55:34.038 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-09 11:55:34.040 +02:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Login() on controller QuizzyPop.Controllers.AccountController (QuizzyPop).
+2025-10-09 11:55:34.042 +02:00 [INF] Executing ViewResult, running view Login.
+2025-10-09 11:55:34.049 +02:00 [INF] Executed ViewResult - view Login executed in 7.925ms.
+2025-10-09 11:55:34.049 +02:00 [INF] Executed action QuizzyPop.Controllers.AccountController.Login (QuizzyPop) in 8.566ms
+2025-10-09 11:55:34.049 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-09 11:55:34.049 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Account/Login - 200 null text/html; charset=utf-8 11.8853ms
+2025-10-09 11:55:34.131 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-09 11:55:34.133 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 2.1237ms
+2025-10-09 11:55:34.134 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-09 11:55:51.420 +02:00 [INF] Application is shutting down...

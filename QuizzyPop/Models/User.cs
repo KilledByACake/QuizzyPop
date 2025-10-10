@@ -1,8 +1,15 @@
 namespace QuizzyPop.Models;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 public class User
 {
-    public int UserId { get; set; }
-    public string Name { get; set; } = string.Empty;
-    public string Address { get; set; } = string.Empty;
+    public int Id { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+
+    public string Role { get; set; } = "student"; 
+    public string? Phone { get; set; }
+    public DateTime? Birthdate { get; set; }
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

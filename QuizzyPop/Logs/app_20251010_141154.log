@@ -1,0 +1,6 @@
+2025-10-10 14:11:54.901 +02:00 [INF] User profile is available. Using 'C:\Users\Vincent Ngo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-10 14:11:54.994 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-10 14:11:54.997 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-10 14:11:54.998 +02:00 [INF] Hosting environment: Development
+2025-10-10 14:11:54.998 +02:00 [INF] Content root path: C:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop
+2025-10-10 14:12:04.233 +02:00 [INF] Application is shutting down...

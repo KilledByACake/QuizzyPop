@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<UserDbContext>(options =>
 {
     options.UseSqlite(
-        builder.Configuration.GetConnectionString("ItemDbContextConnection"));
+        builder.Configuration.GetConnectionString("UserDbContextConnection"));
 });
 
 builder.Services.AddControllersWithViews();

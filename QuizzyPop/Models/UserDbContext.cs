@@ -8,11 +8,9 @@ public class UserDbContext : DbContext
 	{
 		//Database.EnsureCreated();
 	}
-	
-	 protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseLazyLoadingProxies();
-    }
 
 	public DbSet<User> Users { get; set; }
+	public DbSet<Quiz> Quiz { get; set; }
+	public DbSet<Category> Categories { get; set; }
+	public DbSet<Question> Questions { get; set; }
 }

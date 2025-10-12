@@ -442,84 +442,6 @@ body{
         justify-content: center;
     }
 }
-.qp-publish-success {
-  text-align: center;
-  padding: 40px 20px;
-  background: #eaf7ff;
-  min-height: 100vh;
-}
-
-.qp-publish__header h1 {
-  font-size: 2.2rem;
-  margin-bottom: 0.3em;
-  color: #0a5b8f;
-}
-.qp-publish__header p {
-  font-size: 1.2rem;
-  margin-bottom: 1.5em;
-}
-
-.qp-publish__mascot img {
-  width: 120px;
-  margin-bottom: 1.5em;
-}
-
-.qp-quiz-card {
-  background: #fff;
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  max-width: 500px;
-  margin: 0 auto 2em;
-  padding: 20px;
-  text-align: left;
-}
-.qp-quiz-card h2 {
-  margin: 0 0 0.4em;
-  font-size: 1.6rem;
-  color: #0a5b8f;
-}
-.qp-quiz__desc {
-  margin: 0 0 1em;
-  color: #444;
-}
-.qp-quiz__meta {
-  font-size: 0.95rem;
-  color: #555;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.qp-tag {
-  display: inline-block;
-  margin-right: 6px;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: #0a5b8f;
-  color: #fff;
-  font-size: 0.8rem;
-}
-
-.qp-publish__actions {
-  display: flex;
-  justify-content: center;
-  gap: 1em;
-}
-.qp-btn {
-  padding: 10px 20px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.2s;
-}
-.qp-btn--primary {
-  background: #0F766E;
-  color: #fff;
-}
-.qp-btn--primary:hover { background: #e38f16; }
-.qp-btn { background: #fff; color: #0a5b8f; border: 2px solid #0a5b8f; }
-.qp-btn:hover { background: #0a5b8f; color: #fff; }
 
 #addQuestionBtn {
     background-color: #0F766E;
@@ -536,24 +458,12 @@ article h1 {
     margin-bottom: 1rem;
 }
 
-.center-card-container {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    display: block;
-    margin: 0;
-    height: 100vh;
-}
-.center-card-container > .card {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-}
+
 .home-hero,
 .create-quiz-page,
 .take-quiz-page,
 .taking-quiz-page,
 .about-page,
-.qp_publish_success,
 .published-quiz-page,
 .signup-page,
 .login-page {
@@ -580,8 +490,26 @@ article h1 {
     padding: 12px 16px 0 16px;
 }
 
-.title-row h1 {
-    display: none; /* Hide the h1 in title-row since it's now in form-col */
+
+/* CREATE QUIZ FONTS */
+.create-quiz-page {
+    font-family: 'Baloo 2', cursive, sans-serif;
+}
+
+.create-quiz-page h1, 
+.create-quiz-page h2, 
+.create-quiz-page h3 {
+    font-family: 'Baby', Arial, sans-serif;
+}
+
+.card-title {
+    font-family: 'Baby', Arial, sans-serif;
+}
+
+.i-text, 
+.switch-text,
+.btn {
+    font-family: 'Baloo 2', cursive, sans-serif;
 }
 
 

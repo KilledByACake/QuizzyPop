@@ -1,6 +1,5 @@
 namespace QuizzyPop.Models;
 using System;
-using System.ComponentModel.DataAnnotations;
 
 public class User
 {
@@ -12,4 +11,7 @@ public class User
     public string? Phone { get; set; }
     public DateTime? Birthdate { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Quizzes created by the user
+    public List<Quiz> Quizzes { get; set; } = new();
 }

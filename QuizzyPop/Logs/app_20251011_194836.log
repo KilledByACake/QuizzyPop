@@ -1,0 +1,38 @@
+2025-10-11 19:48:36.822 +02:00 [INF] User profile is available. Using 'C:\Users\Vincent Ngo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-11 19:48:36.913 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-11 19:48:36.917 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-11 19:48:36.918 +02:00 [INF] Hosting environment: Development
+2025-10-11 19:48:36.918 +02:00 [INF] Content root path: C:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop
+2025-10-11 19:48:40.028 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-11 19:48:40.170 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-11 19:48:40.246 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-11 19:48:40.327 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-11 19:48:40.403 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-11 19:48:40.660 +02:00 [INF] Executed ViewResult - view Index executed in 282.7183ms.
+2025-10-11 19:48:40.670 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 340.5919ms
+2025-10-11 19:48:40.671 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-11 19:48:40.690 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 667.045ms
+2025-10-11 19:48:42.124 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-11 19:48:42.130 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/images/QuizzyNoArms.png - null null
+2025-10-11 19:48:42.130 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/images/QuizzyBlueberry.png - null null
+2025-10-11 19:48:42.153 +02:00 [INF] The file /images/QuizzyNoArms.png was not modified
+2025-10-11 19:48:42.153 +02:00 [INF] The file /images/QuizzyBlueberry.png was not modified
+2025-10-11 19:48:42.154 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/images/QuizzyBlueberry.png - 304 null image/png 24.1724ms
+2025-10-11 19:48:42.154 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/images/QuizzyNoArms.png - 304 null image/png 24.1721ms
+2025-10-11 19:48:42.246 +02:00 [INF] Sending file. Request path: '/css/purged.css'. Physical path: 'C:\Users\Vincent Ngo\Downloads\QuizzyPop\QuizzyPop\wwwroot\css\purged.css'
+2025-10-11 19:48:42.248 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 200 16209 text/css 124.5166ms
+2025-10-11 19:48:45.470 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baby.ttf - null null
+2025-10-11 19:48:45.474 +02:00 [INF] The file /fonts/Baby.ttf was not modified
+2025-10-11 19:48:45.474 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baby.ttf - 304 null application/x-font-ttf 3.8567ms
+2025-10-11 19:48:54.339 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-11 19:48:54.343 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-11 19:48:54.346 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-11 19:48:54.346 +02:00 [INF] This is an information message.
+2025-10-11 19:48:54.347 +02:00 [WRN] This is a warning message
+2025-10-11 19:48:54.348 +02:00 [ERR] This is an error message.
+2025-10-11 19:48:54.350 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-11 19:48:54.465 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 116.9118ms.
+2025-10-11 19:48:54.466 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 119.8735ms
+2025-10-11 19:48:54.466 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-11 19:48:54.466 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 126.6453ms
+2025-10-11 20:30:24.675 +02:00 [INF] Application is shutting down...

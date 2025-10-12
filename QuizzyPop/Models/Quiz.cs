@@ -17,7 +17,6 @@ public class Quiz
     // Owner of the quiz
     public int UserId { get; set; }
     public User? User { get; set; }
-
     // Questions in the quiz
     public List<Question> Questions { get; set; } = new();
 }

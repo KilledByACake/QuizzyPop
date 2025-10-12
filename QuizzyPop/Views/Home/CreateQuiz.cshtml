@@ -83,5 +83,248 @@
 </template>
 
 @section Scripts {
-    @* Your JavaScript for adding questions goes here *@
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const questionsContainer = document.getElementById('questions');
+    let questionCount = @Model.Questions.Count;
+
+    // Add Question functionality
+    addQuestionBtn.addEventListener('click', function() {
+        questionCount++;
+        
+        const lastQuestion = questionsContainer.querySelector('.question-card:last-child');
+        
+        if (lastQuestion) {
+            const newQuestion = lastQuestion.cloneNode(true);
+            
+            // Clear all input values in the cloned question
+            const inputs = newQuestion.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            
+            // Update the question number in the heading
+            const questionHeading = newQuestion.querySelector('h3');
+            if (questionHeading) {
+                questionHeading.textContent = `Question ${questionCount}`;
+            }
+            
+            // Update all name attributes to have the correct index
+            inputs.forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace(/\[\d+\]/, `[${questionCount - 1}]`);
+                }
+            });
+            
+            // Update any id attributes
+            inputs.forEach(input => {
+                if (input.id) {
+                    input.id = input.id.replace(/_\d+_/, `_${questionCount - 1}_`);
+                }
+            });
+            
+            // Update any for attributes in labels
+            const labels = newQuestion.querySelectorAll('label[for]');
+            labels.forEach(label => {
+                if (label.getAttribute('for')) {
+                    label.setAttribute('for', 
+                        label.getAttribute('for').replace(/_\d+_/, `_${questionCount - 1}_`)
+                    );
+                }
+            });
+            
+            questionsContainer.appendChild(newQuestion);
+            updateQuestionCount();
+            updateMoveButtons();
+            newQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+    
+    // Handle all button clicks with event delegation
+    document.addEventListener('click', function(e) {
+        // Remove question functionality
+        if (e.target.classList.contains('remove-question-btn')) {
+            const questionCard = e.target.closest('.question-card');
+            if (questionCard && questionCount > 1) {
+                questionCard.remove();
+                questionCount--;
+                updateQuestionCount();
+                renumberQuestions();
+                updateMoveButtons();
+            }
+        }
+        
+        // Move Up functionality
+        if (e.target.classList.contains('move-up-btn')) {
+            const questionCard = e.target.closest('.question-card');
+            const previousCard = questionCard.previousElementSibling;
+            if (previousCard) {
+                questionsContainer.insertBefore(questionCard, previousCard);
+                renumberQuestions();
+                updateMoveButtons();
+                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // Move Down functionality
+        if (e.target.classList.contains('move-down-btn')) {
+            const questionCard = e.target.closest('.question-card');
+            const nextCard = questionCard.nextElementSibling;
+            if (nextCard) {
+                questionsContainer.insertBefore(nextCard, questionCard);
+                renumberQuestions();
+                updateMoveButtons();
+                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+    });
+    
+    // Function to update the question count in the sidebar
+    function updateQuestionCount() {
+        const totalQuestionsElement = document.querySelector('.stats li strong');
+        if (totalQuestionsElement) {
+            totalQuestionsElement.textContent = questionCount;
+        }
+    }
+    
+    // Function to renumber all questions after removal or reordering
+    function renumberQuestions() {
+        const questionCards = questionsContainer.querySelectorAll('.question-card');
+        questionCards.forEach((card, index) => {
+            const questionHeading = card.querySelector('h3');
+            if (questionHeading) {
+                questionHeading.textContent = `Question ${index + 1}`;
+            }
+            
+            // Update data-question-index
+            card.setAttribute('data-question-index', index + 1);
+            
+            // Update name attributes
+            const inputs = card.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
+                }
+                if (input.id) {
+                    input.id = input.id.replace(/_\d+_/, `_${index}_`);
+                }
+            });
+            
+            // Update label for attributes
+            const labels = card.querySelectorAll('label[for]');
+            labels.forEach(label => {
+                if (label.getAttribute('for')) {
+                    label.setAttribute('for', 
+                        label.getAttribute('for').replace(/_\d+_/, `_${index}_`)
+                    );
+                }
+            });
+        });
+    }
+    
+    // Function to update move button states
+    function updateMoveButtons() {
+        const questionCards = questionsContainer.querySelectorAll('.question-card');
+        
+        questionCards.forEach((card, index) => {
+            const moveUpBtn = card.querySelector('.move-up-btn');
+            const moveDownBtn = card.querySelector('.move-down-btn');
+            
+            // Disable move up for first question
+            if (moveUpBtn) {
+                moveUpBtn.disabled = (index === 0);
+            }
+            
+            // Disable move down for last question
+            if (moveDownBtn) {
+                moveDownBtn.disabled = (index === questionCards.length - 1);
+            }
+        });
+    }
+    
+    // Initialize move button states
+    updateMoveButtons();
+});
+</script>
 }
+<style>
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.question-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.move-up-btn, .move-down-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    background: #0F766E;  /* Green theme color */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.move-up-btn:hover, .move-down-btn:hover {
+    background: #0F766E;
+    transform: translateY(-1px);
+}
+
+.remove-question-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    background: #ff4757;  /* Red for remove */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.remove-question-btn:hover {
+    background: #ff3742;
+    transform: translateY(-1px);
+}
+
+.move-up-btn:disabled, .move-down-btn:disabled {
+    background: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.move-up-btn:disabled:hover, .move-down-btn:disabled:hover {
+    background: #cccccc;
+    transform: none;
+}
+
+/* Alternative: If you want to match your exact theme colors */
+.move-up-btn, .move-down-btn {
+    background: #0F766E;  /* Blue theme */
+}
+
+.move-up-btn:hover, .move-down-btn:hover {
+    background: #0F766E;
+}
+</style>

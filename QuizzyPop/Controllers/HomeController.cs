@@ -5,6 +5,7 @@ using QuizzyPop.Models;
 using QuizzyPop.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System; // Add this line for DateTime
 
 namespace QuizzyPop.Controllers
 {
@@ -52,10 +53,23 @@ namespace QuizzyPop.Controllers
                 return View("CreateQuiz", model);
             }
 
-            // TODO: Save quiz to database later
+            _logger.LogInformation("Model is valid, setting TempData");
 
-            // After saving, show the “quiz published” page
-            return View("QuizPublished", model);
+            // Store data in TempData to pass to the redirect
+            TempData["QuizTitle"] = model.Title;
+            TempData["QuizDescription"] = model.Description;
+            TempData["QuizCategory"] = model.Category;
+            TempData["QuizDifficulty"] = model.Difficulty;
+            TempData["QuizTimeLimit"] = model.TimeLimit;
+            TempData["QuizTags"] = model.Tags;
+            TempData["QuestionCount"] = model.Questions?.Count ?? 0;
+            TempData["CreatorName"] = "Current User";
+            TempData["QuizId"] = "QZ" + DateTime.Now.Ticks.ToString().Substring(0, 6);
+            
+            _logger.LogInformation("Redirecting to PublishedQuiz");
+            
+            // Redirect instead of returning a view directly
+            return RedirectToAction("PublishedQuiz");
         }
 
         // ==================== ABOUT PAGE ====================
@@ -209,6 +223,74 @@ namespace QuizzyPop.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult PublishedQuiz(string id = null)
+        {
+            _logger.LogInformation("PublishedQuiz GET action called");
+            _logger.LogInformation($"TempData QuizTitle: {TempData["QuizTitle"]}");
+            
+            QuizMetaDataViewModel model;
+            
+            // Check if we're coming from a redirect (after creating a quiz)
+            if (TempData["QuizTitle"] != null)
+            {
+                _logger.LogInformation("Using TempData to build model");
+                
+                // Use the data from TempData (from the Create action)
+                model = new QuizMetaDataViewModel
+                {
+                    Title = TempData["QuizTitle"] as string,
+                    Description = TempData["QuizDescription"] as string,
+                    Category = TempData["QuizCategory"] as string,
+                    Difficulty = TempData["QuizDifficulty"] as string,
+                    TimeLimit = (int)(TempData["QuizTimeLimit"] ?? 0),
+                    Tags = TempData["QuizTags"] as string,
+                    Questions = new List<QuizQuestionViewModel>()
+                };
+                
+                // Add dummy questions based on count from TempData
+                int questionCount = (int)(TempData["QuestionCount"] ?? 1);
+                for (int i = 0; i < questionCount; i++)
+                {
+                    model.Questions.Add(new QuizQuestionViewModel 
+                    { 
+                        Text = $"Question {i + 1}",
+                        Options = new List<string> { "Option A", "Option B", "Option C", "Option D" }
+                    });
+                }
+                
+                ViewBag.CreatorName = TempData["CreatorName"] as string;
+                ViewBag.QuizId = TempData["QuizId"] as string;
+            }
+            else
+            {
+                _logger.LogInformation("Using fallback sample data");
+                
+                // Direct access with ID (fallback for when someone visits the URL directly)
+                model = new QuizMetaDataViewModel
+                {
+                    Title = "Sample Quiz",
+                    Description = "This is a sample quiz",
+                    Category = "General Knowledge",
+                    Difficulty = "Medium",
+                    Questions = new List<QuizQuestionViewModel>
+                    {
+                        new QuizQuestionViewModel 
+                        { 
+                            Text = "Sample Question",
+                            Options = new List<string> { "A", "B", "C", "D" }
+                        }
+                    }
+                };
+                
+                ViewBag.CreatorName = "Sample User";
+                ViewBag.QuizId = id ?? "QZ123456";
+            }
+            
+            _logger.LogInformation($"Returning view with model title: {model.Title}");
+            return View(model);
         }
     }
 }

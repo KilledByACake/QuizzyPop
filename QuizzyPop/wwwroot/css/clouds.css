@@ -1,0 +1,42 @@
+/* --- CLOUD SHAPES --- */
+.cloud {
+  position: absolute;
+  width: 260px; height: 120px;
+  background: #ffffff;
+  border-radius: 60px;
+  opacity: 0.7;
+  filter: drop-shadow(0 6px 0 rgba(0,0,0,.08));
+  /* animation */
+  animation: cloudFall var(--dur, 22s) linear infinite;
+  /* random-ish sizes/left/offset via nth-child */
+}
+
+.cloud::before, .cloud::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+.cloud::before { width: 120px; height: 120px; top: -40px; left: 30px; }
+.cloud::after  { width: 160px; height: 160px; top: -70px; left: 110px; }
+
+/* Give each cloud its own lane, speed, and start offset */
+.clouds .cloud:nth-child(1) { left: 3%;  transform: translateY(-140%); --dur: 24s; animation-delay: -4s; }
+.clouds .cloud:nth-child(2) { left: 18%; transform: translateY(-180%); --dur: 28s; animation-delay: -12s; }
+.clouds .cloud:nth-child(3) { left: 33%; transform: translateY(-160%); --dur: 20s; animation-delay: -6s; }
+.clouds .cloud:nth-child(4) { left: 48%; transform: translateY(-200%); --dur: 26s; animation-delay: -16s; }
+.clouds .cloud:nth-child(5) { left: 63%; transform: translateY(-150%); --dur: 22s; animation-delay: -9s; }
+.clouds .cloud:nth-child(6) { left: 76%; transform: translateY(-190%); --dur: 30s; animation-delay: -2s; }
+.clouds .cloud:nth-child(7) { left: 85%; transform: translateY(-170%); --dur: 25s; animation-delay: -11s; }
+.clouds .cloud:nth-child(8) { left: 92%; transform: translateY(-210%); --dur: 32s; animation-delay: -18s; }
+
+/* Falling with a gentle sideways drift */
+@keyframes cloudFall {
+  0%   { transform: translateY(-220px) translateX(0);  }
+  100% { transform: translateY(120vh) translateX(40px); }
+}
+
+/* Accessibility: stop motion for users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .cloud { animation: none; }
+}

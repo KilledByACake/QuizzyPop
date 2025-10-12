@@ -40,7 +40,6 @@ namespace QuizzyPop.Controllers
         {
             if (ModelState.IsValid)
             {
-                // 🔒 Optional: hash password here before saving
                 _userDbContext.Users.Add(user);
                 await _userDbContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

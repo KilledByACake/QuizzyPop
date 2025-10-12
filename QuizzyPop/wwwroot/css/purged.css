@@ -181,7 +181,7 @@ body{
   display:flex; justify-content:space-between; align-items:center;
   padding: 12px 16px 0 16px;
 }
-.title-row h1 { margin: 0; font-size: 28px; }
+.title-row h1 { margin: 0; font-size: 28px; font-family: 'Baloo 2', Arial, sans-serif; }
 
 /* grid */
 .cq-grid {
@@ -220,7 +220,7 @@ body{
   margin: 0;
 }
 .card.small { padding: 1.2rem; font-size: 0.97rem; }
-.card-title{ margin: 0 0 12px 0; font-size: 18px; }
+.card-title{ margin: 0 0 12px 0; font-size: 18px; font-family: 'Baloo 2', Arial, sans-serif;} 
 .card-title-row{ display:flex; justify-content:space-between; align-items:center; }
 
 /* form elements */
@@ -554,6 +554,7 @@ article h1 {
 .taking-quiz-page,
 .about-page,
 .qp_publish_success,
+.published-quiz-page,
 .signup-page,
 .login-page {
     position: relative;
@@ -561,6 +562,26 @@ article h1 {
     /* background: #dff3ff; */
     min-height: 100vh;
     margin-top: 0 !important;
+}
+
+/* Move h1 above first card instead of in title-row */
+.form-col h1 {
+    margin: 0 0 1.5rem 0;
+    font-size: 28px; 
+    font-family: 'Baby', Arial, sans-serif;
+    color: #0F766E;
+}
+
+/* Hide or reduce the title-row if you're moving the h1 */
+.title-row {
+    display: flex; 
+    justify-content: flex-end; /* Only show right side content */
+    align-items: center;
+    padding: 12px 16px 0 16px;
+}
+
+.title-row h1 {
+    display: none; /* Hide the h1 in title-row since it's now in form-col */
 }
 
 

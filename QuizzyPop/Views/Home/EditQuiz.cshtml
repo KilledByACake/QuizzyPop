@@ -1,0 +1,129 @@
+@model QuizzyPop.ViewModels.QuizMetaDataViewModel
+@{
+    ViewData["Title"] = "Edit Quiz";
+}
+
+<section class="create-quiz-page">
+    <div class="cq-grid">
+        <!-- Main Form Column -->
+        <div class="form-col">
+            <h1>Edit Quiz</h1>
+            
+            <form asp-action="UpdateQuiz" method="post">
+                <!-- Quiz Details Card -->
+                <div class="card">
+                    <h2 class="card-title">Quiz Details</h2>
+                    
+                    <div class="form-row">
+                        <label asp-for="Title">Quiz Title</label>
+                        <input asp-for="Title" class="i-text" placeholder="Enter quiz title" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-row">
+                        <label asp-for="Description">Description</label>
+                        <textarea asp-for="Description" class="i-text" rows="3" 
+                                 placeholder="Describe your quiz"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-row-2">
+                        <div class="form-row">
+                            <label asp-for="Category">Category</label>
+                            <select asp-for="Category" class="i-text">
+                                <option value="">Select category</option>
+                                <option value="General">General Knowledge</option>
+                                <option value="Science">Science</option>
+                                <option value="History">History</option>
+                                <option value="Geography">Geography</option>
+                                <option value="Sports">Sports</option>
+                                <option value="Entertainment">Entertainment</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-row">
+                            <label asp-for="Difficulty">Difficulty</label>
+                            <select asp-for="Difficulty" class="i-text">
+                                <option value="">Select difficulty</option>
+                                <option value="Easy">Easy</option>
+                                <option value="Medium">Medium</option>
+                                <option value="Hard">Hard</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Questions Section -->
+                <div id="questions-container">
+                    @for (var i = 0; i < Model.Questions.Count; i++)
+                    {
+                        <div class="card question-card" data-question-index="@i">
+                            <div class="question-header">
+                                <h3>Question @(i + 1)</h3>
+                                <div class="question-controls">
+                                    <button type="button" class="move-up-btn" title="Move Up">↑</button>
+                                    <button type="button" class="move-down-btn" title="Move Down">↓</button>
+                                    <button type="button" class="remove-question-btn" title="Remove">×</button>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <label asp-for="Questions[i].Text">Question Text</label>
+                                <input asp-for="Questions[i].Text" class="i-text" />
+                                <span asp-validation-for="Questions[i].Text" class="text-danger"></span>
+                            </div>
+
+                            <div class="options-container">
+                                @for (var j = 0; j < Model.Questions[i].Options.Count; j++)
+                                {
+                                    <div class="option-row">
+                                        <input type="radio" 
+                                               name="Questions[@i].CorrectAnswerIndex" 
+                                               value="@j" 
+                                               id="q@(i)a@(j)" 
+                                               @(j == Model.Questions[i].CorrectAnswerIndex ? "checked" : "") />
+                                        <input type="text" 
+                                               asp-for="Questions[i].Options[j]" 
+                                               class="i-text option-text" />
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <button type="button" id="addQuestionBtn" class="btn">Add Question</button>
+
+                <div class="publish-bottom">
+                    <button type="submit" class="btn btn-giant">Save Changes</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="card small">
+                <h2 class="card-title">Quiz Settings</h2>
+                <div class="toggles">
+                    <label class="switch">
+                        <input type="checkbox" checked disabled />
+                        <span class="slider"></span>
+                        <span class="switch-text">Public Quiz</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card small">
+                <div class="card-title-row">
+                    <h2 class="card-title">Quiz Info</h2>
+                </div>
+                <ul class="stats">
+                    <li>
+                        <span>Questions</span>
+                        <strong id="questionCount">@Model.Questions.Count</strong>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+    </div>
+</section>

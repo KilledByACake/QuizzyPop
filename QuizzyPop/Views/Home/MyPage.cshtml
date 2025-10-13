@@ -51,7 +51,7 @@
                         </div>
                         <div class="quiz-item-actions">
                             <button class="btn-action" onclick="showDetails(@i)">Details</button>
-                            <button class="btn-action btn-edit" onclick="editQuiz(@i)">Edit</button>
+                            <button class="btn-action btn-edit" onclick="location.href='@Url.Action("EditQuiz", new { id = i })'">Edit</button>
                             <button class="btn-action btn-delete" onclick="deleteQuiz(@i)">Delete</button>
                         </div>
                     </div>

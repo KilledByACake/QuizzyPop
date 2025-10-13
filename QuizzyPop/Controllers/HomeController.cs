@@ -238,5 +238,29 @@ namespace QuizzyPop.Controllers
             var user = JsonSerializer.Deserialize<User>(userJson);
             return View(user);
         }
+
+        [HttpGet]
+        public IActionResult EditQuiz(string id)
+        {
+            // TODO: In production, fetch the actual quiz from database
+            var model = new QuizMetaDataViewModel
+            {
+                Title = "Sample Quiz",
+                Description = "This is a sample quiz",
+                Category = "Science",
+                Difficulty = "Medium",
+                Questions = new List<QuizQuestionViewModel>
+                {
+                    new QuizQuestionViewModel
+                    {
+                        Text = "What is the capital of France?",
+                        Options = new List<string> { "London", "Paris", "Berlin", "Madrid" },
+                        CorrectAnswerIndex = 1
+                    }
+                }
+            };
+
+            return View(model);
+        }
     }
 }

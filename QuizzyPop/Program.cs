@@ -5,27 +5,20 @@ using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddDbContext<UserDbContext>(options =>
-{
-    options.UseSqlite(
-        builder.Configuration.GetConnectionString("ItemDbContextConnection"));
-});
-
+// Add services to the container.
 builder.Services.AddControllersWithViews();
 
-var loggerConfiguration = new LoggerConfiguration()
-    .MinimumLevel.Information() // levels: Trace< Information < Warning < Erorr < Fatal
-    .WriteTo.File($"Logs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
-
-loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var value) &&
-                            e.Level == LogEventLevel.Information &&
-                            e.MessageTemplate.Text.Contains("Executed DbCommand"));
-
-var logger = loggerConfiguration.CreateLogger();
-builder.Logging.AddSerilog(logger);
+// ADD SESSION SERVICES
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -36,6 +29,9 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+
+// ADD SESSION MIDDLEWARE (IMPORTANT: Must be before UseAuthorization)
+app.UseSession();
 
 app.UseAuthorization();
 

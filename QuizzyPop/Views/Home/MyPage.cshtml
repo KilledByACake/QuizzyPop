@@ -1,0 +1,213 @@
+@model QuizzyPop.Models.User
+
+@{
+    ViewData["Title"] = "My Page - " + (Model.DisplayName ?? Model.Name);
+}
+
+<section class="my-page">
+    <div class="my-page-container">
+        
+        <!-- User Header -->
+        <div class="user-header">
+            <div class="user-avatar">
+                <img src="~/images/mascot.png" alt="User Avatar" class="avatar-img" />
+            </div>
+            <div class="user-info">
+                <h1>@(Model.DisplayName ?? Model.Name)</h1>
+                <p class="username">@@@Model.Name</p>
+                <p class="address">📍 @Model.Address</p>
+                <p class="member-since">Member since @Model.CreatedAt.ToString("MMMM yyyy")</p>
+            </div>
+            <div class="user-actions">
+                <form asp-action="Logout" method="post" style="display: inline;">
+                    <button type="submit" class="btn-logout">Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📝</div>
+                <div class="stat-content">
+                    <h3>@Model.QuizzesCreated</h3>
+                    <p>Quizzes Created</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <h3>@Model.QuizzesTaken</h3>
+                    <p>Quizzes Taken</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🏆</div>
+                <div class="stat-content">
+                    <h3>@((Model.QuizzesTaken > 0 ? (int)((Model.QuizzesCreated / (double)Model.QuizzesTaken) * 100) : 0))%</h3>
+                    <p>Success Rate</p>
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-icon">🆔</div>
+                <div class="stat-content">
+                    <h3>#@Model.UserId</h3>
+                    <p>User ID</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Details Card -->
+        <div class="user-details">
+            <h2>Account Details</h2>
+            <div class="details-card">
+                <div class="detail-row">
+                    <span class="detail-label">Full Name:</span>
+                    <span class="detail-value">@Model.Name</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Display Name:</span>
+                    <span class="detail-value">@(Model.DisplayName ?? "Not set")</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Address:</span>
+                    <span class="detail-value">@Model.Address</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">User ID:</span>
+                    <span class="detail-value">#@Model.UserId</span>
+                </div>
+                <div class="detail-row">
+                    <span class="detail-label">Member Since:</span>
+                    <span class="detail-value">@Model.CreatedAt.ToString("MMMM dd, yyyy")</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2>Quick Actions</h2>
+            <div class="action-grid">
+                <a href="@Url.Action("CreateQuiz")" class="action-card">
+                    <div class="action-icon">➕</div>
+                    <h3>Create Quiz</h3>
+                    <p>Start building a new quiz</p>
+                </a>
+                
+                <a href="@Url.Action("Index")" class="action-card">
+                    <div class="action-icon">🎮</div>
+                    <h3>Take Quiz</h3>
+                    <p>Browse available quizzes</p>
+                </a>
+                
+                <a href="#" class="action-card">
+                    <div class="action-icon">📊</div>
+                    <h3>View Results</h3>
+                    <p>See your quiz performance</p>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div class="activity-list">
+                <div class="activity-item">
+                    <div class="activity-icon">📝</div>
+                    <div class="activity-content">
+                        <p><strong>Created a quiz</strong> "Sample Math Quiz"</p>
+                        <span class="activity-time">2 hours ago</span>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🎯</div>
+                    <div class="activity-content">
+                        <p><strong>Took a quiz</strong> "Science Trivia"</p>
+                        <span class="activity-time">1 day ago</span>
+                    </div>
+                </div>
+                
+                <div class="activity-item">
+                    <div class="activity-icon">🏆</div>
+                    <div class="activity-content">
+                        <p><strong>Achieved</strong> 95% on "History Quiz"</p>
+                        <span class="activity-time">3 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<style>
+/* All the existing CSS from before, plus these additions: */
+
+.username {
+    color: #666;
+    font-weight: 600;
+    margin: 0 0 0.25rem 0;
+}
+
+.address {
+    color: #666;
+    font-size: 0.9rem;
+    margin: 0 0 0.25rem 0;
+}
+
+.member-since {
+    color: #888;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+/* User Details Card */
+.user-details {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.08);
+    padding: 2rem;
+}
+
+.user-details h2 {
+    font-family: 'Baby', Arial, sans-serif;
+    color: #0F766E;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.details-card {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.detail-row:last-child {
+    border-bottom: none;
+}
+
+.detail-label {
+    font-weight: 700;
+    color: #0F766E;
+}
+
+.detail-value {
+    color: #333;
+    font-weight: 600;
+}
+
+/* Keep all the other existing CSS styles from the previous MyPage view */
+/* ... (rest of the CSS remains the same) ... */
+</style>

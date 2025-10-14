@@ -45,6 +45,8 @@ body {
 }
 
 main {
+    position: relative;
+    z-index: 1;  /* Keep content above clouds */
     flex: 1 0 auto;
 }
 
@@ -150,6 +152,7 @@ main {
     font-size: 1rem;
     border: none;
     box-shadow: none;
+    z-index: 1000;
 }
 
 /* Footer Content Layout */
@@ -264,6 +267,11 @@ main {
         flex-wrap: wrap;
         justify-content: center;
     }
+}
+
+.container-body {
+    position: relative;
+    z-index: 1;
 }
 
 

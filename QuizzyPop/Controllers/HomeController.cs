@@ -255,27 +255,48 @@ namespace QuizzyPop.Controllers
         }
 
         [HttpGet]
-        public IActionResult EditQuiz(string id)
+        public IActionResult EditQuiz(int id)
         {
-            // TODO: In production, fetch the actual quiz from database
-            var model = new QuizMetaDataViewModel
+            // TODO: Backend Implementation Required
+            // 1. Use the 'id' parameter to fetch the quiz and its questions from the database
+            // 2. Include all quiz data:
+            //    - Quiz metadata (title, description, etc.)
+            //    - All questions with their complete data
+            //    - Correct answer indices
+            //    - Points and time limits
+            //    - Any quiz-specific settings
+            // 3. Map the database entities to QuizQuestionViewModel
+            // 4. Ensure all form fields are populated with existing data
+            // 5. Consider adding audit info (last edited, created by, etc.)
+            
+            // Example of expected data structure:
+            var questions = new List<QuizQuestionViewModel>
             {
-                Title = "Sample Quiz",
-                Description = "This is a sample quiz",
-                Category = "Science",
-                Difficulty = "Medium",
-                Questions = new List<QuizQuestionViewModel>
+                new QuizQuestionViewModel
                 {
-                    new QuizQuestionViewModel
-                    {
-                        Text = "What is the capital of France?",
-                        Options = new List<string> { "London", "Paris", "Berlin", "Madrid" },
-                        CorrectAnswerIndex = 1
-                    }
+                    Text = "Sample Question 1",
+                    Choices = new List<string> { "Option 1", "Option 2", "Option 3", "Option 4" },
+                    CorrectAnswerIndex = 0,
+                    Points = 10,
+                    TimeLimit = 30,
+                    Required = true,
+                    ShuffleAnswers = false,
+                    Explanation = "Sample explanation"
                 }
             };
 
-            return View(model);
+            return View(questions);
+        }
+
+        [HttpPost]
+        public IActionResult EditQuiz(List<QuizQuestionViewModel> questions)
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO: Save changes to database
+                return RedirectToAction("Index");
+            }
+            return View(questions);
         }
 
         [HttpPost]

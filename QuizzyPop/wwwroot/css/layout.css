@@ -118,16 +118,16 @@ main {
 
 /* Navigation Actions (Login/Signup buttons) */
 .navbar-link {
-    border: 2px solid var(--qp-primary);
-    border-radius: var(--qp-radius-md);
-    padding: var(--qp-space-xs) var(--qp-space-md);
+    border: 2px solid #1ea672;
+    border-radius: 12px;
+    padding: 0.4rem 0.8rem;
     font-weight: 700;
     text-decoration: none;
-    color: var(--qp-primary);
+    color: #1ea672;
 }
 
 .navbar-link:hover {
-    background: color-mix(in srgb, var(--qp-primary) 10%, transparent);
+    background: rgba(30, 166, 114, 0.1);
 }
 
 /* Right-side Actions (Search, Login) */
@@ -138,6 +138,19 @@ main {
     gap: var(--qp-space-sm);
 }
 
+/* Link buttons (log in / sign up) */
+.btn-link {
+    border: 2px solid #1ea672;
+    border-radius: 12px;
+    padding: 0.4rem 0.8rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: #1ea672;
+}
+
+.btn-link:hover {
+    background: rgba(30, 166, 114, 0.1);
+}
 
 /* ===============================
    FOOTER SECTION

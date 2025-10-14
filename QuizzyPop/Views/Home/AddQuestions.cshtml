@@ -17,7 +17,7 @@
                 <div class="question-controls">
                     <button type="button" class="move-up-btn" title="Move question up">↑</button>
                     <button type="button" class="move-down-btn" title="Move question down">↓</button>
-                    <button type="button" class="remove-question-btn" title="Remove question">×</button>
+                    <button type="button" class="remove-question-btn" title="Remove question">✕</button>
                 </div>
             </div>
 
@@ -96,7 +96,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const addQuestionBtn = document.getElementById('addQuestionBtn');
     const questionsContainer = document.getElementById('questions');
-    let questionCount = 1;  // Start with 1 since we have one question
+    let questionCount = 1;
 
     // Add Question functionality
     addQuestionBtn.addEventListener('click', function() {
@@ -148,58 +148,79 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             
             questionsContainer.appendChild(newQuestion);
-            updateQuestionCount();
             updateMoveButtons();
             newQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     });
     
-    // Update button states function
-    function updateAllButtonStates() {
-        const allCards = document.querySelectorAll('.quiz-card');
-        allCards.forEach((card, index) => {
-            const upBtn = card.querySelector('.move-up-btn');
-            const downBtn = card.querySelector('.move-down-btn');
-            
-            // First question can't move up
-            if(upBtn) upBtn.classList.toggle('active', index > 0);
-            
-            // Last question can't move down
-            if(downBtn) downBtn.classList.toggle('active', index < allCards.length - 1);
-        });
-    }
-    
-    // Initialize button states
-    updateAllButtonStates();
-    
-    // Delegate click events for move/remove buttons
+    // Handle all button clicks with event delegation
     document.addEventListener('click', function(e) {
-        if (e.target.classList.contains('move-up-btn') && e.target.classList.contains('active')) {
-            const currentCard = e.target.closest('.quiz-card');
-            const previousCard = currentCard.previousElementSibling;
-            if (previousCard && previousCard.classList.contains('quiz-card')) {
-                currentCard.parentNode.insertBefore(currentCard, previousCard);
-                updateAllButtonStates();
-            }
-        }
-        
-        if (e.target.classList.contains('move-down-btn') && e.target.classList.contains('active')) {
-            const currentCard = e.target.closest('.quiz-card');
-            const nextCard = currentCard.nextElementSibling;
-            if (nextCard && nextCard.classList.contains('quiz-card')) {
-                currentCard.parentNode.insertBefore(nextCard, currentCard);
-                updateAllButtonStates();
-            }
-        }
-        
+        // Remove question functionality
         if (e.target.classList.contains('remove-question-btn')) {
-            const currentCard = e.target.closest('.quiz-card');
-            if (document.querySelectorAll('.quiz-card').length > 1) {
-                currentCard.remove();
-                updateAllButtonStates();
+            const questionCard = e.target.closest('.quiz-card');
+            if (questionCard && questionCount > 1) {
+                questionCard.remove();
+                questionCount--;
+                renumberQuestions();
+                updateMoveButtons();
+            }
+        }
+        
+        // Move Up functionality
+        if (e.target.classList.contains('move-up-btn')) {
+            const questionCard = e.target.closest('.quiz-card');
+            const previousCard = questionCard.previousElementSibling;
+            if (previousCard) {
+                questionsContainer.insertBefore(questionCard, previousCard);
+                renumberQuestions();
+                updateMoveButtons();
+                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // Move Down functionality
+        if (e.target.classList.contains('move-down-btn')) {
+            const questionCard = e.target.closest('.quiz-card');
+            const nextCard = questionCard.nextElementSibling;
+            if (nextCard) {
+                questionsContainer.insertBefore(nextCard, questionCard);
+                renumberQuestions();
+                updateMoveButtons();
+                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         }
     });
+    
+    // Function to renumber all questions after removal or reordering
+    function renumberQuestions() {
+        const questionCards = questionsContainer.querySelectorAll('.quiz-card');
+        questionCards.forEach((card, index) => {
+            const questionHeading = card.querySelector('h3');
+            if (questionHeading) {
+                questionHeading.textContent = `Question ${index + 1}`;
+            }
+        });
+    }
+    
+    // Function to update move button states
+    function updateMoveButtons() {
+        const questionCards = questionsContainer.querySelectorAll('.quiz-card');
+        questionCards.forEach((card, index) => {
+            const moveUpBtn = card.querySelector('.move-up-btn');
+            const moveDownBtn = card.querySelector('.move-down-btn');
+            
+            if (moveUpBtn) {
+                moveUpBtn.disabled = (index === 0);
+            }
+            
+            if (moveDownBtn) {
+                moveDownBtn.disabled = (index === questionCards.length - 1);
+            }
+        });
+    }
+    
+    // Initialize move button states
+    updateMoveButtons();
 });
 </script>
 }
@@ -256,46 +277,28 @@ document.addEventListener('DOMContentLoaded', function() {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: var(--qp-space-lg);
+    padding-bottom: var(--qp-space-sm);
     border-bottom: 1px solid var(--qp-gray-200);
+    position: relative;
+}
+
+.question-header h3 {
+    font-family: var(--qp-font-special);
+    color: var(--qp-deep);
+    margin: 0;
 }
 
 .question-controls {
     display: flex;
     gap: 0.5rem;
+    position: relative;
+    z-index: 2;
 }
 
 /* Control Buttons */
 .move-up-btn, 
-.move-down-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    border: none;
-    border-radius: var(--qp-radius-md);
-    transition: all 0.2s ease;
-    color: var(--qp-white);
-    background: var(--qp-gray-300);  /* Default disabled state */
-    cursor: not-allowed;
-}
-
-.move-up-btn.active, 
-.move-down-btn.active {
-    background: var(--qp-primary);
-    cursor: pointer;
-}
-
-.move-up-btn.active:hover, 
-.move-down-btn.active:hover {
-    transform: translateY(-2px);
-    background: var(--qp-primary-dark);
-}
-
+.move-down-btn,
 .remove-question-btn {
     width: 32px;
     height: 32px;
@@ -305,15 +308,38 @@ document.addEventListener('DOMContentLoaded', function() {
     font-weight: bold;
     font-size: 16px;
     border: none;
-    border-radius: var(--qp-radius-md);
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
     transition: all 0.2s ease;
-    color: var(--qp-white);
-    background: var(--qp-error);
+}
+
+.move-up-btn, 
+.move-down-btn {
+    background: #0F766E;  /* Green theme color */
+}
+
+.move-up-btn:disabled, 
+.move-down-btn:disabled {
+    background: #cccccc;
+    color: #888888;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.remove-question-btn {
+    background: #ff4757;  /* Red for remove */
+}
+
+.move-up-btn:hover:not(:disabled), 
+.move-down-btn:hover:not(:disabled) {
+    background: #0F766E;
+    transform: translateY(-1px);
 }
 
 .remove-question-btn:hover {
-    background: var(--qp-error-dark);
-    transform: translateY(-2px);
+    background: #ff3742;
+    transform: translateY(-1px);
 }
 
 /* Form Styling */
@@ -394,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function() {
 .btn-next, 
 .btn-prev,
 .btn-publish {
-    font-family: var(--qp-font-special);
+    font-family: var(--qp-font-main);
     font-weight: 700;
     font-size: 1rem;
     border: none;

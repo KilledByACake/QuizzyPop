@@ -21,8 +21,31 @@
     font-weight: normal;
     font-style: normal;
 }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    width: 100%;
+}
+
 body {
     background-color: var(--qp-sky);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Page wrapper to ensure footer sticks to bottom */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+main {
+    flex: 1 0 auto;
 }
 
 /* ===============================
@@ -38,11 +61,11 @@ body {
     z-index: 1000;
 }
 
+/* Navbar Inner Container */
 .navbar-inner {
     max-width: 1200px;
-    margin: 0 auto;
-    margin-right: 0;
-    padding: var(--qp-space-sm) var(--qp-space-md);
+    margin: 0 auto;  /* Remove margin-right: 0 */
+    padding: var(--qp-space-sm) var(--qp-space-xl);  /* Match footer padding */
     display: flex;
     align-items: center;
     gap: var(--qp-space-md);
@@ -132,7 +155,9 @@ body {
 /* Footer Content Layout */
 .footer-content {
     max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 var(--qp-space-xl);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -140,10 +165,11 @@ body {
     gap: var(--qp-space-lg);
 }
 
+/* Brand in footer */
 .footer-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: var(--qp-space-sm);
 }
 
 .footer-logo {
@@ -158,15 +184,45 @@ body {
     font-size: 1.5rem;
     font-weight: bold;
     letter-spacing: 2px;
+    color: var(--qp-white);
+}
+
+/* Navigation */
+.footer-nav {
+    display: flex;
+    gap: var(--qp-space-lg);
+}
+
+.footer-nav a {
+    color: var(--qp-white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    font-family: var(--qp-font-main);
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+}
+
+/* Copyright text */
+.footer-copy {
+    flex-basis: 100%;
+    text-align: center;
+    margin-top: var(--qp-space-sm);
+    font-size: 0.95rem;
+    opacity: 0.8;
+    font-family: var(--qp-font-main);
 }
 
 /* Footer Decorative Elements */
 .footer-confetti {
     position: absolute;
-    left: 0; 
-    right: 0; 
+    left: 0;
+    right: 0;
     bottom: 0;
-    height: 60px;
+    top: 0;  /* Added top: 0 */
+    height: 100%;
     pointer-events: none;
     z-index: 0;
 }
@@ -176,25 +232,38 @@ body {
     content: "";
     position: absolute;
     width: 220px;
-    height: 60px;
+    height: 100%;  /* Changed from 60px to 100% */
     opacity: 0.25;
     pointer-events: none;
+    top: 0;  /* Added top: 0 */
 }
 
 .footer-confetti::before {
     left: 0;
-    bottom: 0;
     background:
-      radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 20px 20px/32px 32px repeat,
-      radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 60px 10px/36px 36px repeat;
+        radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 20px 20px/32px 32px repeat,
+        radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 60px 10px/36px 36px repeat;
 }
 
 .footer-confetti::after {
     right: 0;
-    bottom: 0;
     background:
-      radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
-      radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
+        radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
+        radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
+}
+
+/* Responsive Design */
+@media (max-width: 700px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--qp-space-sm);
+    }
+    
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 }
 
 

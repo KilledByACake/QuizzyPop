@@ -3,492 +3,332 @@
     ViewData["Title"] = "Create Quiz";
 }
 
-<section class=" qp-pagecreate-quiz-page">
-
-    <div class="title-row">
-        <h1>Create new Quiz</h1>
+<section class="qp-page create-quiz-page">
+    <!-- Title Section -->
+    <div class="page-header">
+        <img src="~/images/QuizzyBlueberry.png" alt="Quizzy Pop mascot" class="mascot" />
+        <h1>Create Your Quiz</h1>
+        <p class="subtitle">Share knowledge through fun questions!</p>
     </div>
 
-    <div class="cq-grid">
-        <!-- LEFT: form column -->
-        <div class="form-col">
-            <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
-                <!-- Quiz info card -->
-                <div class="card">
-                    <h2 class="card-title">Quiz information</h2>
-                    @await Html.PartialAsync("_QuizMetaData", Model)
-                </div>
-
-                <!-- Questions card(s) -->
-                <div class="card" style="margin-top:2rem;">
-                    <h2>Questions</h2>
-                    <div id="questions">
-                        @for (int i = 0; i < Model.Questions.Count; i++)
-                        {
-                            @await Html.PartialAsync("_QuizQuestion", Model.Questions[i], new ViewDataDictionary(ViewData) { { "QuestionNumber", i + 1 } })
-                        }
-                    </div>
-                    <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
-                        <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
-                            + Add question
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Publish button at the bottom -->
-                <div class="publish-bottom" style="margin-top:2rem;">
-                    <button type="submit" class="btn btn-giant">Publish</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- RIGHT: sidebar -->
-        <aside class="sidebar" aria-label="Quiz summary and settings">
-            <div class="card small">
-                <ul class="stats">
-                    <li><span>Total questions</span><strong>@Model.Questions.Count</strong></li>
-                    <li><span>Total points</span><strong>1</strong></li>
-                    <li><span>Estimated time</span><strong>2 min</strong></li>
-                </ul>
+    <!-- Quiz Form -->
+    <div class="quiz-card">
+        <form asp-action="CreateQuiz" method="post" enctype="multipart/form-data">
+            <!-- Quiz Details -->
+            <div class="form-group">
+                <label asp-for="Title">Quiz Title</label>
+                <input asp-for="Title" class="form-input" placeholder="Enter quiz title..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="card small" style="margin-top:1rem;">
-                <div class="settings">
-                    <label class="switch">
-                        <input type="checkbox" name="RandomizeQuestionOrder" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Randomize question order</span>
-                    </label>
 
-                    <label class="switch">
-                        <input type="checkbox" name="AllowBackNavigation" />
-                        <span class="slider"></span>
-                        <span class="switch-text">Allow back navigation</span>
-                    </label>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-input" rows="3" placeholder="Describe your quiz..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-                    <label class="switch">
-                        <input type="checkbox" name="GiveAwards" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Give awards for right answers</span>
-                    </label>
+            <!-- New Fields -->
+            <div class="form-group">
+                <label asp-for="CoverImage">Cover Image</label>
+                <div class="file-upload">
+                    <input type="file" asp-for="CoverImage" class="file-input" accept="image/*" />
+                    <div class="file-placeholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose an image or drag it here</span>
+                    </div>
+                </div>
+                <span class="form-hint">Maximum size: 2MB. Recommended: 1200x630px</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label asp-for="Category">Category</label>
+                    <select asp-for="Category" class="form-input">
+                        <option value="">Select a category...</option>
+                        <option value="General">General Knowledge</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Arts">Arts & Literature</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <div class="form-group half">
+                    <label asp-for="Difficulty">Difficulty</label>
+                    <select asp-for="Difficulty" class="form-input">
+                        <option value="Easy">Easy (10 points per question)</option>
+                        <option value="Medium">Medium (20 points per question)</option>
+                        <option value="Hard">Hard (30 points per question)</option>
+                    </select>
                 </div>
             </div>
-        </aside>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label asp-for="TimeLimit">Time Limit (Optional)</label>
+                    <div class="time-input">
+                        <input asp-for="TimeLimit" type="number" class="form-input" min="1" max="180" />
+                        <span class="time-suffix">minutes</span>
+                    </div>
+                    <span class="form-hint">Leave empty for no time limit</span>
+                </div>
+
+                <div class="form-group half">
+                    <label>Publicly Visible</label>
+                    <div class="toggle-container">
+                        <label class="toggle">
+                            <input asp-for="IsPublic" type="checkbox" />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <span class="form-hint">Allow other users to find and take your quiz</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-row">
+                <button type="submit" class="btn-next">Create Quiz</button>
+                <a asp-action="Index" class="btn-prev">Cancel</a>
+            </div>
+        </form>
     </div>
 </section>
 
-<template id="question-template">
-  <div class="card question-card" data-index="__INDEX__">
-    <!-- Question template content here -->
-  </div>
-</template>
-
-@section Scripts {
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const addQuestionBtn = document.getElementById('addQuestionBtn');
-    const questionsContainer = document.getElementById('questions');
-    let questionCount = @Model.Questions.Count;
-
-    // Add Question functionality
-    addQuestionBtn.addEventListener('click', function() {
-        questionCount++;
-        
-        const lastQuestion = questionsContainer.querySelector('.question-card:last-child');
-        
-        if (lastQuestion) {
-            const newQuestion = lastQuestion.cloneNode(true);
-            
-            // Clear all input values in the cloned question
-            const inputs = newQuestion.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {
-                if (input.type === 'checkbox' || input.type === 'radio') {
-                    input.checked = false;
-                } else {
-                    input.value = '';
-                }
-            });
-            
-            // Update the question number in the heading
-            const questionHeading = newQuestion.querySelector('h3');
-            if (questionHeading) {
-                questionHeading.textContent = `Question ${questionCount}`;
-            }
-            
-            // Update all name attributes to have the correct index
-            inputs.forEach(input => {
-                if (input.name) {
-                    input.name = input.name.replace(/\[\d+\]/, `[${questionCount - 1}]`);
-                }
-            });
-            
-            // Update any id attributes
-            inputs.forEach(input => {
-                if (input.id) {
-                    input.id = input.id.replace(/_\d+_/, `_${questionCount - 1}_`);
-                }
-            });
-            
-            // Update any for attributes in labels
-            const labels = newQuestion.querySelectorAll('label[for]');
-            labels.forEach(label => {
-                if (label.getAttribute('for')) {
-                    label.setAttribute('for', 
-                        label.getAttribute('for').replace(/_\d+_/, `_${questionCount - 1}_`)
-                    );
-                }
-            });
-            
-            questionsContainer.appendChild(newQuestion);
-            updateQuestionCount();
-            updateMoveButtons();
-            newQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    });
-    
-    // Handle all button clicks with event delegation
-    document.addEventListener('click', function(e) {
-        // Remove question functionality
-        if (e.target.classList.contains('remove-question-btn')) {
-            const questionCard = e.target.closest('.question-card');
-            if (questionCard && questionCount > 1) {
-                questionCard.remove();
-                questionCount--;
-                updateQuestionCount();
-                renumberQuestions();
-                updateMoveButtons();
-            }
-        }
-        
-        // Move Up functionality
-        if (e.target.classList.contains('move-up-btn')) {
-            const questionCard = e.target.closest('.question-card');
-            const previousCard = questionCard.previousElementSibling;
-            if (previousCard) {
-                questionsContainer.insertBefore(questionCard, previousCard);
-                renumberQuestions();
-                updateMoveButtons();
-                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-        
-        // Move Down functionality
-        if (e.target.classList.contains('move-down-btn')) {
-            const questionCard = e.target.closest('.question-card');
-            const nextCard = questionCard.nextElementSibling;
-            if (nextCard) {
-                questionsContainer.insertBefore(nextCard, questionCard);
-                renumberQuestions();
-                updateMoveButtons();
-                questionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
-        }
-    });
-    
-    // Function to update the question count in the sidebar
-    function updateQuestionCount() {
-        const totalQuestionsElement = document.querySelector('.stats li strong');
-        if (totalQuestionsElement) {
-            totalQuestionsElement.textContent = questionCount;
-        }
-    }
-    
-    // Function to renumber all questions after removal or reordering
-    function renumberQuestions() {
-        const questionCards = questionsContainer.querySelectorAll('.question-card');
-        questionCards.forEach((card, index) => {
-            const questionHeading = card.querySelector('h3');
-            if (questionHeading) {
-                questionHeading.textContent = `Question ${index + 1}`;
-            }
-            
-            // Update data-question-index
-            card.setAttribute('data-question-index', index + 1);
-            
-            // Update name attributes
-            const inputs = card.querySelectorAll('input, textarea, select');
-            inputs.forEach(input => {
-                if (input.name) {
-                    input.name = input.name.replace(/\[\d+\]/, `[${index}]`);
-                }
-                if (input.id) {
-                    input.id = input.id.replace(/_\d+_/, `_${index}_`);
-                }
-            });
-            
-            // Update label for attributes
-            const labels = card.querySelectorAll('label[for]');
-            labels.forEach(label => {
-                if (label.getAttribute('for')) {
-                    label.setAttribute('for', 
-                        label.getAttribute('for').replace(/_\d+_/, `_${index}_`)
-                    );
-                }
-            });
-        });
-    }
-    
-    // Function to update move button states
-    function updateMoveButtons() {
-        const questionCards = questionsContainer.querySelectorAll('.question-card');
-        
-        questionCards.forEach((card, index) => {
-            const moveUpBtn = card.querySelector('.move-up-btn');
-            const moveDownBtn = card.querySelector('.move-down-btn');
-            
-            // Disable move up for first question
-            if (moveUpBtn) {
-                moveUpBtn.disabled = (index === 0);
-            }
-            
-            // Disable move down for last question
-            if (moveDownBtn) {
-                moveDownBtn.disabled = (index === questionCards.length - 1);
-            }
-        });
-    }
-    
-    // Initialize move button states
-    updateMoveButtons();
-});
-</script>
-}
 <style>
-/* Page Layout */
 .create-quiz-page {
-    min-height: calc(100vh - 180px);
-    padding: var(--qp-space-2xl);
-    position: relative;
-    z-index: 1;
-    font-family: var(--qp-font-main);
+    padding: var(--qp-space-xl) var(--qp-space-lg);
 }
 
-/* Title Section */
-.title-row {
+/* Header Styling */
+.page-header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
-    padding: var(--qp-space-sm) var(--qp-space-md);
+    text-align: center;
     margin-bottom: var(--qp-space-xl);
 }
 
-.title-row h1 {
-    margin: 0;
-    font-size: 2.2rem;
-    font-family: var(--qp-font-main);
-    color: var(--qp-primary);
-    font-weight: 800;
-}
-
-/* Two-Column Grid Layout */
-.cq-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
-    gap: var(--qp-space-xl);
-    max-width: 1100px;
-    margin: 0 auto;
-    align-items: flex-start;
-}
-
-/* Form Column */
-.form-col {
-    display: flex;
-    flex-direction: column;
-    gap: var(--qp-space-lg);
-}
-
-/* Sidebar */
-.sidebar {
-    display: flex;
-    flex-direction: column;
-    gap: var(--qp-space-md);
-}
-
-/* Form Components */
-.form-row {
-    display: flex;
-    flex-direction: column;
-    gap: var(--qp-space-sm);
+.page-header .mascot {
+    width: 100px;
+    height: auto;
     margin-bottom: var(--qp-space-md);
 }
 
-.form-row-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--qp-space-md);
+.page-header h1 {
+    color: var(--qp-blue);
+    font-size: 2.2rem;
+    margin: var(--qp-space-sm) 0;
+    font-family: var(--qp-font-special);
 }
 
-.i-text {
-    padding: var(--qp-space-sm) var(--qp-space-md);
-    border: 2px solid var(--qp-primary);
-    border-radius: var(--qp-radius-md);
+.subtitle {
+    color: var(--qp-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Card Styling */
+.quiz-card {
     background: var(--qp-white);
-    font-size: 1rem;
+    border-radius: var(--qp-radius-lg);
+    padding: var(--qp-space-xl);
+    box-shadow: var(--qp-shadow-md);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--qp-space-xs);
+    font-weight: 600;
+    color: var(--qp-deep);
     font-family: var(--qp-font-main);
 }
 
-/* Upload Section */
-.upload-box {
-    display: inline-grid;
-    place-items: center;
-    width: 140px;
-    height: 100px;
-    background: var(--qp-gray-200);
+.form-input {
+    width: 100%;
+    padding: var(--qp-space-sm);
+    border: 2px solid var(--qp-gray-200);
     border-radius: var(--qp-radius-md);
-    border: 2px dashed var(--qp-gray-400);
+    font-family: var(--qp-font-main);
+    font-size: 1rem;
+    transition: border-color 0.2s;
 }
 
-/* Toggle Switches */
-.switch {
-    --w: 48px;
-    --h: 26px;
+.form-input:focus {
+    outline: none;
+    border-color: var(--qp-primary);
+}
+
+/* Form Row Layout */
+.form-row {
     display: flex;
-    align-items: center;
-    gap: var(--qp-space-sm);
+    gap: var(--qp-space-lg);
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+/* File Upload Styling */
+.file-upload {
+    border: 2px dashed var(--qp-gray-200);
+    border-radius: var(--qp-radius-md);
+    padding: var(--qp-space-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.file-upload:hover {
+    border-color: var(--qp-primary);
+}
+
+.file-input {
+    display: none;
+}
+
+.file-placeholder {
+    color: var(--qp-gray-500);
+}
+
+/* Time Input Styling */
+.time-input {
+    position: relative;
+}
+
+.time-suffix {
+    position: absolute;
+    right: var(--qp-space-md);
+    color: var(--qp-gray-500);
+}
+
+/* Toggle Switch Styling */
+.toggle-container {
+    display: flex;
+    justify-content: center;
     margin: var(--qp-space-sm) 0;
 }
 
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
 .slider {
-    width: var(--w);
-    height: var(--h);
-    border-radius: var(--qp-radius-full);
-    background: var(--qp-gray-200);
-    border: 2px solid var(--qp-primary);
-    position: relative;
-    transition: background 0.15s ease;
-}
-
-.slider::after {
-    content: "";
     position: absolute;
-    top: 2px;
-    left: 2px;
-    width: calc(var(--h) - 6px);
-    height: calc(var(--h) - 6px);
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--qp-gray-300);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
     border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--qp-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Form Hints */
+.form-hint {
+    display: block;
+    color: var(--qp-gray-500);
+    font-size: 0.875rem;
+    margin-top: var(--qp-space-xs);
+}
+
+/* Button Styling */
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--qp-space-md);
+    margin-top: var(--qp-space-xl);
+}
+
+.btn-next, 
+.btn-prev {
+    font-family: var(--qp-font-main);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--qp-radius-full);
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-next {
     background: var(--qp-primary);
-    transition: transform 0.15s ease;
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-primary-dark);
 }
 
-.switch input:checked + .slider {
-    background: var(--qp-primary-light);
+.btn-prev {
+    background: var(--qp-gray-400);
+    color: var(--qp-white);
 }
 
-/* Stats Section */
-.stats {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: var(--qp-space-sm);
-}
-
-.stats li {
-    display: flex;
-    justify-content: space-between;
-    color: var(--qp-gray-700);
-}
-
-.stats strong {
-    font-weight: 800;
-    color: var(--qp-primary);
-}
-
-/* Question Card Styles */
-.question-card {
-    padding: var(--qp-space-md);
-    border: 2px solid var(--qp-gray-300);
-    border-radius: var(--qp-radius-md);
-    background: var(--qp-white);
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.question-card:hover {
+.btn-next:hover,
+.btn-prev:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Question Header */
-.question-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid #e0e0e0;
-}
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .create-quiz-page {
+        padding: var(--qp-space-lg) var(--qp-space-md);
+    }
 
-.question-controls {
-    display: flex;
-    gap: 0.5rem;
-}
+    .quiz-card {
+        padding: var(--qp-space-lg);
+    }
 
-/* Move buttons */
-.move-up-btn, .move-down-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    background: #0F766E;  /* Green theme color */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.move-up-btn:hover, .move-down-btn:hover {
-    background: #0F766E;
-    transform: translateY(-1px);
-}
-
-/* Remove button */
-.remove-question-btn {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: bold;
-    font-size: 16px;
-    background: #ff4757;  /* Red for remove */
-    color: white;
-    border: none;
-    border-radius: 6px;
-    transition: all 0.2s ease;
-}
-
-.remove-question-btn:hover {
-    background: #ff3742;
-    transform: translateY(-1px);
-}
-
-/* Disabled state for move buttons */
-.move-up-btn:disabled, .move-down-btn:disabled {
-    background: #cccccc;
-    color: #888888;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.move-up-btn:disabled:hover, .move-down-btn:disabled:hover {
-    background: #cccccc;
-    transform: none;
-}
-
-/* Create Quiz Responsive Design */
-@@media (max-width: 980px) {
-    .cq-grid {
-        grid-template-columns: 1fr;
-        max-width: 98vw;
+    .form-row {
+        flex-direction: column;
         gap: var(--qp-space-md);
     }
-    .sidebar {
-        order: -1;
+
+    .button-row {
+        flex-direction: column-reverse;
+    }
+
+    .btn-next,
+    .btn-prev {
+        width: 100%;
     }
 }
 </style>

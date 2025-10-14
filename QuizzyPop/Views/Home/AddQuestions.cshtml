@@ -1,0 +1,536 @@
+@model QuizzyPop.ViewModels.QuizQuestionViewModel
+@{
+    ViewData["Title"] = "Add Questions - QuizzyPop";
+}
+
+<section class="create-quiz-page">
+    <div class="page-header">
+        <img src="~/images/QuizzyBlueberry.png" alt="Quizzy Pop mascot" class="mascot" />
+        <h1>Now add some questions!</h1>
+        <p class="subtitle">Share knowledge through fun questions!</p>
+    </div>
+
+    <div id="questions">
+        <div class="quiz-card">
+            <div class="question-header">
+                <h3>Question 1</h3>
+                <div class="question-controls">
+                    <button type="button" class="move-up-btn" title="Move question up">↑</button>
+                    <button type="button" class="move-down-btn" title="Move question down">↓</button>
+                    <button type="button" class="remove-question-btn" title="Remove question">×</button>
+                </div>
+            </div>
+
+            <form asp-controller="Home" asp-action="AddQuestion" method="post" id="quiz-form">
+                <div class="form-group">
+                    <label asp-for="Text">Question Text</label>
+                    <textarea asp-for="Text" class="form-input" rows="3" placeholder="Enter your question..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Answer Options</label>
+                    <div class="options-container">
+                        @for (int i = 0; i < 4; i++)
+                        {
+                            <div class="option-row @(i == Model.CorrectAnswerIndex ? "correct-option" : "")">
+                                <input asp-for="Choices[i]" class="form-input" 
+                                    placeholder="@(i == Model.CorrectAnswerIndex ? "Enter correct answer..." : $"Enter option {i + 1}...")" />
+                                @if (i == Model.CorrectAnswerIndex)
+                                {
+                                    <span class="correct-badge">✓</span>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label asp-for="Points">Points</label>
+                        <input asp-for="Points" type="number" class="form-input" value="10" min="1" max="100" />
+                    </div>
+                    <div class="form-group half">
+                        <label asp-for="TimeLimit">Time Limit (seconds)</label>
+                        <input asp-for="TimeLimit" type="number" class="form-input" value="30" min="0" />
+                        <span class="form-hint">0 = no time limit</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group half">
+                        <label class="toggle">
+                            <input asp-for="ShuffleAnswers" type="checkbox" />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Shuffle Answer Options</span>
+                    </div>
+                    <div class="form-group half">
+                        <label class="toggle">
+                            <input asp-for="Required" type="checkbox" checked />
+                            <span class="slider"></span>
+                        </label>
+                        <span class="toggle-label">Question Required</span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Explanation">Explanation (Optional)</label>
+                    <textarea asp-for="Explanation" class="form-input" rows="2" placeholder="Explain why the correct answer is right..."></textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Moved buttons outside question cards -->
+    <div class="action-buttons">
+        <div class="button-row">
+            <a asp-action="Index" class="btn-prev">Cancel</a>
+            <button type="button" class="btn-next" id="addQuestionBtn">Add Another Question</button>
+            <button type="submit" form="quiz-form" name="action" value="finish" class="btn-publish">Publish Quiz</button>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const addQuestionBtn = document.getElementById('addQuestionBtn');
+    const questionsContainer = document.getElementById('questions');
+    let questionCount = 1;  // Start with 1 since we have one question
+
+    // Add Question functionality
+    addQuestionBtn.addEventListener('click', function() {
+        questionCount++;
+        
+        const lastQuestion = questionsContainer.querySelector('.quiz-card:last-child');
+        
+        if (lastQuestion) {
+            const newQuestion = lastQuestion.cloneNode(true);
+            
+            // Clear all input values in the cloned question
+            const inputs = newQuestion.querySelectorAll('input, textarea, select');
+            inputs.forEach(input => {
+                if (input.type === 'checkbox' || input.type === 'radio') {
+                    input.checked = false;
+                } else {
+                    input.value = '';
+                }
+            });
+            
+            // Update the question number in the heading
+            const questionHeading = newQuestion.querySelector('h3');
+            if (questionHeading) {
+                questionHeading.textContent = `Question ${questionCount}`;
+            }
+            
+            // Update all name attributes to have the correct index
+            inputs.forEach(input => {
+                if (input.name) {
+                    input.name = input.name.replace(/\[\d+\]/, `[${questionCount - 1}]`);
+                }
+            });
+            
+            // Update any id attributes
+            inputs.forEach(input => {
+                if (input.id) {
+                    input.id = input.id.replace(/_\d+_/, `_${questionCount - 1}_`);
+                }
+            });
+            
+            // Update any for attributes in labels
+            const labels = newQuestion.querySelectorAll('label[for]');
+            labels.forEach(label => {
+                if (label.getAttribute('for')) {
+                    label.setAttribute('for', 
+                        label.getAttribute('for').replace(/_\d+_/, `_${questionCount - 1}_`)
+                    );
+                }
+            });
+            
+            questionsContainer.appendChild(newQuestion);
+            updateQuestionCount();
+            updateMoveButtons();
+            newQuestion.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
+    
+    // Update button states function
+    function updateAllButtonStates() {
+        const allCards = document.querySelectorAll('.quiz-card');
+        allCards.forEach((card, index) => {
+            const upBtn = card.querySelector('.move-up-btn');
+            const downBtn = card.querySelector('.move-down-btn');
+            
+            // First question can't move up
+            if(upBtn) upBtn.classList.toggle('active', index > 0);
+            
+            // Last question can't move down
+            if(downBtn) downBtn.classList.toggle('active', index < allCards.length - 1);
+        });
+    }
+    
+    // Initialize button states
+    updateAllButtonStates();
+    
+    // Delegate click events for move/remove buttons
+    document.addEventListener('click', function(e) {
+        if (e.target.classList.contains('move-up-btn') && e.target.classList.contains('active')) {
+            const currentCard = e.target.closest('.quiz-card');
+            const previousCard = currentCard.previousElementSibling;
+            if (previousCard && previousCard.classList.contains('quiz-card')) {
+                currentCard.parentNode.insertBefore(currentCard, previousCard);
+                updateAllButtonStates();
+            }
+        }
+        
+        if (e.target.classList.contains('move-down-btn') && e.target.classList.contains('active')) {
+            const currentCard = e.target.closest('.quiz-card');
+            const nextCard = currentCard.nextElementSibling;
+            if (nextCard && nextCard.classList.contains('quiz-card')) {
+                currentCard.parentNode.insertBefore(nextCard, currentCard);
+                updateAllButtonStates();
+            }
+        }
+        
+        if (e.target.classList.contains('remove-question-btn')) {
+            const currentCard = e.target.closest('.quiz-card');
+            if (document.querySelectorAll('.quiz-card').length > 1) {
+                currentCard.remove();
+                updateAllButtonStates();
+            }
+        }
+    });
+});
+</script>
+}
+
+<style>
+/* Page Layout */
+.create-quiz-page {
+    padding: var(--qp-space-xl) var(--qp-space-lg);
+}
+
+/* Header Styling */
+.page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: var(--qp-space-xl);
+}
+
+.page-header .mascot {
+    width: 100px;
+    height: auto;
+    margin-bottom: var(--qp-space-md);
+}
+
+.page-header h1 {
+    color: var(--qp-blue);
+    font-size: 2.2rem;
+    margin: var(--qp-space-sm) 0;
+    font-family: var(--qp-font-special);
+}
+
+.subtitle {
+    color: var(--qp-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Card Styling */
+.quiz-card {
+    background: var(--qp-white);
+    border-radius: var(--qp-radius-lg);
+    padding: var(--qp-space-xl);
+    box-shadow: var(--qp-shadow-md);
+    max-width: 800px;
+    margin: 0 auto;
+
+    /* Add space between question cards */
+    margin-bottom: 3rem;
+}
+
+/* Question Header */
+.question-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--qp-gray-200);
+}
+
+.question-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+/* Control Buttons */
+.move-up-btn, 
+.move-down-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--qp-radius-md);
+    transition: all 0.2s ease;
+    color: var(--qp-white);
+    background: var(--qp-gray-300);  /* Default disabled state */
+    cursor: not-allowed;
+}
+
+.move-up-btn.active, 
+.move-down-btn.active {
+    background: var(--qp-primary);
+    cursor: pointer;
+}
+
+.move-up-btn.active:hover, 
+.move-down-btn.active:hover {
+    transform: translateY(-2px);
+    background: var(--qp-primary-dark);
+}
+
+.remove-question-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--qp-radius-md);
+    transition: all 0.2s ease;
+    color: var(--qp-white);
+    background: var(--qp-error);
+}
+
+.remove-question-btn:hover {
+    background: var(--qp-error-dark);
+    transform: translateY(-2px);
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--qp-space-xs);
+    font-weight: 600;
+    color: var(--qp-deep);
+    font-family: var(--qp-font-main);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--qp-space-sm);
+    border: 2px solid var(--qp-gray-200);
+    border-radius: var(--qp-radius-md);
+    font-family: var(--qp-font-main);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--qp-primary);
+}
+
+/* Form Row Layout */
+.form-row {
+    display: flex;
+    gap: var(--qp-space-lg);
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+/* Options Container */
+.options-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--qp-space-md);
+}
+
+.option-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-md);
+}
+
+.correct-badge {
+    position: absolute;
+    right: var(--qp-space-md);
+    color: var(--qp-success);
+}
+
+/* Form Hints */
+.form-hint {
+    display: block;
+    color: var(--qp-gray-500);
+    font-size: 0.875rem;
+    margin-top: var(--qp-space-xs);
+}
+
+/* Button Styling */
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--qp-space-md);
+    margin-top: var(--qp-space-xl);
+}
+
+.btn-next, 
+.btn-prev,
+.btn-publish {
+    font-family: var(--qp-font-special);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--qp-radius-full);
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-next {
+    background: var(--qp-primary);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-primary-dark);
+}
+
+.btn-prev {
+    background: var(--qp-gray-400);
+    color: var(--qp-white);
+}
+
+.btn-publish {
+    font-family: var(--qp-font-special);  /* Baloo font */
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--qp-radius-full);
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    cursor: pointer;
+    transition: transform 0.2s;
+    background: var(--qp-success);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-success-dark);
+}
+
+.btn-next:hover,
+.btn-prev:hover,
+.btn-publish:hover {
+    transform: translateY(-2px);
+}
+
+/* Toggle Switch Styling */
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--qp-gray-300);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--qp-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Action Buttons Container */
+.action-buttons {
+    font-family: var(--qp-font-main); 
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 var(--qp-space-lg);
+    margin-top: -1rem;  /* Pull buttons up closer to cards */
+}
+
+/* Publish Button */
+.btn-publish {
+    font-family: var(--qp-font-main);  /* Baloo font */
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--qp-radius-full);
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    cursor: pointer;
+    transition: transform 0.2s;
+    background: var(--qp-deep);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-success-dark);
+}
+
+.btn-publish:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .create-quiz-page {
+        padding: var(--qp-space-lg) var(--qp-space-md);
+    }
+
+    .quiz-card {
+        padding: var(--qp-space-lg);
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: var(--qp-space-md);
+    }
+
+    .button-row {
+        flex-direction: column-reverse;
+    }
+
+    .btn-next,
+    .btn-prev {
+        width: 100%;
+    }
+}
+</style>

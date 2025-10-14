@@ -34,18 +34,33 @@ namespace QuizzyPop.Controllers
         // ==================== CREATE QUIZ (POST) ====================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(QuizMetaDataViewModel model)
+        public IActionResult CreateQuiz(QuizMetaDataViewModel model)  // Changed from Create to CreateQuiz
         {
-            if (!ModelState.IsValid)
+            // Simple validation to proceed to questions page
+            if (!string.IsNullOrEmpty(model.Title))
             {
-                // Validation failed — reload the same page with errors
-                return View("CreateQuiz", model);
+                return RedirectToAction("AddQuestions");
             }
+            return View(model);  // Changed from View("CreateQuiz", model)
+        }
 
-            // TODO: Backend team will implement quiz saving logic here
-            
-            // For now, just redirect to a simple published page
-            return RedirectToAction("PublishedQuiz", new { id = "temp123" });
+        public IActionResult AddQuestions(string quizId)
+        {
+            var model = new QuizQuestionViewModel
+            {
+                Text = string.Empty,
+                Image = string.Empty,
+                Choices = new List<string> { "", "", "", "" },  // Initialize 4 empty choices
+                Options = new List<string> { "", "", "", "" },  // Keep both for compatibility
+                CorrectAnswerIndex = 0,
+                Points = 1,
+                TimeLimit = 0,
+                ShuffleAnswers = false,
+                Required = true,
+                Explanation = string.Empty
+            };
+
+            return View(model);
         }
 
         // ==================== ABOUT PAGE ====================
@@ -261,6 +276,30 @@ namespace QuizzyPop.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult AddQuestion(QuizQuestionViewModel model, string action)
+        {
+            // Temporary validation - we just want the UI flow for now
+            if (!string.IsNullOrEmpty(model.Text) && model.Choices.Any())
+            {
+                // If "Add Another Question" was clicked
+                if (action == "addAnother")
+                {
+                    TempData["Success"] = "Question added successfully!";
+                    return RedirectToAction("AddQuestions");
+                }
+                
+                // If "Finish Quiz" was clicked
+                if (action == "finish")
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // If validation fails, return to the same view
+            return View("AddQuestions", model);
         }
     }
 }

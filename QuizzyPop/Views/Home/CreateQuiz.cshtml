@@ -13,7 +13,7 @@
 
     <!-- Quiz Form -->
     <div class="quiz-card">
-        <form asp-action="CreateQuiz" method="post" enctype="multipart/form-data">
+        <form asp-controller="Home" asp-action="CreateQuiz" method="post" enctype="multipart/form-data">
             <!-- Quiz Details -->
             <div class="form-group">
                 <label asp-for="Title">Quiz Title</label>

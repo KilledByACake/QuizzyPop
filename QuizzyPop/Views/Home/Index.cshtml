@@ -103,4 +103,23 @@
     text-align: center;
     font-family: var(--qp-font-main);
 }
+
+/* Layout for buttons and mascot */
+.cta-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    gap: var(--qp-space-xl);
+    align-items: center;
+    justify-items: center;
+    margin-top: var(--qp-space-xl);
+    padding: 0 var(--qp-space-lg);
+}
+
+/* Responsive adjustments */
+@@media (max-width: 768px) {
+    .cta-row {
+        grid-template-columns: 1fr;
+        gap: var(--qp-space-lg);
+    }
+}
 </style>

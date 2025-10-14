@@ -27,3 +27,80 @@
         <a asp-controller="Home" asp-action="CreateQuiz" class="btn-cta">Make Quiz!</a>
     </div>
 </section>
+
+<style>
+/* Index Page Hero Section */
+.arc-title {
+    width: min(900px, 95vw);
+    margin: var(--qp-space-lg) auto 0;
+    display: block;
+}
+
+.arc-text {
+    font-weight: 800;
+    font-family: var(--qp-font-special);
+    font-size: clamp(28px, 6vw, 56px);
+    letter-spacing: 8px;
+    fill: var(--qp-primary);
+    paint-order: stroke;
+    stroke: var(--qp-white);
+    stroke-opacity: 0.35;
+    stroke-width: 8px;
+}
+
+/* Mascot & Speech Bubble */
+.mascot-wrap {
+    position: relative;
+    justify-self: center;
+    align-self: end;
+    display: grid;
+    place-items: center;
+}
+
+.mascot {
+    width: min(575px, 70vw);
+    height: auto;
+    filter: drop-shadow(0 10px 0 rgba(0,0,0,.15));
+}
+
+.speech {
+    position: absolute;
+    right: -140px;
+    top: var(--qp-space-xl);
+    font-family: var(--qp-font-main);
+    max-width: 260px;
+    background: var(--qp-white);
+    padding: var(--qp-space-sm) var(--qp-space-md);
+    border-radius: var(--qp-radius-lg);
+    font-weight: 700;
+    box-shadow: var(--qp-shadow-md);
+}
+
+.speech::after {
+    content: "";
+    position: absolute;
+    left: -16px;
+    top: 38px;
+    width: 0;
+    height: 0;
+    border: 12px solid transparent;
+    border-right-color: var(--qp-white);
+    transform: rotate(20deg);
+}
+
+/* Call-to-Action Buttons */
+.btn-cta {
+    display: inline-block;
+    font-size: clamp(18px, 2.2vw, 24px);
+    font-weight: 800;
+    text-decoration: none;
+    padding: var(--qp-space-lg) var(--qp-space-xl);
+    color: var(--qp-white);
+    background: var(--qp-primary);
+    border-radius: var(--qp-radius-full);
+    box-shadow: 0 9px 0 var(--qp-primary-dark), 0 0 0 4px var(--qp-white) inset;
+    transition: transform .05s ease-in-out;
+    text-align: center;
+    font-family: var(--qp-font-main);
+}
+</style>

@@ -1,0 +1,203 @@
+/* ===============================
+   FONT IMPORTS & GLOBAL SETUP
+   =============================== */
+@font-face {
+    font-family: 'Baby';
+    src: url('/fonts/Baby.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SuperBalloon';
+    src: url('/fonts/Super-Balloon-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('/fonts/Baloo2-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+body {
+    background-color: var(--qp-sky);
+}
+
+/* ===============================
+   NAVIGATION BAR
+   =============================== */
+/* Main Navbar Container */
+.navbar {
+    background: var(--qp-white);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    box-shadow: var(--qp-shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-right: 0;
+    padding: var(--qp-space-sm) var(--qp-space-md);
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-md);
+}
+
+/* Brand Logo & Text */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-sm);
+    text-decoration: none;
+    font-family: 'SuperBalloon', Arial, sans-serif;
+    font-size: 24px;
+    color: var(--qp-blue);
+}
+
+.navbar-brand img {
+    width: 57px;
+    height: 57px;
+}
+
+.brand-text {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--qp-blue);
+    font-family: var(--qp-font-special);
+}
+
+/* Navigation Links */
+.navbar-nav {
+    display: flex;
+    gap: var(--qp-space-md);
+    margin-left: var(--qp-space-md);
+}
+
+.navbar-nav a {
+    text-decoration: none;
+    font-weight: 700;
+    padding: var(--qp-space-sm) var(--qp-space-md);
+    border-radius: var(--qp-radius-sm);
+    color: var(--qp-blue);
+}
+
+.navbar-nav a:hover,
+.navbar-nav a[aria-current="page"] {
+    background: var(--qp-gray-100);
+}
+
+/* Navigation Actions (Login/Signup buttons) */
+.navbar-link {
+    border: 2px solid var(--qp-primary);
+    border-radius: var(--qp-radius-md);
+    padding: var(--qp-space-xs) var(--qp-space-md);
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--qp-primary);
+}
+
+.navbar-link:hover {
+    background: color-mix(in srgb, var(--qp-primary) 10%, transparent);
+}
+
+/* Right-side Actions (Search, Login) */
+.navbar-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-sm);
+}
+
+
+/* ===============================
+   FOOTER SECTION
+   =============================== */
+/* Footer Container */
+.site-footer {
+    position: relative;
+    background: var(--qp-deep);
+    color: var(--qp-white);
+    padding: var(--qp-space-xl) 0 var(--qp-space-md) 0;
+    margin-top: 0;
+    font-size: 1rem;
+    border: none;
+    box-shadow: none;
+}
+
+/* Footer Content Layout */
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qp-space-lg);
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.footer-title {
+    font-family: 'Baby', Arial, sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+/* Footer Decorative Elements */
+.footer-confetti {
+    position: absolute;
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    height: 60px;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.footer-confetti::before,
+.footer-confetti::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 60px;
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.footer-confetti::before {
+    left: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 20px 20px/32px 32px repeat,
+      radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 60px 10px/36px 36px repeat;
+}
+
+.footer-confetti::after {
+    right: 0;
+    bottom: 0;
+    background:
+      radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
+      radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
+}
+
+
+
+
+

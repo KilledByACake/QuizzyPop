@@ -7,7 +7,6 @@ public class Quiz
     public string Description { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string Difficulty { get; set; } = "easy"; // easy, medium, hard
-    public int TimeLimit { get; set; } = 30;
 
     // Category of the quiz
     public int CategoryId { get; set; }

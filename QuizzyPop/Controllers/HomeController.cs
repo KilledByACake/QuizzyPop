@@ -5,16 +5,19 @@ using QuizzyPop.Models;
 using QuizzyPop.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace QuizzyPop.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UserDbContext context, ILogger<HomeController> logger)
         {
             _logger = logger;
+            _context = context;
         }
 
         // ==================== HOME PAGE ====================
@@ -63,54 +66,19 @@ namespace QuizzyPop.Controllers
         {
             return View();
         }
-
         // ==================== TAKE QUIZ PAGE ====================
-        public IActionResult TakeQuiz()
+        public async Task<IActionResult> TakeQuiz()
         {
-            // Example quiz data (will later come from a database)
-            var quizzes = new List<QuizMetaDataViewModel>
-            {
-                new QuizMetaDataViewModel
-                {
-                    Title = "Animals of Savanna",
-                    Description = "Learn about African wildlife!",
-                    Difficulty = "Easy",
-                    Questions = new List<QuizQuestionViewModel>()
-                },
-                new QuizMetaDataViewModel
-                {
-                    Title = "Disney Characters",
-                    Description = "Guess your favorite Disney heroes!",
-                    Difficulty = "Easy",
-                    Questions = new List<QuizQuestionViewModel>()
-                },
-                new QuizMetaDataViewModel
-                {
-                    Title = "Geometry",
-                    Description = "Shapes and formulas quiz.",
-                    Difficulty = "Medium",
-                    Questions = new List<QuizQuestionViewModel>()
-                },
-                new QuizMetaDataViewModel
-                {
-                    Title = "Roman Empire",
-                    Description = "How well do you know ancient history?",
-                    Difficulty = "Medium",
-                    Questions = new List<QuizQuestionViewModel>()
-                },
-                new QuizMetaDataViewModel
-                {
-                    Title = "Football Stars",
-                    Description = "Can you guess players from clues?",
-                    Difficulty = "Hard",
-                    Questions = new List<QuizQuestionViewModel>()
-                }
-            };
+            var quizzes = await _context.Quiz
+                .Include(q => q.Category)
+                .Include(q => q.User)
+                .Include(q => q.Questions)
+                .ToListAsync();
 
-            _logger.LogInformation($"TakeQuiz() called — loaded {quizzes.Count} quizzes");
-
+            _logger.LogInformation($"Loaded {quizzes.Count} quizzes from database.");
             return View(quizzes);
         }
+
 
         // ==================== START QUIZ ====================
         public IActionResult StartQuiz(string id, int questionIndex = 0)

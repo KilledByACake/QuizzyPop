@@ -32,6 +32,12 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    DBInit.Seed(app);
+}
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

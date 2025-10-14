@@ -1,0 +1,96 @@
+2025-10-13 18:14:11.687 +02:00 [INF] User profile is available. Using 'C:\Users\Vincent Ngo\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-13 18:14:11.761 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-13 18:14:11.764 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-13 18:14:11.765 +02:00 [INF] Hosting environment: Development
+2025-10-13 18:14:11.765 +02:00 [INF] Content root path: C:\Users\Vincent Ngo\Downloads\QuizzyPop\Quizzypop
+2025-10-13 18:14:14.852 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-13 18:14:14.881 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-13 18:14:14.931 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-13 18:14:14.962 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-13 18:14:14.988 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-13 18:14:15.119 +02:00 [INF] Executed ViewResult - view Index executed in 132.9681ms.
+2025-10-13 18:14:15.123 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 160.6103ms
+2025-10-13 18:14:15.124 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-13 18:14:15.128 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 282.3776ms
+2025-10-13 18:14:20.790 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - null null
+2025-10-13 18:14:20.793 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-13 18:14:20.809 +02:00 [INF] Route matched with {action = "TakeQuiz", controller = "Home"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TakeQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-13 18:14:21.126 +02:00 [INF] Executing ViewResult, running view TakeQuiz.
+2025-10-13 18:14:21.138 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop) in 328.3457ms
+2025-10-13 18:14:21.139 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-13 18:14:21.157 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The model item passed into the ViewDataDictionary is of type 'System.Collections.Generic.List`1[QuizzyPop.Models.Quiz]', but this ViewDataDictionary instance requires a model item of type 'System.Collections.Generic.List`1[QuizzyPop.ViewModels.QuizMetaDataViewModel]'.
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary.EnsureCompatible(Object value)
+   at lambda_method289(Closure, ViewDataDictionary)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.Activate(Object page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ActionContext actionContext, IView view, ViewDataDictionary viewData, ITempDataDictionary tempData, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-10-13 18:14:21.191 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - 500 null text/html; charset=utf-8 400.6311ms
+2025-10-13 18:14:31.330 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-13 18:14:31.336 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-13 18:14:31.340 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-13 18:14:31.341 +02:00 [INF] This is an information message.
+2025-10-13 18:14:31.344 +02:00 [WRN] This is a warning message
+2025-10-13 18:14:31.345 +02:00 [ERR] This is an error message.
+2025-10-13 18:14:31.348 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-13 18:14:31.442 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 96.3079ms.
+2025-10-13 18:14:31.442 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 102.0592ms
+2025-10-13 18:14:31.442 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-13 18:14:31.442 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 112.4168ms
+2025-10-13 18:14:32.691 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - null null
+2025-10-13 18:14:32.691 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-13 18:14:32.691 +02:00 [INF] Route matched with {action = "TakeQuiz", controller = "Home"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] TakeQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-13 18:14:32.742 +02:00 [INF] Executing ViewResult, running view TakeQuiz.
+2025-10-13 18:14:32.742 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop) in 51.0685ms
+2025-10-13 18:14:32.742 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-13 18:14:32.744 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The model item passed into the ViewDataDictionary is of type 'System.Collections.Generic.List`1[QuizzyPop.Models.Quiz]', but this ViewDataDictionary instance requires a model item of type 'System.Collections.Generic.List`1[QuizzyPop.ViewModels.QuizMetaDataViewModel]'.
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewDataDictionary.EnsureCompatible(Object value)
+   at lambda_method289(Closure, ViewDataDictionary)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorPagePropertyActivator.Activate(Object page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageCoreAsync(IRazorPage page, ViewContext context)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderPageAsync(IRazorPage page, ViewContext context, Boolean invokeViewStarts)
+   at Microsoft.AspNetCore.Mvc.Razor.RazorView.RenderAsync(ViewContext context)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ViewContext viewContext, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewExecutor.ExecuteAsync(ActionContext actionContext, IView view, ViewDataDictionary viewData, ITempDataDictionary tempData, String contentType, Nullable`1 statusCode)
+   at Microsoft.AspNetCore.Mvc.ViewFeatures.ViewResultExecutor.ExecuteAsync(ActionContext context, ViewResult result)
+   at Microsoft.AspNetCore.Mvc.ViewResult.ExecuteResultAsync(ActionContext context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResultFilterAsync>g__Awaited|30_0[TFilter,TFilterAsync](ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResultExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.ResultNext[TFilter,TFilterAsync](State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeResultFilters()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|25_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.InvokeFilterPipelineAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Logged|17_1(ResourceInvoker invoker)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-10-13 18:14:32.752 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - 500 null text/html; charset=utf-8 60.7734ms
+2025-10-13 18:17:38.192 +02:00 [INF] Application is shutting down...

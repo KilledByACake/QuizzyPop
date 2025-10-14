@@ -32,13 +32,37 @@ public static class DBInit
             context.SaveChanges();
         }
 
+        if (!context.Categories.Any())
+        {
+            var categories = new List<Category>
+            {
+                new Category { Name = "Math",
+                Description = "Quizzes about numbers and calculations" },
+                new Category { Name = "Entertainment",
+                Description = "Quizzes about movies, music and pop culture" },
+                new Category { Name = "History",
+                Description = "Quizzes about historical events and figures" },
+            };
+            context.AddRange(categories);
+            context.SaveChanges();
+        }
+
         if (!context.Quiz.Any())
         {
             var quizzes = new List<Quiz>
             {
                 new Quiz { Title = "Geometry",
-                Description = "A simple quiz about basic geometry",
-                Difficulty = "easy",}
+                    Description = "A simple quiz about basic geometry",
+                    Difficulty = "medium",
+                    CategoryId = 1,
+                    UserId = 1 },
+
+                new Quiz {
+                    Title = "Disney Characters",
+                    Description = "Test your knowledge about Disney Characters!",
+                    Difficulty = "easy",
+                    CategoryId = 2,
+                    UserId = 1 }
             };
 
             context.AddRange(quizzes);

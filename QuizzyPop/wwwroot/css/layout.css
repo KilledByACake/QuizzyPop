@@ -25,15 +25,12 @@
 html, body {
     height: 100%;
     margin: 0;
-    display: flex;
-    flex-direction: column;
 }
 
 body {
-    background-color: var(--qp-sky);
-    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
 /* Page wrapper to ensure footer sticks to bottom */
@@ -157,17 +154,15 @@ main {
    =============================== */
 /* Footer Container */
 .site-footer {
+    margin-top: auto;
+    width: 100%;
     background: var(--qp-deep);
     color: var(--qp-white);
     padding: var(--qp-space-xl) 0 var(--qp-space-md) 0;
-    margin-top: 0;
     font-size: 1rem;
     border: none;
     box-shadow: none;
     z-index: 1000;
-
-    margin-top: auto;
-    width: 100%;
 }
 
 /* Footer Content Layout */
@@ -306,8 +301,3 @@ main {
 .navbar-actions .btn-link:hover {
     background: rgba(15, 118, 110, 0.1);
 }
-
-
-
-
-

@@ -23,10 +23,10 @@
 }
 
 html, body {
+    height: 100%;
     margin: 0;
-    padding: 0;
-    overflow-x: hidden;
-    width: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -157,7 +157,6 @@ main {
    =============================== */
 /* Footer Container */
 .site-footer {
-    position: relative;
     background: var(--qp-deep);
     color: var(--qp-white);
     padding: var(--qp-space-xl) 0 var(--qp-space-md) 0;
@@ -166,6 +165,9 @@ main {
     border: none;
     box-shadow: none;
     z-index: 1000;
+
+    margin-top: auto;
+    width: 100%;
 }
 
 /* Footer Content Layout */
@@ -283,8 +285,26 @@ main {
 }
 
 .container-body {
-    position: relative;
-    z-index: 1;
+    flex: 1;
+}
+.navbar-actions form {
+    display: inline;
+}
+
+.navbar-actions .btn-link {
+    background: none;
+    border: none;
+    font: inherit;
+    color: #0F766E;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 12px;
+    transition: background 0.2s ease;
+}
+
+.navbar-actions .btn-link:hover {
+    background: rgba(15, 118, 110, 0.1);
 }
 
 

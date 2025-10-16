@@ -82,7 +82,7 @@ namespace QuizzyPop.Controllers
                 Password = password,
                 Role = role,
                 Phone = phone,
-                Birthdate = birthdate
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Users.Add(newUser);

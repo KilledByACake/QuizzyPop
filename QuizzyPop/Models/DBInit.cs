@@ -15,17 +15,32 @@ public static class DBInit
         {
             var users = new List<User>
             {
-                new User { Email = "Knut.knutson@gmail.com",
-                Password = "Knut1234",
-                Role = "student",
-                Phone = "99999999",
-                Birthdate = new DateTime(2018, 8, 20)},
+                new User {
+                    Email = "demo@quizzypop.com",
+                    Name = "Demo User",
+                    Role = "student",
+                    DisplayName = "Demo User",
+                    QuizzesCreated = 5,
+                    QuizzesTaken = 12
+                },
 
-                new User { Email = "Jan.oslo-skole@gmail.com",
-                Password = "Volvo1234",
-                Role = "teacher",
-                Phone = "99999998",
-                Birthdate = new DateTime(1980, 12, 12)}
+                new User {
+                    Email = "test@quizzypop.com",
+                    Name = "Test User",
+                    Role = "teacher",
+                    DisplayName = "Test User",
+                    QuizzesCreated = 3,
+                    QuizzesTaken = 8
+                },
+
+                new User {
+                    Email = "admin@quizzypop.com",
+                    Name = "Admin User",
+                    Role = "admin",
+                    DisplayName = "Admin User",
+                    QuizzesCreated = 15,
+                    QuizzesTaken = 25
+                }      
             };
 
             context.AddRange(users);

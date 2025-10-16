@@ -14,7 +14,7 @@ public class User
     public string? DisplayName { get; set; }
     public int? QuizzesCreated { get; set; }
     public int? QuizzesTaken { get; set; }
-    public DateTime? Birthdate { get; set; }
+    
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
     // Quizzes created by the user

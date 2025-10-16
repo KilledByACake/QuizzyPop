@@ -4,9 +4,9 @@ using QuizzyPop.Models;
 
 public interface IQuizQuestionRepository
 {
-    Task<QuizQuestion?> GetByIdAsync(int id);
-    Task<IReadOnlyList<QuizQuestion>> GetByQuizIdAsync(int quizId);
-    Task<QuizQuestion> AddAsync(QuizQuestion entity);
-    Task<bool> UpdateAsync(QuizQuestion entity);
+    Task<Question?> GetByIdAsync(int id);
+    Task<IReadOnlyList<Question>> GetByQuizIdAsync(int quizId);
+    Task<Question> AddAsync(Question entity);
+    Task<bool> UpdateAsync(Question entity);
     Task<bool> DeleteAsync(int id);
 }

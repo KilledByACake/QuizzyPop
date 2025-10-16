@@ -8,6 +8,12 @@ namespace QuizzyPop.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly UserDbContext _context;
+        public AccountController(UserDbContext context)
+        {
+            _context = context;
+        }
+
         /* === LOGIN PAGE === */
         [HttpGet]
         public IActionResult Login()
@@ -18,23 +24,23 @@ namespace QuizzyPop.Controllers
         [HttpPost]
         public IActionResult Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                // Simple validation for demo accounts
-                if (IsValidLogin(model.Email, model.Password))
-                {
-                    var tempUser = CreateTempUser(model.Email);
-                    HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(tempUser));
-                    return RedirectToAction("MyPage", "Home");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Invalid email or password");
-                }
-            }
+            if (!ModelState.IsValid)
+            return View(model);
 
+        var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
+
+        if (user == null || user.Password != model.Password)
+        {
+            ModelState.AddModelError("", "Invalid email or password");
             return View(model);
         }
+
+        HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(user));
+
+        return RedirectToAction("MyPage", "Home");
+        }
+
+
 
         /* === REGISTER PAGE === */
         [HttpGet]
@@ -47,15 +53,13 @@ namespace QuizzyPop.Controllers
         [HttpPost]
         public IActionResult Register(IFormCollection form)
         {
-            // Get all form values
             var email = form["email"].ToString();
             var password = form["password"].ToString();
             var confirmPassword = form["confirmPassword"].ToString();
-            var role = form["role"].ToString();
+            var role = form["role"].ToString().ToLower();
             var phone = form["phone"].ToString();
-            var birthdate = form["birthdate"].ToString();
+            var birthdate = DateTime.TryParse(form["birthdate"], out var b) ? b : DateTime.Now;
 
-            // Basic validation for required fields
             if (string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(password) ||
                 password != confirmPassword ||
@@ -65,26 +69,26 @@ namespace QuizzyPop.Controllers
                 return View();
             }
 
-            // Extract name before @
-            var at = email.IndexOf('@');
-            var namePart = at > 0 ? email.Substring(0, at) : email;
+            // Check if email exists
+            if (_context.Users.Any(u => u.Email == email))
+            {
+                ModelState.AddModelError("", "Email already registered.");
+                return View();
+            }
 
-            // Create a temporary user session
             var newUser = new User
             {
-                UserId = new Random().Next(1000, 9999),
-                Name = namePart,
-                DisplayName = namePart,
-                Address = "N/A",
-                CreatedAt = DateTime.Now,
-                QuizzesCreated = 0,
-                QuizzesTaken = 0
+                Email = email,
+                Password = password,
+                Role = role,
+                Phone = phone,
+                Birthdate = birthdate
             };
 
-            // Save user in session
-            HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(newUser));
+            _context.Users.Add(newUser);
+            _context.SaveChanges();
 
-            // Redirect to user’s page
+            HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(newUser));
             return RedirectToAction("MyPage", "Home");
         }
 
@@ -111,58 +115,6 @@ namespace QuizzyPop.Controllers
             return validCredentials.ContainsKey(email.ToLower())
                 ? validCredentials[email.ToLower()] == password
                 : password == "password"; // Default password for any other email
-        }
-
-        private User CreateTempUser(string email)
-        {
-            // Create different temp users based on email
-            var tempUsers = new Dictionary<string, User>
-            {
-                ["demo@quizzypop.com"] = new User
-                {
-                    UserId = 1,
-                    Name = "Demo User",
-                    Address = "123 Demo Street, Demo City",
-                    DisplayName = "Demo User",
-                    CreatedAt = DateTime.Now.AddDays(-30),
-                    QuizzesCreated = 5,
-                    QuizzesTaken = 12
-                },
-                ["test@quizzypop.com"] = new User
-                {
-                    UserId = 2,
-                    Name = "Test User",
-                    Address = "456 Test Avenue, Test Town",
-                    DisplayName = "Test User",
-                    CreatedAt = DateTime.Now.AddDays(-15),
-                    QuizzesCreated = 3,
-                    QuizzesTaken = 8
-                },
-                ["admin@quizzypop.com"] = new User
-                {
-                    UserId = 3,
-                    Name = "Admin User",
-                    Address = "789 Admin Boulevard, Admin City",
-                    DisplayName = "Admin User",
-                    CreatedAt = DateTime.Now.AddDays(-90),
-                    QuizzesCreated = 15,
-                    QuizzesTaken = 25
-                }
-            };
-
-            // Return specific user or create a generic one
-            return tempUsers.ContainsKey(email.ToLower())
-                ? tempUsers[email.ToLower()]
-                : new User
-                {
-                    UserId = 999,
-                    Name = email.Split('@')[0],
-                    Address = "Generic Address, Generic City",
-                    DisplayName = email.Split('@')[0],
-                    CreatedAt = DateTime.Now,
-                    QuizzesCreated = 1,
-                    QuizzesTaken = 2
-                };
         }
     }
 }

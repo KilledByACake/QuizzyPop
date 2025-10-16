@@ -8,7 +8,7 @@ namespace QuizzyPop.Controllers
 {
     public class AccountController : Controller
     {
-        /* ===================== LOGIN PAGE ===================== */
+        /* === LOGIN PAGE === */
         [HttpGet]
         public IActionResult Login()
         {
@@ -36,7 +36,7 @@ namespace QuizzyPop.Controllers
             return View(model);
         }
 
-        /* ===================== REGISTER PAGE ===================== */
+        /* === REGISTER PAGE === */
         [HttpGet]
         public IActionResult Register()
         {
@@ -88,7 +88,7 @@ namespace QuizzyPop.Controllers
             return RedirectToAction("MyPage", "Home");
         }
 
-        /* ===================== LOGOUT ===================== */
+        /* === LOGOUT === */
         [HttpPost]
         public IActionResult Logout()
         {
@@ -96,7 +96,7 @@ namespace QuizzyPop.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        /* ===================== HELPER METHODS ===================== */
+        /* === HELPER METHODS === */
         private bool IsValidLogin(string email, string password)
         {
             // Simple demo email/password validation

@@ -19,15 +19,11 @@
     font-weight: normal;
     font-style: normal;
 }
-/* === GLOBAL FONT SETUP === */
-:root {
-    --qp-font-main: 'Baloo 2', sans-serif;
-    --qp-font-special: 'Baloo 2', sans-serif; /* du kan endre hvis du vil ha annen font på spesielle elementer */
-}
 
 html, body {
     height: 100%;
     margin: 0;
+    background-color: var(--qp-sky);
 }
 
 body {
@@ -54,7 +50,6 @@ main {
 /* ==== NAVIGATION BAR === */
 /* Main Navbar Container */
 .navbar {
-    background: var(--qp-white);
     border-bottom: 1px solid rgba(0,0,0,.08);
     box-shadow: var(--qp-shadow-sm);
     position: sticky;

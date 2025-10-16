@@ -50,6 +50,7 @@ main {
 /* ==== NAVIGATION BAR === */
 /* Main Navbar Container */
 .navbar {
+    background-color: var(--qp-white);
     border-bottom: 1px solid rgba(0,0,0,.08);
     box-shadow: var(--qp-shadow-sm);
     position: sticky;

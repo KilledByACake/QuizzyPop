@@ -1,6 +1,4 @@
-/* ===============================
-   FONT IMPORTS & GLOBAL SETUP
-   =============================== */
+/* === FONT IMPORTS & GLOBAL SETUP === */
 @font-face {
     font-family: 'Baby';
     src: url('/fonts/Baby.ttf') format('truetype');
@@ -47,9 +45,7 @@ main {
     flex: 1 0 auto;
 }
 
-/* ===============================
-   NAVIGATION BAR
-   =============================== */
+/* ==== NAVIGATION BAR === */
 /* Main Navbar Container */
 .navbar {
     background: var(--qp-white);
@@ -149,12 +145,11 @@ main {
     background: rgba(30, 166, 114, 0.1);
 }
 
-/* ===============================
-   FOOTER SECTION
-   =============================== */
+/* === FOOTER SECTION === */
 /* Footer Container */
 .site-footer {
     margin-top: auto;
+    position: relative;
     width: 100%;
     background: var(--qp-deep);
     color: var(--qp-white);
@@ -228,13 +223,12 @@ main {
     font-family: var(--qp-font-main);
 }
 
-/* Footer Decorative Elements */
+/* === Footer Decorative Elements === */
 .footer-confetti {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    top: 0;  /* Added top: 0 */
     height: 100%;
     pointer-events: none;
     z-index: 0;
@@ -245,10 +239,9 @@ main {
     content: "";
     position: absolute;
     width: 220px;
-    height: 100%;  /* Changed from 60px to 100% */
+    height: 100%;
     opacity: 0.25;
     pointer-events: none;
-    top: 0;  /* Added top: 0 */
 }
 
 .footer-confetti::before {
@@ -264,6 +257,7 @@ main {
         radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
         radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
 }
+
 
 /* Responsive Design */
 @media (max-width: 700px) {

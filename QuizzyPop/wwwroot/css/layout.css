@@ -19,6 +19,11 @@
     font-weight: normal;
     font-style: normal;
 }
+/* === GLOBAL FONT SETUP === */
+:root {
+    --qp-font-main: 'Baloo 2', sans-serif;
+    --qp-font-special: 'Baloo 2', sans-serif; /* du kan endre hvis du vil ha annen font på spesielle elementer */
+}
 
 html, body {
     height: 100%;
@@ -29,6 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+    font-family: var(--qp-font-main);
 }
 
 /* Page wrapper to ensure footer sticks to bottom */
@@ -59,8 +65,8 @@ main {
 /* Navbar Inner Container */
 .navbar-inner {
     max-width: 1200px;
-    margin: 0 auto;  /* Remove margin-right: 0 */
-    padding: var(--qp-space-sm) var(--qp-space-xl);  /* Match footer padding */
+    margin: 0 auto;  
+    padding: var(--qp-space-sm) var(--qp-space-xl); 
     display: flex;
     align-items: center;
     gap: var(--qp-space-md);
@@ -72,7 +78,7 @@ main {
     align-items: center;
     gap: var(--qp-space-sm);
     text-decoration: none;
-    font-family: 'SuperBalloon', Arial, sans-serif;
+    font-family: var(--qp-font-main);
     font-size: 24px;
     color: var(--qp-blue);
 }
@@ -86,7 +92,7 @@ main {
     font-weight: 800;
     font-size: 1.2rem;
     color: var(--qp-blue);
-    font-family: var(--qp-font-special);
+    font-family: var(--qp-font-main);
 }
 
 /* Navigation Links */
@@ -109,19 +115,7 @@ main {
     background: var(--qp-gray-100);
 }
 
-/* Navigation Actions (Login/Signup buttons) */
-.navbar-link {
-    border: 2px solid #1ea672;
-    border-radius: 12px;
-    padding: 0.4rem 0.8rem;
-    font-weight: 700;
-    text-decoration: none;
-    color: #1ea672;
-}
 
-.navbar-link:hover {
-    background: rgba(30, 166, 114, 0.1);
-}
 
 /* Right-side Actions (Search, Login) */
 .navbar-actions {
@@ -131,18 +125,50 @@ main {
     gap: var(--qp-space-sm);
 }
 
+/* === ACTION BUTTONS (Log In / Sign Up / Account / Log Out) === */
+.navbar-actions .btn-outline-green {
+    background-color: white;
+    color: #1ea672;
+    border: 2px solid #1ea672;
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 800;
+    font-family: var(--qp-font-main);
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s ease-in-out;
+    box-shadow: none;
+}
+
+.navbar-actions .btn-outline-green:hover {
+    background-color: #1ea672;
+    color: white;
+    transform: scale(1.05);
+}
+
+
 /* Link buttons (log in / sign up) */
 .btn-link {
-    border: 2px solid #1ea672;
-    border-radius: 12px;
-    padding: 0.4rem 0.8rem;
-    font-weight: 700;
-    text-decoration: none;
+    background-color: white;
     color: #1ea672;
+    border: 2px solid #1ea672;
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 800;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s ease-in-out;
+    box-shadow: none;
 }
 
 .btn-link:hover {
-    background: rgba(30, 166, 114, 0.1);
+    background-color: #1ea672;
+    color: white;
+    box-shadow: none;
+    transform: scale(1.05);
 }
 
 /* === FOOTER SECTION === */
@@ -278,20 +304,4 @@ main {
 }
 .navbar-actions form {
     display: inline;
-}
-
-.navbar-actions .btn-link {
-    background: none;
-    border: none;
-    font: inherit;
-    color: #0F766E;
-    cursor: pointer;
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: 12px;
-    transition: background 0.2s ease;
-}
-
-.navbar-actions .btn-link:hover {
-    background: rgba(15, 118, 110, 0.1);
 }

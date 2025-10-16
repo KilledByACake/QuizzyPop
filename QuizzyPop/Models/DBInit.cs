@@ -68,5 +68,35 @@ public static class DBInit
             context.AddRange(quizzes);
             context.SaveChanges();
         }
+
+        if (!context.Questions.Any())
+        {
+            var questions = new List<Question>
+            {
+                new Question {
+                    QuizId = 1,
+                    Text = "What is the sum of the interior angles of a triangle?",
+                    CorrectAnswer = "180 degrees",
+                },
+                new Question {
+                    QuizId = 1,
+                    Text = "What do you call a polygon with eight sides?",
+                    CorrectAnswer = "Octagon",
+                },
+                new Question {
+                    QuizId = 2,
+                    Text = "Who is the main antagonist in 'The Lion King'?",
+                    CorrectAnswer = "Scar",
+                },
+                new Question {
+                    QuizId = 2,
+                    Text = "In 'Aladdin', what is the name of Jasmine's pet tiger?",
+                    CorrectAnswer = "Rajah",
+                }
+            };
+
+            context.AddRange(questions);
+            context.SaveChanges();
+        }
     }
 }

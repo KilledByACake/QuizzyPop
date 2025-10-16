@@ -6,6 +6,7 @@ public class Quiz
     public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public string ImageUrl { get; set; } = string.Empty;
     public string Difficulty { get; set; } = "easy"; // easy, medium, hard
 
     // Category of the quiz

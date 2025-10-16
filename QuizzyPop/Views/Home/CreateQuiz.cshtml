@@ -3,85 +3,332 @@
     ViewData["Title"] = "Create Quiz";
 }
 
-<section class="create-quiz-page">
-
-    <div class="title-row">
-        <h1>Create new Quiz</h1>
+<section class="qp-page create-quiz-page">
+    <!-- Title Section -->
+    <div class="page-header">
+        <img src="~/images/QuizzyBlueberry.png" alt="Quizzy Pop mascot" class="mascot" />
+        <h1>Create Your Quiz</h1>
+        <p class="subtitle">Share knowledge through fun questions!</p>
     </div>
 
-    <div class="cq-grid">
-        <!-- LEFT: form column -->
-        <div class="form-col">
-            <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" novalidate>
-                <!-- Quiz info card -->
-                <div class="card">
-                    <h2 class="card-title">Quiz information</h2>
-                    @await Html.PartialAsync("_QuizMetaData", Model)
-                </div>
-
-                <!-- Questions card(s) -->
-                <div class="card" style="margin-top:2rem;">
-                    <h2>Questions</h2>
-                    <div id="questions">
-                        @for (int i = 0; i < Model.Questions.Count; i++)
-                        {
-                            @await Html.PartialAsync("_QuizQuestion", Model.Questions[i], new ViewDataDictionary(ViewData) { { "QuestionNumber", i + 1 } })
-                        }
-                    </div>
-                    <div class="add-question-container" style="margin-top:1.5rem; text-align:center;">
-                        <button type="button" id="addQuestionBtn" class="btn btn-outline-primary">
-                            + Add question
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Publish button at the bottom -->
-                <div class="publish-bottom" style="margin-top:2rem;">
-                    <button type="submit" class="btn btn-giant">Publish</button>
-                </div>
-            </form>
-        </div>
-
-        <!-- RIGHT: sidebar -->
-        <aside class="sidebar" aria-label="Quiz summary and settings">
-            <div class="card small">
-                <ul class="stats">
-                    <li><span>Total questions</span><strong>@Model.Questions.Count</strong></li>
-                    <li><span>Total points</span><strong>1</strong></li>
-                    <li><span>Estimated time</span><strong>2 min</strong></li>
-                </ul>
+    <!-- Quiz Form -->
+    <div class="quiz-card">
+        <form asp-controller="Home" asp-action="CreateQuiz" method="post" enctype="multipart/form-data">
+            <!-- Quiz Details -->
+            <div class="form-group">
+                <label asp-for="Title">Quiz Title</label>
+                <input asp-for="Title" class="form-input" placeholder="Enter quiz title..." />
+                <span asp-validation-for="Title" class="text-danger"></span>
             </div>
-            <div class="card small" style="margin-top:1rem;">
-                <div class="settings">
-                    <label class="switch">
-                        <input type="checkbox" name="RandomizeQuestionOrder" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Randomize question order</span>
-                    </label>
 
-                    <label class="switch">
-                        <input type="checkbox" name="AllowBackNavigation" />
-                        <span class="slider"></span>
-                        <span class="switch-text">Allow back navigation</span>
-                    </label>
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="form-input" rows="3" placeholder="Describe your quiz..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
 
-                    <label class="switch">
-                        <input type="checkbox" name="GiveAwards" checked />
-                        <span class="slider"></span>
-                        <span class="switch-text">Give awards for right answers</span>
-                    </label>
+            <!-- New Fields -->
+            <div class="form-group">
+                <label asp-for="CoverImage">Cover Image</label>
+                <div class="file-upload">
+                    <input type="file" asp-for="CoverImage" class="file-input" accept="image/*" />
+                    <div class="file-placeholder">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <span>Choose an image or drag it here</span>
+                    </div>
+                </div>
+                <span class="form-hint">Maximum size: 2MB. Recommended: 1200x630px</span>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label asp-for="Category">Category</label>
+                    <select asp-for="Category" class="form-input">
+                        <option value="">Select a category...</option>
+                        <option value="General">General Knowledge</option>
+                        <option value="Science">Science</option>
+                        <option value="History">History</option>
+                        <option value="Geography">Geography</option>
+                        <option value="Arts">Arts & Literature</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+                    <span asp-validation-for="Category" class="text-danger"></span>
+                </div>
+
+                <div class="form-group half">
+                    <label asp-for="Difficulty">Difficulty</label>
+                    <select asp-for="Difficulty" class="form-input">
+                        <option value="Easy">Easy (10 points per question)</option>
+                        <option value="Medium">Medium (20 points per question)</option>
+                        <option value="Hard">Hard (30 points per question)</option>
+                    </select>
                 </div>
             </div>
-        </aside>
+
+            <div class="form-row">
+                <div class="form-group half">
+                    <label asp-for="TimeLimit">Time Limit (Optional)</label>
+                    <div class="time-input">
+                        <input asp-for="TimeLimit" type="number" class="form-input" min="1" max="180" />
+                        <span class="time-suffix">minutes</span>
+                    </div>
+                    <span class="form-hint">Leave empty for no time limit</span>
+                </div>
+
+                <div class="form-group half">
+                    <label>Publicly Visible</label>
+                    <div class="toggle-container">
+                        <label class="toggle">
+                            <input asp-for="IsPublic" type="checkbox" />
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <span class="form-hint">Allow other users to find and take your quiz</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="button-row">
+                <button type="submit" class="btn-next">Create Quiz</button>
+                <a asp-action="Index" class="btn-prev">Cancel</a>
+            </div>
+        </form>
     </div>
 </section>
 
-<template id="question-template">
-  <div class="card question-card" data-index="__INDEX__">
-    <!-- Question template content here -->
-  </div>
-</template>
-
-@section Scripts {
-    @* Your JavaScript for adding questions goes here *@
+<style>
+.create-quiz-page {
+    padding: var(--qp-space-xl) var(--qp-space-lg);
 }
+
+/* Header Styling */
+.page-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: var(--qp-space-xl);
+}
+
+.page-header .mascot {
+    width: 100px;
+    height: auto;
+    margin-bottom: var(--qp-space-md);
+}
+
+.page-header h1 {
+    color: var(--qp-blue);
+    font-size: 2.2rem;
+    margin: var(--qp-space-sm) 0;
+    font-family: var(--qp-font-special);
+}
+
+.subtitle {
+    color: var(--qp-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Card Styling */
+.quiz-card {
+    background: var(--qp-white);
+    border-radius: var(--qp-radius-lg);
+    padding: var(--qp-space-xl);
+    box-shadow: var(--qp-shadow-md);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* Form Styling */
+.form-group {
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: var(--qp-space-xs);
+    font-weight: 600;
+    color: var(--qp-deep);
+    font-family: var(--qp-font-main);
+}
+
+.form-input {
+    width: 100%;
+    padding: var(--qp-space-sm);
+    border: 2px solid var(--qp-gray-200);
+    border-radius: var(--qp-radius-md);
+    font-family: var(--qp-font-main);
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--qp-primary);
+}
+
+/* Form Row Layout */
+.form-row {
+    display: flex;
+    gap: var(--qp-space-lg);
+    margin-bottom: var(--qp-space-lg);
+}
+
+.form-group.half {
+    flex: 1;
+}
+
+/* File Upload Styling */
+.file-upload {
+    border: 2px dashed var(--qp-gray-200);
+    border-radius: var(--qp-radius-md);
+    padding: var(--qp-space-lg);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.file-upload:hover {
+    border-color: var(--qp-primary);
+}
+
+.file-input {
+    display: none;
+}
+
+.file-placeholder {
+    color: var(--qp-gray-500);
+}
+
+/* Time Input Styling */
+.time-input {
+    position: relative;
+}
+
+.time-suffix {
+    position: absolute;
+    right: var(--qp-space-md);
+    color: var(--qp-gray-500);
+}
+
+/* Toggle Switch Styling */
+.toggle-container {
+    display: flex;
+    justify-content: center;
+    margin: var(--qp-space-sm) 0;
+}
+
+.toggle {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--qp-gray-300);
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--qp-primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Form Hints */
+.form-hint {
+    display: block;
+    color: var(--qp-gray-500);
+    font-size: 0.875rem;
+    margin-top: var(--qp-space-xs);
+}
+
+/* Button Styling */
+.button-row {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--qp-space-md);
+    margin-top: var(--qp-space-xl);
+}
+
+.btn-next, 
+.btn-prev {
+    font-family: var(--qp-font-main);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: var(--qp-radius-full);
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn-next {
+    background: var(--qp-primary);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-primary-dark);
+}
+
+.btn-prev {
+    background: var(--qp-gray-400);
+    color: var(--qp-white);
+}
+
+.btn-next:hover,
+.btn-prev:hover {
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@@media (max-width: 768px) {
+    .create-quiz-page {
+        padding: var(--qp-space-lg) var(--qp-space-md);
+    }
+
+    .quiz-card {
+        padding: var(--qp-space-lg);
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: var(--qp-space-md);
+    }
+
+    .button-row {
+        flex-direction: column-reverse;
+    }
+
+    .btn-next,
+    .btn-prev {
+        width: 100%;
+    }
+}
+</style>

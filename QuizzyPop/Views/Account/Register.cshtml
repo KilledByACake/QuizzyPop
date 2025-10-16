@@ -3,13 +3,6 @@
 }
 
 <section class="signup-page">
-    <!-- Floating background clouds -->
-    <div class="clouds" aria-hidden="true">
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-        <div class="cloud"></div>
-    </div>
-
     <div class="signup-container">
         <img src="~/images/QuizzyBlueberry.png" alt="Quizzy Pop mascot" class="signup-mascot" />
         <h1>Create Your Account</h1>
@@ -83,7 +76,7 @@
 <!-- ===================== STYLES ===================== -->
 <style>
     .signup-page {
-        background: #d9f1ff;
+        /* background: #d9f1ff; */
         min-height: 100vh;
         position: relative;
         overflow: hidden;
@@ -94,42 +87,6 @@
         font-family: 'Baloo 2', system-ui, sans-serif;
     }
 
-    /* Clouds */
-    .clouds {
-        position: absolute;
-        inset: 0;
-        overflow: hidden;
-        z-index: 0;
-    }
-
-    .cloud {
-        position: absolute;
-        background: #fff;
-        border-radius: 50%;
-        opacity: 0.85;
-        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.05);
-    }
-
-    .cloud:nth-child(1) {
-        width: 200px;
-        height: 100px;
-        top: 10%;
-        left: 10%;
-    }
-
-    .cloud:nth-child(2) {
-        width: 250px;
-        height: 120px;
-        top: 60%;
-        left: 60%;
-    }
-
-    .cloud:nth-child(3) {
-        width: 180px;
-        height: 90px;
-        top: 75%;
-        left: 25%;
-    }
 
     /* Container */
     .signup-container {
@@ -157,7 +114,7 @@
     }
 
     .subtitle {
-        color: #ff9900;
+        color: #0F766E;
         font-weight: 700;
         margin-bottom: 2rem;
     }
@@ -180,7 +137,7 @@
     .dropdown-wrapper select {
         appearance: none;
         background: #fff;
-        border: 3px solid #ffa726;
+        border: 3px solid #0F766E;
         border-radius: 999px;
         padding: 12px 20px;
         width: 100%;
@@ -194,7 +151,7 @@
     }
 
     .dropdown-wrapper select:focus {
-        border-color: #ff9900;
+        border-color: #0F766E;
         background-color: #fffaf3;
     }
 
@@ -217,7 +174,7 @@
     }
 
     .form-group input:focus {
-        border-color: #ff9900;
+        border-color: #0F766E;
         background: #fffef7;
     }
 
@@ -251,7 +208,7 @@
     }
 
     /* Footer text */
-    .footer-text {
+   /* .footer-text {
         margin-top: 1.2rem;
         color: #374151;
         text-align: center;
@@ -259,7 +216,7 @@
     }
 
     .footer-text a {
-        color: #ff9900;
+        color: #0F766E;
         text-decoration: none;
         font-weight: 700;
     }

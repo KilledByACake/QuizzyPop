@@ -27,38 +27,43 @@ namespace QuizzyPop.Controllers
         }
 
         // ==================== CREATE QUIZ (GET) ====================
+        [HttpGet]
         public IActionResult CreateQuiz()
         {
-            // Initialize a new quiz model with one empty question
-            _logger.LogInformation("This is an information message.");
-        _logger.LogWarning("This is a warning message");
-        _logger.LogError("This is an error message.");
-            var model = new QuizMetaDataViewModel
-            {
-                Questions = new List<QuizQuestionViewModel>
-                {
-                    new QuizQuestionViewModel()
-                }
-            };
-
+            var model = new QuizMetaDataViewModel();
             return View(model);
         }
 
         // ==================== CREATE QUIZ (POST) ====================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(QuizMetaDataViewModel model)
+        public IActionResult CreateQuiz(QuizMetaDataViewModel model)  // Changed from Create to CreateQuiz
         {
-            if (!ModelState.IsValid)
+            // Simple validation to proceed to questions page
+            if (!string.IsNullOrEmpty(model.Title))
             {
-                // Validation failed — reload the same page with errors
-                return View("CreateQuiz", model);
+                return RedirectToAction("AddQuestions");
             }
+            return View(model);  // Changed from View("CreateQuiz", model)
+        }
 
-            // TODO: Save quiz to database later
+        public IActionResult AddQuestions(string quizId)
+        {
+            var model = new QuizQuestionViewModel
+            {
+                Text = string.Empty,
+                Image = string.Empty,
+                Choices = new List<string> { "", "", "", "" },  // Initialize 4 empty choices
+                Options = new List<string> { "", "", "", "" },  // Keep both for compatibility
+                CorrectAnswerIndex = 0,
+                Points = 1,
+                TimeLimit = 0,
+                ShuffleAnswers = false,
+                Required = true,
+                Explanation = string.Empty
+            };
 
-            // After saving, show the “quiz published” page
-            return View("QuizPublished", model);
+            return View(model);
         }
 
         // ==================== ABOUT PAGE ====================
@@ -177,6 +182,113 @@ namespace QuizzyPop.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpGet]
+        public IActionResult PublishedQuiz(string id)
+        {
+            // TODO: Backend team will load actual quiz data from database using the id
+            
+            // For now, show a simple success page with placeholder data
+            var model = new QuizMetaDataViewModel
+            {
+                Title = "Your Quiz",
+                Description = "Quiz has been published successfully!",
+                Category = "General",
+                Difficulty = "Medium",
+                Questions = new List<QuizQuestionViewModel>
+                {
+                    new QuizQuestionViewModel { Text = "Sample Question", Options = new List<string> { "A", "B", "C", "D" } }
+                }
+            };
+            
+            ViewBag.CreatorName = "Current User";
+            ViewBag.QuizId = id ?? "QZ123456";
+            
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult MyPage()
+        {
+            // Get user from session
+            var userJson = HttpContext.Session.GetString("CurrentUser");
+            if (userJson == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            
+            var user = JsonSerializer.Deserialize<User>(userJson);
+            return View(user);
+        }
+
+        [HttpGet]
+        public IActionResult EditQuiz(int id)
+        {
+            // TODO: Backend Implementation Required
+            // 1. Use the 'id' parameter to fetch the quiz and its questions from the database
+            // 2. Include all quiz data:
+            //    - Quiz metadata (title, description, etc.)
+            //    - All questions with their complete data
+            //    - Correct answer indices
+            //    - Points and time limits
+            //    - Any quiz-specific settings
+            // 3. Map the database entities to QuizQuestionViewModel
+            // 4. Ensure all form fields are populated with existing data
+            // 5. Consider adding audit info (last edited, created by, etc.)
+            
+            // Example of expected data structure:
+            var questions = new List<QuizQuestionViewModel>
+            {
+                new QuizQuestionViewModel
+                {
+                    Text = "Sample Question 1",
+                    Choices = new List<string> { "Option 1", "Option 2", "Option 3", "Option 4" },
+                    CorrectAnswerIndex = 0,
+                    Points = 10,
+                    TimeLimit = 30,
+                    Required = true,
+                    ShuffleAnswers = false,
+                    Explanation = "Sample explanation"
+                }
+            };
+
+            return View(questions);
+        }
+
+        [HttpPost]
+        public IActionResult EditQuiz(List<QuizQuestionViewModel> questions)
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO: Save changes to database
+                return RedirectToAction("Index");
+            }
+            return View(questions);
+        }
+
+        [HttpPost]
+        public IActionResult AddQuestion(QuizQuestionViewModel model, string action)
+        {
+            // Temporary validation - we just want the UI flow for now
+            if (!string.IsNullOrEmpty(model.Text) && model.Choices.Any())
+            {
+                // If "Add Another Question" was clicked
+                if (action == "addAnother")
+                {
+                    TempData["Success"] = "Question added successfully!";
+                    return RedirectToAction("AddQuestions");
+                }
+                
+                // If "Finish Quiz" was clicked
+                if (action == "finish")
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // If validation fails, return to the same view
+            return View("AddQuestions", model);
         }
     }
 }

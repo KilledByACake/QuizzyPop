@@ -1,0 +1,25 @@
+2025-10-12 11:59:07.168 +02:00 [INF] User profile is available. Using 'C:\Users\anjat\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-12 11:59:07.288 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-12 11:59:07.296 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-12 11:59:07.299 +02:00 [INF] Hosting environment: Development
+2025-10-12 11:59:07.301 +02:00 [INF] Content root path: C:\Users\anjat\QuizzyPop\QuizzyPop
+2025-10-12 11:59:07.556 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-12 11:59:07.599 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-12 11:59:07.629 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 11:59:07.702 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 11:59:07.720 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-12 11:59:08.269 +02:00 [INF] Executed ViewResult - view Index executed in 536.7932ms.
+2025-10-12 11:59:08.283 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 580.0951ms
+2025-10-12 11:59:08.284 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 11:59:08.293 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 738.6777ms
+2025-10-12 11:59:19.198 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-12 11:59:19.200 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 11:59:19.202 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 11:59:19.204 +02:00 [INF] This is an information message.
+2025-10-12 11:59:19.209 +02:00 [WRN] This is a warning message
+2025-10-12 11:59:19.212 +02:00 [ERR] This is an error message.
+2025-10-12 11:59:19.214 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-12 11:59:19.282 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 69.3679ms.
+2025-10-12 11:59:19.282 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 80.5061ms
+2025-10-12 11:59:19.283 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 11:59:19.283 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 85.6758ms

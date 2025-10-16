@@ -24,17 +24,27 @@
             <a asp-controller="Home" asp-action="CreateQuiz" class="@isActive("Home", "CreateQuiz")">Make Quiz</a>
         </nav>
 
+        @{
+            var userSession = Context.Session.GetString("CurrentUser");
+        }
+
         <!-- Right side actions -->
         <div class="navbar-actions">
-            <!-- Search bar
-            <form class="navbar-search" role="search">
-                <input type="search" placeholder="Search…" aria-label="Search quizzes" />
-            </form>
-            -->
+            @if (!string.IsNullOrEmpty(userSession))
+            {
+                <!-- If Logged in -->
+                <a asp-controller="Home" asp-action="MyPage" class="btn-outline-green">Account</a>
 
-            <a asp-controller="Account" asp-action="Login" class="btn-link">Log In</a>
-            <a asp-controller="Account" asp-action="Register" class="btn-link">Sign Up</a>
-
+                <form asp-controller="Account" asp-action="Logout" method="post" style="display:inline;">
+                    <button type="submit" class="btn-outline-green">Log Out</button>
+                </form>
+            }
+            else
+            {
+                <!-- If NOT logged in -->
+                <a asp-controller="Account" asp-action="Login" class="btn-outline-green">Log In</a>
+                <a asp-controller="Account" asp-action="Register" class="btn-outline-green">Sign Up</a>
+            }
         </div>
     </div>
 </header>

@@ -1,0 +1,245 @@
+2025-10-12 13:31:15.685 +02:00 [INF] User profile is available. Using 'C:\Users\anjat\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2025-10-12 13:31:15.931 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-12 13:31:15.944 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-12 13:31:15.949 +02:00 [INF] Hosting environment: Development
+2025-10-12 13:31:15.952 +02:00 [INF] Content root path: C:\Users\anjat\QuizzyPop\QuizzyPop
+2025-10-12 13:31:17.921 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-12 13:31:18.143 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-12 13:31:18.215 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:31:18.384 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:31:18.420 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-12 13:31:18.667 +02:00 [INF] Executed ViewResult - view Index executed in 251.0669ms.
+2025-10-12 13:31:18.711 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 326.1454ms
+2025-10-12 13:31:18.712 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:31:18.720 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 804.8509ms
+2025-10-12 13:31:18.774 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:31:18.774 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/clouds.css - null null
+2025-10-12 13:31:18.789 +02:00 [INF] The file /css/clouds.css was not modified
+2025-10-12 13:31:18.790 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/clouds.css - 304 null text/css 17.7817ms
+2025-10-12 13:31:18.850 +02:00 [INF] Sending file. Request path: '/css/purged.css'. Physical path: 'C:\Users\anjat\QuizzyPop\QuizzyPop\wwwroot\css\purged.css'
+2025-10-12 13:31:18.850 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 200 12292 text/css 77.5708ms
+2025-10-12 13:31:20.746 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-12 13:31:20.752 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:31:20.757 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:31:20.765 +02:00 [INF] This is an information message.
+2025-10-12 13:31:20.773 +02:00 [WRN] This is a warning message
+2025-10-12 13:31:20.780 +02:00 [ERR] This is an error message.
+2025-10-12 13:31:20.784 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-12 13:31:21.022 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 239.7894ms.
+2025-10-12 13:31:21.023 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 265.6693ms
+2025-10-12 13:31:21.023 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:31:21.025 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 278.7879ms
+2025-10-12 13:31:21.502 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:31:21.503 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-12 13:31:21.503 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 1.511ms
+2025-10-12 13:31:21.701 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:31:21.734 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 32.3958ms
+2025-10-12 13:31:21.748 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:34:23.458 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-12 13:34:23.459 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:34:23.460 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:34:23.460 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-12 13:34:23.468 +02:00 [INF] Executed ViewResult - view Index executed in 8.2979ms.
+2025-10-12 13:34:23.468 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 8.6323ms
+2025-10-12 13:34:23.468 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:34:23.468 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 10.9063ms
+2025-10-12 13:34:23.523 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:34:23.526 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-12 13:34:23.532 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 7.4371ms
+2025-10-12 13:35:18.011 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-12 13:35:18.014 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:35:18.014 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:18.016 +02:00 [INF] This is an information message.
+2025-10-12 13:35:18.018 +02:00 [WRN] This is a warning message
+2025-10-12 13:35:18.020 +02:00 [ERR] This is an error message.
+2025-10-12 13:35:18.020 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-12 13:35:18.030 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 9.6646ms.
+2025-10-12 13:35:18.030 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 15.9425ms
+2025-10-12 13:35:18.030 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:35:18.030 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 19.975ms
+2025-10-12 13:35:18.064 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:35:18.065 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-12 13:35:18.065 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 0.7738ms
+2025-10-12 13:35:18.095 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:18.096 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.5552ms
+2025-10-12 13:35:18.096 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:35:38.519 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - null null
+2025-10-12 13:35:38.521 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-12 13:35:38.522 +02:00 [INF] Route matched with {action = "TakeQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult TakeQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:38.525 +02:00 [INF] TakeQuiz() called — loaded 5 quizzes
+2025-10-12 13:35:38.531 +02:00 [INF] Executing ViewResult, running view TakeQuiz.
+2025-10-12 13:35:38.536 +02:00 [INF] Executed ViewResult - view TakeQuiz executed in 10.8972ms.
+2025-10-12 13:35:38.536 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop) in 13.6467ms
+2025-10-12 13:35:38.536 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.TakeQuiz (QuizzyPop)'
+2025-10-12 13:35:38.536 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/TakeQuiz - 200 null text/html; charset=utf-8 19.1761ms
+2025-10-12 13:35:38.597 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:38.598 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.5259ms
+2025-10-12 13:35:38.598 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:35:43.446 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna - null null
+2025-10-12 13:35:43.446 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:43.454 +02:00 [INF] Route matched with {action = "StartQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult StartQuiz(System.String, Int32) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:43.467 +02:00 [INF] Executing ViewResult, running view TakingQuiz.
+2025-10-12 13:35:43.472 +02:00 [INF] Executed ViewResult - view TakingQuiz executed in 6.4719ms.
+2025-10-12 13:35:43.473 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop) in 18.6093ms
+2025-10-12 13:35:43.473 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:43.473 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna - 200 null text/html; charset=utf-8 27.1107ms
+2025-10-12 13:35:43.514 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:43.515 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.6704ms
+2025-10-12 13:35:43.516 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:35:45.461 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - application/x-www-form-urlencoded 259
+2025-10-12 13:35:45.461 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:45.469 +02:00 [INF] Route matched with {action = "SubmitQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult SubmitQuiz(QuizzyPop.ViewModels.TakingQuizViewModel, System.String) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:45.486 +02:00 [INF] Executing RedirectResult, redirecting to /Home/StartQuiz/Animals%20of%20Savanna?questionIndex=1.
+2025-10-12 13:35:45.486 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop) in 17.2405ms
+2025-10-12 13:35:45.486 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:45.487 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - 302 0 null 25.7892ms
+2025-10-12 13:35:45.491 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna?questionIndex=1 - null null
+2025-10-12 13:35:45.491 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:45.491 +02:00 [INF] Route matched with {action = "StartQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult StartQuiz(System.String, Int32) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:45.494 +02:00 [INF] Executing ViewResult, running view TakingQuiz.
+2025-10-12 13:35:45.495 +02:00 [INF] Executed ViewResult - view TakingQuiz executed in 1.1274ms.
+2025-10-12 13:35:45.495 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop) in 4.2097ms
+2025-10-12 13:35:45.495 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:45.495 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna?questionIndex=1 - 200 null text/html; charset=utf-8 4.6099ms
+2025-10-12 13:35:45.523 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:35:45.523 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-12 13:35:45.523 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 0.5835ms
+2025-10-12 13:35:45.539 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:45.540 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.7822ms
+2025-10-12 13:35:45.540 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:35:47.079 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - application/x-www-form-urlencoded 259
+2025-10-12 13:35:47.079 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:47.079 +02:00 [INF] Route matched with {action = "SubmitQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult SubmitQuiz(QuizzyPop.ViewModels.TakingQuizViewModel, System.String) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:47.081 +02:00 [INF] Executing RedirectResult, redirecting to /Home/StartQuiz/Animals%20of%20Savanna?questionIndex=2.
+2025-10-12 13:35:47.081 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop) in 1.4552ms
+2025-10-12 13:35:47.081 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:47.081 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - 302 0 null 2.1383ms
+2025-10-12 13:35:47.084 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna?questionIndex=2 - null null
+2025-10-12 13:35:47.084 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:47.085 +02:00 [INF] Route matched with {action = "StartQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult StartQuiz(System.String, Int32) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:47.085 +02:00 [INF] Executing ViewResult, running view TakingQuiz.
+2025-10-12 13:35:47.086 +02:00 [INF] Executed ViewResult - view TakingQuiz executed in 1.1951ms.
+2025-10-12 13:35:47.086 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop) in 1.5866ms
+2025-10-12 13:35:47.086 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.StartQuiz (QuizzyPop)'
+2025-10-12 13:35:47.086 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/StartQuiz/Animals of Savanna?questionIndex=2 - 200 null text/html; charset=utf-8 1.9804ms
+2025-10-12 13:35:47.152 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:47.152 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.4126ms
+2025-10-12 13:35:47.152 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:35:50.977 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - application/x-www-form-urlencoded 261
+2025-10-12 13:35:50.977 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:50.978 +02:00 [INF] Route matched with {action = "SubmitQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult SubmitQuiz(QuizzyPop.ViewModels.TakingQuizViewModel, System.String) on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:50.978 +02:00 [INF] Executing RedirectResult, redirecting to /Home/QuizCompleted.
+2025-10-12 13:35:50.978 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop) in 0.6501ms
+2025-10-12 13:35:50.978 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.SubmitQuiz (QuizzyPop)'
+2025-10-12 13:35:50.978 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost:5299/Home/SubmitQuiz - 302 0 null 1.2102ms
+2025-10-12 13:35:50.983 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/QuizCompleted - null null
+2025-10-12 13:35:50.983 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.QuizCompleted (QuizzyPop)'
+2025-10-12 13:35:50.985 +02:00 [INF] Route matched with {action = "QuizCompleted", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult QuizCompleted() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:35:50.987 +02:00 [INF] Executing ViewResult, running view QuizCompleted.
+2025-10-12 13:35:50.993 +02:00 [INF] Executed ViewResult - view QuizCompleted executed in 7.2791ms.
+2025-10-12 13:35:50.993 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.QuizCompleted (QuizzyPop) in 8.4262ms
+2025-10-12 13:35:50.993 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.QuizCompleted (QuizzyPop)'
+2025-10-12 13:35:50.993 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/QuizCompleted - 200 null text/html; charset=utf-8 10.5585ms
+2025-10-12 13:35:51.037 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/images/QuizzyOrange.png - null null
+2025-10-12 13:35:51.037 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/images/QuizzyOrange.png - 404 0 null 0.3368ms
+2025-10-12 13:35:51.037 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/images/QuizzyOrange.png, Response status code: 404
+2025-10-12 13:35:51.060 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:35:51.060 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.4229ms
+2025-10-12 13:35:51.060 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:36:06.588 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-12 13:36:06.589 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:36:06.589 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:36:06.589 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-12 13:36:06.589 +02:00 [INF] Executed ViewResult - view Index executed in 0.4842ms.
+2025-10-12 13:36:06.589 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 0.6719ms
+2025-10-12 13:36:06.589 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:36:06.590 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 1.0715ms
+2025-10-12 13:36:10.395 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-12 13:36:10.395 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:36:10.395 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:36:10.397 +02:00 [INF] This is an information message.
+2025-10-12 13:36:10.399 +02:00 [WRN] This is a warning message
+2025-10-12 13:36:10.401 +02:00 [ERR] This is an error message.
+2025-10-12 13:36:10.402 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-12 13:36:10.403 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 1.9788ms.
+2025-10-12 13:36:10.404 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 8.5963ms
+2025-10-12 13:36:10.404 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-12 13:36:10.404 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 9.0225ms
+2025-10-12 13:36:10.455 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:36:10.456 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.3887ms
+2025-10-12 13:36:10.456 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:36:11.354 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Account/Login - null null
+2025-10-12 13:36:11.354 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-12 13:36:11.355 +02:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Login() on controller QuizzyPop.Controllers.AccountController (QuizzyPop).
+2025-10-12 13:36:11.356 +02:00 [INF] Executing ViewResult, running view Login.
+2025-10-12 13:36:11.362 +02:00 [INF] Executed ViewResult - view Login executed in 6.8711ms.
+2025-10-12 13:36:11.362 +02:00 [INF] Executed action QuizzyPop.Controllers.AccountController.Login (QuizzyPop) in 7.2245ms
+2025-10-12 13:36:11.362 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-12 13:36:11.362 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Account/Login - 200 null text/html; charset=utf-8 8.7278ms
+2025-10-12 13:36:11.434 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:36:11.435 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.5928ms
+2025-10-12 13:36:11.435 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:36:12.400 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Account/Register - null null
+2025-10-12 13:36:12.401 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.AccountController.Register (QuizzyPop)'
+2025-10-12 13:36:12.401 +02:00 [INF] Route matched with {action = "Register", controller = "Account"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Register() on controller QuizzyPop.Controllers.AccountController (QuizzyPop).
+2025-10-12 13:36:12.402 +02:00 [INF] Executing ViewResult, running view Register.
+2025-10-12 13:36:12.408 +02:00 [INF] Executed ViewResult - view Register executed in 6.6383ms.
+2025-10-12 13:36:12.408 +02:00 [INF] Executed action QuizzyPop.Controllers.AccountController.Register (QuizzyPop) in 6.8939ms
+2025-10-12 13:36:12.408 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.AccountController.Register (QuizzyPop)'
+2025-10-12 13:36:12.409 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Account/Register - 200 null text/html; charset=utf-8 8.4741ms
+2025-10-12 13:36:12.463 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:36:12.463 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.553ms
+2025-10-12 13:36:12.463 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:36:14.828 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Account/Login - null null
+2025-10-12 13:36:14.828 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-12 13:36:14.828 +02:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Login() on controller QuizzyPop.Controllers.AccountController (QuizzyPop).
+2025-10-12 13:36:14.828 +02:00 [INF] Executing ViewResult, running view Login.
+2025-10-12 13:36:14.829 +02:00 [INF] Executed ViewResult - view Login executed in 0.9444ms.
+2025-10-12 13:36:14.829 +02:00 [INF] Executed action QuizzyPop.Controllers.AccountController.Login (QuizzyPop) in 1.236ms
+2025-10-12 13:36:14.829 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-12 13:36:14.830 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Account/Login - 200 null text/html; charset=utf-8 1.8821ms
+2025-10-12 13:36:14.866 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-12 13:36:14.867 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-12 13:36:14.867 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 1.1508ms
+2025-10-12 13:36:14.915 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-12 13:36:14.915 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 0.4533ms
+2025-10-12 13:36:14.916 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-12 13:36:17.493 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-12 13:36:17.494 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:36:17.494 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-12 13:36:17.494 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-12 13:36:17.494 +02:00 [INF] Executed ViewResult - view Index executed in 0.5768ms.
+2025-10-12 13:36:17.495 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 0.7831ms
+2025-10-12 13:36:17.495 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-12 13:36:17.495 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 1.2148ms
+2025-10-13 12:39:08.455 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-13 12:39:08.509 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-13 12:39:08.538 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-13 12:39:08.576 +02:00 [INF] This is an information message.
+2025-10-13 12:39:08.594 +02:00 [WRN] This is a warning message
+2025-10-13 12:39:08.600 +02:00 [ERR] This is an error message.
+2025-10-13 12:39:08.669 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-13 12:39:08.861 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 252.5637ms.
+2025-10-13 12:39:08.862 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 323.2851ms
+2025-10-13 12:39:08.863 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-13 12:39:08.863 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 412.8902ms
+2025-10-13 12:39:09.036 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/clouds.css - null null
+2025-10-13 12:39:09.036 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/css/purged.css - null null
+2025-10-13 12:39:09.047 +02:00 [INF] The file /css/purged.css was not modified
+2025-10-13 12:39:09.047 +02:00 [INF] The file /css/clouds.css was not modified
+2025-10-13 12:39:09.048 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/purged.css - 304 null text/css 11.5927ms
+2025-10-13 12:39:09.055 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/css/clouds.css - 304 null text/css 11.9937ms
+2025-10-13 12:39:09.150 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-13 12:39:09.156 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 5.7021ms
+2025-10-13 12:39:09.157 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-13 12:39:11.292 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Account/Login - null null
+2025-10-13 12:39:11.294 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-13 12:39:11.295 +02:00 [INF] Route matched with {action = "Login", controller = "Account"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Login() on controller QuizzyPop.Controllers.AccountController (QuizzyPop).
+2025-10-13 12:39:11.296 +02:00 [INF] Executing ViewResult, running view Login.
+2025-10-13 12:39:11.302 +02:00 [INF] Executed ViewResult - view Login executed in 7.0497ms.
+2025-10-13 12:39:11.302 +02:00 [INF] Executed action QuizzyPop.Controllers.AccountController.Login (QuizzyPop) in 7.2877ms
+2025-10-13 12:39:11.302 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.AccountController.Login (QuizzyPop)'
+2025-10-13 12:39:11.302 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Account/Login - 200 null text/html; charset=utf-8 10.3233ms
+2025-10-13 12:39:11.429 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
+2025-10-13 12:39:11.466 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 36.6762ms
+2025-10-13 12:39:11.466 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404

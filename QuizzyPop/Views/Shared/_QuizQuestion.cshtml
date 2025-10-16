@@ -3,9 +3,20 @@
 @{
     var questionNumber = ViewData["QuestionNumber"] ?? 1;
 }
-<div class="card">
-    <div class="card-title-row">
-        <h2 class="card-title">Question @questionNumber</h2>
+<div class="card question-card" data-question-index="@ViewData["QuestionNumber"]">
+    <div class="question-header">
+        <h3>Question @ViewData["QuestionNumber"]</h3>
+        <div class="question-controls">
+            <button type="button" class="btn btn-sm btn-outline-secondary move-up-btn" title="Move Up">
+                ↑
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-secondary move-down-btn" title="Move Down">
+                ↓
+            </button>
+            <button type="button" class="btn btn-sm btn-outline-danger remove-question-btn" title="Remove Question">
+                ✕
+            </button>
+        </div>
     </div>
     <div class="form-row">
         <label asp-for="Text">Question Text</label>
@@ -18,7 +29,6 @@
             <label for="Image" class="upload-label">Upload image</label>
         </div>
     </div>
-    @* Render options here, e.g. a loop over Model.Options *@
     @for (int i = 0; i < Model.Options.Count; i++)
     {
         <div class="form-row">
@@ -56,4 +66,6 @@
         </label>
     </div>
 </div>
+
+
 

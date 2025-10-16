@@ -1,0 +1,303 @@
+/* === FONT IMPORTS & GLOBAL SETUP === */
+@font-face {
+    font-family: 'Baby';
+    src: url('/fonts/Baby.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'SuperBalloon';
+    src: url('/fonts/Super-Balloon-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baloo 2';
+    src: url('/fonts/Baloo2-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    background-color: var(--qp-sky);
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: var(--qp-font-main);
+}
+
+/* Page wrapper to ensure footer sticks to bottom */
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+main {
+    position: relative;
+    z-index: 1;  /* Keep content above clouds */
+    flex: 1 0 auto;
+}
+
+/* ==== NAVIGATION BAR === */
+/* Main Navbar Container */
+.navbar {
+    background-color: var(--qp-white);
+    border-bottom: 1px solid rgba(0,0,0,.08);
+    box-shadow: var(--qp-shadow-sm);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Navbar Inner Container */
+.navbar-inner {
+    max-width: 1200px;
+    margin: 0 auto;  
+    padding: var(--qp-space-sm) var(--qp-space-xl); 
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-md);
+}
+
+/* Brand Logo & Text */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-sm);
+    text-decoration: none;
+    font-family: var(--qp-font-main);
+    font-size: 24px;
+    color: var(--qp-blue);
+}
+
+.navbar-brand img {
+    width: 57px;
+    height: 57px;
+}
+
+.brand-text {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--qp-blue);
+    font-family: var(--qp-font-main);
+}
+
+/* Navigation Links */
+.navbar-nav {
+    display: flex;
+    gap: var(--qp-space-md);
+    margin-left: var(--qp-space-md);
+}
+
+.navbar-nav a {
+    text-decoration: none;
+    font-weight: 700;
+    padding: var(--qp-space-sm) var(--qp-space-md);
+    border-radius: var(--qp-radius-sm);
+    color: var(--qp-blue);
+}
+
+.navbar-nav a:hover,
+.navbar-nav a[aria-current="page"] {
+    background: var(--qp-gray-100);
+}
+
+
+
+/* Right-side Actions (Search, Login) */
+.navbar-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-sm);
+}
+
+/* === ACTION BUTTONS (Log In / Sign Up / Account / Log Out) === */
+.navbar-actions .btn-outline-green {
+    background-color: white;
+    color: #1ea672;
+    border: 2px solid #1ea672;
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 800;
+    font-family: var(--qp-font-main);
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s ease-in-out;
+    box-shadow: none;
+}
+
+.navbar-actions .btn-outline-green:hover {
+    background-color: #1ea672;
+    color: white;
+    transform: scale(1.05);
+}
+
+
+/* Link buttons (log in / sign up) */
+.btn-link {
+    background-color: white;
+    color: #1ea672;
+    border: 2px solid #1ea672;
+    border-radius: 50px;
+    padding: 0.5rem 1.2rem;
+    font-weight: 800;
+    font-family: 'Baloo 2', sans-serif;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: all 0.15s ease-in-out;
+    box-shadow: none;
+}
+
+.btn-link:hover {
+    background-color: #1ea672;
+    color: white;
+    box-shadow: none;
+    transform: scale(1.05);
+}
+
+/* === FOOTER SECTION === */
+/* Footer Container */
+.site-footer {
+    margin-top: auto;
+    position: relative;
+    width: 100%;
+    background: var(--qp-deep);
+    color: var(--qp-white);
+    padding: var(--qp-space-xl) 0 var(--qp-space-md) 0;
+    font-size: 1rem;
+    border: none;
+    box-shadow: none;
+    z-index: 1000;
+}
+
+/* Footer Content Layout */
+.footer-content {
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 var(--qp-space-xl);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--qp-space-lg);
+}
+
+/* Brand in footer */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    gap: var(--qp-space-sm);
+}
+
+.footer-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: contain;
+}
+
+.footer-title {
+    font-family: 'Baby', Arial, sans-serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: var(--qp-white);
+}
+
+/* Navigation */
+.footer-nav {
+    display: flex;
+    gap: var(--qp-space-lg);
+}
+
+.footer-nav a {
+    color: var(--qp-white);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    font-family: var(--qp-font-main);
+}
+
+.footer-nav a:hover {
+    opacity: 0.8;
+}
+
+/* Copyright text */
+.footer-copy {
+    flex-basis: 100%;
+    text-align: center;
+    margin-top: var(--qp-space-sm);
+    font-size: 0.95rem;
+    opacity: 0.8;
+    font-family: var(--qp-font-main);
+}
+
+/* === Footer Decorative Elements === */
+.footer-confetti {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.footer-confetti::before,
+.footer-confetti::after {
+    content: "";
+    position: absolute;
+    width: 220px;
+    height: 100%;
+    opacity: 0.25;
+    pointer-events: none;
+}
+
+.footer-confetti::before {
+    left: 0;
+    background:
+        radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 20px 20px/32px 32px repeat,
+        radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 60px 10px/36px 36px repeat;
+}
+
+.footer-confetti::after {
+    right: 0;
+    background:
+        radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
+        radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
+}
+
+
+/* Responsive Design */
+@media (max-width: 700px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+        gap: var(--qp-space-sm);
+    }
+    
+    .footer-nav {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+.container-body {
+    flex: 1;
+}
+.navbar-actions form {
+    display: inline;
+}

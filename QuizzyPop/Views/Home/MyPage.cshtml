@@ -30,7 +30,7 @@
                 <span class="stat-label">Taken</span>
             </div>
             <div class="stat">
-                <span class="stat-number">@((Model.QuizzesTaken > 0 ? (int)((Model.QuizzesCreated / (double)Model.QuizzesTaken) * 100) : 0))%</span>
+                <span class="stat-number">@((Model.QuizzesCreated.HasValue && Model.QuizzesTaken.HasValue && Model.QuizzesTaken.Value > 0 ? (int)((Model.QuizzesCreated.Value / (double)Model.QuizzesTaken.Value) * 100) : 0))%</span>
                 <span class="stat-label">Success</span>
             </div>
         </div>

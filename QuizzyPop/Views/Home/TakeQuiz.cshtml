@@ -72,7 +72,18 @@
                     @foreach (var quiz in Model)
                     {
                         <article class="quiz-card">
-                            <div class="quiz-thumb"></div>
+                            <div class="quiz-thumb">
+                                @{
+                                    var imgSrc = string.IsNullOrWhiteSpace(quiz.ImageUrl) 
+                                        ? Url.Content("~/images/default-cover.png")
+                                        : (quiz.ImageUrl.StartsWith("http") || quiz.ImageUrl.StartsWith("//")
+                                            ? quiz.ImageUrl
+                                            : Url.Content(quiz.ImageUrl.StartsWith("~/") || quiz.ImageUrl.StartsWith("/") 
+                                                ? quiz.ImageUrl 
+                                                : "~/" + quiz.ImageUrl));
+                                }
+                                <img src="@imgSrc" asp-append-version="true" alt="@quiz.Title" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;" />
+                            </div>
                             <h3 class="quiz-title">@quiz.Title</h3>
                             <p class="quiz-meta">Difficulty: @quiz.Difficulty</p>
                             <p class="quiz-meta">@((quiz.Questions?.Count ?? 0)) Questions</p>

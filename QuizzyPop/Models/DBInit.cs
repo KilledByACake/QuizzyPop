@@ -1,4 +1,3 @@
-using AspNetCoreGeneratedDocument;
 using Microsoft.EntityFrameworkCore;
 
 namespace QuizzyPop.Models;
@@ -71,43 +70,49 @@ public static class DBInit
                     Description = "A simple quiz about basic geometry",
                     Difficulty = "medium",
                     CategoryId = 1,
-                    UserId = 1,
-                    Questions = new List<Question>
-                    {
-                        new Question {
-                            Text = "What is the sum of the interior angles of a triangle?",
-                            Choices = new List<string> { "180 degrees", "90 degrees", "360 degrees", "270 degrees" },
-                            CorrectAnswerIndex = 0
-                        },
-                        new Question {
-                            Text = "What is the name of a polygon with eight sides?",
-                            Choices = new List<string> { "Hexagon", "Octagon", "Pentagon", "Heptagon" },
-                            CorrectAnswerIndex = 1
-                        }
-                    } },
+                    ImageUrl = "images/geometry.jpeg",
+                    UserId = 1 },
 
                 new Quiz {
                     Title = "Disney Characters",
                     Description = "Test your knowledge about Disney Characters!",
                     Difficulty = "easy",
                     CategoryId = 2,
-                    UserId = 1 ,
-                    Questions = new List<Question>
-                    {
-                        new Question {
-                            Text = "What is the name of Mickey Mouse's dog?",
-                            Choices = new List<string> { "Pluto", "Goofy", "Donald", "Daisy" },
-                            CorrectAnswerIndex = 0
-                        },
-                        new Question {
-                            Text = "Which Disney princess has a raccoon as a sidekick?",
-                            Choices = new List<string> { "Cinderella", "Pocahontas", "Ariel", "Belle" },
-                            CorrectAnswerIndex = 1
-                        }
-                    } },
+                    ImageUrl = "images/disney.webp",
+                    UserId = 1 }
             };
 
             context.AddRange(quizzes);
+            context.SaveChanges();
+        }
+
+        if (!context.Questions.Any())
+        {
+            var questions = new List<Question>
+            {
+                new Question {
+                    QuizId = 1,
+                    Text = "What is the sum of the interior angles of a triangle?",
+                    CorrectAnswer = "180 degrees",
+                },
+                new Question {
+                    QuizId = 1,
+                    Text = "What do you call a polygon with eight sides?",
+                    CorrectAnswer = "Octagon",
+                },
+                new Question {
+                    QuizId = 2,
+                    Text = "Who is the main antagonist in 'The Lion King'?",
+                    CorrectAnswer = "Scar",
+                },
+                new Question {
+                    QuizId = 2,
+                    Text = "In 'Aladdin', what is the name of Jasmine's pet tiger?",
+                    CorrectAnswer = "Rajah",
+                }
+            };
+
+            context.AddRange(questions);
             context.SaveChanges();
         }
     }

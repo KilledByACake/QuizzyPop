@@ -2,6 +2,7 @@ namespace QuizzyPop.ViewModels
 {
     public class TakingQuizViewModel
     {
+        public int QuizId { get; set; }
         public string Title { get; set; } = string.Empty;
 
         // The current index of the question the user is on (0-based)

@@ -87,49 +87,41 @@ namespace QuizzyPop.Controllers
 
 
         // ==================== START QUIZ ====================
-        public IActionResult StartQuiz(string id, int questionIndex = 0)
-        {
-            // Temporary in-memory quiz data (mocked until DB integration)
-            var sampleQuiz = new QuizMetaDataViewModel
-            {
-                Title = id,
-                Questions = new List<QuizQuestionViewModel>
-                {
-                    new QuizQuestionViewModel
-                    {
-                        Text = "What is the capital of France?",
-                        Choices = new List<string>{ "Paris", "Rome", "London", "Madrid" },
-                        CorrectAnswerIndex = 0
-                    },
-                    new QuizQuestionViewModel
-                    {
-                        Text = "Which animal is known as the King of the Jungle?",
-                        Choices = new List<string>{ "Tiger", "Lion", "Elephant", "Bear" },
-                        CorrectAnswerIndex = 1
-                    },
-                    new QuizQuestionViewModel
-                    {
-                        Text = "How many continents are there on Earth?",
-                        Choices = new List<string>{ "5", "6", "7", "8" },
-                        CorrectAnswerIndex = 2
-                    }
-                }
-            };
+        public async Task<IActionResult> StartQuiz(int id, int questionIndex = 0)
+    {
+        var quiz = await _context.Quiz
+            .Include(q => q.Questions)
+            .FirstOrDefaultAsync(q => q.Id == id);
 
-            var totalQuestions = sampleQuiz.Questions.Count;
-            if (questionIndex < 0) questionIndex = 0;
-            if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
+            if (quiz == null)
+                return NotFound();
+
+        var totalQuestions = quiz.Questions.Count;
+            if (totalQuestions == 0)
+            return View("EmptyQuiz", quiz);
+
+        if (questionIndex < 0) questionIndex = 0;
+        if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
+
+        var question = quiz.Questions[questionIndex];
 
             var model = new TakingQuizViewModel
             {
-                Title = sampleQuiz.Title,
+                QuizId = quiz.Id,
+                Title = quiz.Title,
                 CurrentQuestionIndex = questionIndex,
                 TotalQuestions = totalQuestions,
-                CurrentQuestion = sampleQuiz.Questions[questionIndex]
+                CurrentQuestion = new QuizQuestionViewModel
+                {
+                    Text = question.Text,
+                    Choices = question.Choices,
+                    CorrectAnswerIndex = question.CorrectAnswerIndex
+                }
             };
+    
 
-            return View("TakingQuiz", model);
-        }
+        return View("TakingQuiz", model);
+}
 
         // ==================== SUBMIT QUIZ ====================
         [HttpPost]
@@ -147,7 +139,7 @@ namespace QuizzyPop.Controllers
             }
 
             // Redirect to the same quiz with updated question index
-            return RedirectToAction("StartQuiz", new { id = model.Title, questionIndex = nextIndex });
+            return RedirectToAction("StartQuiz", new { id = model.QuizId, questionIndex = nextIndex });
         }
 
         // ==================== QUIZ COMPLETED PAGE ====================

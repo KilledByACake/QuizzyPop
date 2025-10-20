@@ -5,8 +5,9 @@ namespace QuizzyPop.Models
     {
         public int Id { get; set; }
         public string Text { get; set; } = string.Empty;
-        public string CorrectAnswer { get; set; } = string.Empty;
-        public string AnswerExplanation { get; set; } = string.Empty;
+
+        public List<string> Choices { get; set; } = new(); 
+        public int CorrectAnswerIndex { get; set; }
 
         // Which Quiz this question belongs to
         public int QuizId { get; set; }

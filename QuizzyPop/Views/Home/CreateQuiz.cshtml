@@ -43,14 +43,11 @@
             <div class="form-row">
                 <div class="form-group half">
                     <label asp-for="Category">Category</label>
-                    <select asp-for="Category" class="form-input">
-                        <option value="">Select a category...</option>
-                        <option value="General">General Knowledge</option>
-                        <option value="Science">Science</option>
-                        <option value="History">History</option>
-                        <option value="Geography">Geography</option>
-                        <option value="Arts">Arts & Literature</option>
-                        <option value="Entertainment">Entertainment</option>
+                    <select asp-for="CategoryId" class="form-input">
+                    @foreach (var cat in (ViewBag.Categories as List<QuizzyPop.Models.Category>) ?? new List<QuizzyPop.Models.Category>())
+                    {
+                     <option value="@cat.Id">@cat.Name</option>
+                    }
                     </select>
                     <span asp-validation-for="Category" class="text-danger"></span>
                 </div>

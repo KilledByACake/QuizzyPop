@@ -21,7 +21,10 @@
                 </div>
             </div>
 
-            <form asp-controller="Home" asp-action="AddQuestion" method="post" id="quiz-form">
+            <form asp-controller="Home" asp-action="AddQuestions" method="post" id="quiz-form">
+            @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="QuizId" value="@Model.QuizId" />
+
                 <div class="form-group">
                     <label asp-for="Text">Question Text</label>
                     <textarea asp-for="Text" class="form-input" rows="3" placeholder="Enter your question..."></textarea>

@@ -2,13 +2,15 @@ namespace QuizzyPop.ViewModels
 {
     public class QuizQuestionViewModel
     {
+        // === Identification ===
+        public int QuizId { get; set; }                      
         // === Core question data ===
         public string Text { get; set; } = string.Empty;
         public string Image { get; set; } = string.Empty;
 
         // === Choices / Options ===
-        public List<string> Choices { get; set; } = new();      // used by TakingQuiz
-        public List<string> Options { get; set; } = new();      // used by CreateQuiz (old partial)
+        public List<string> Choices { get; set; } = new List<string> { "", "", "", "" };     // used by TakingQuiz
+        public List<string> Options { get; set; } = new List<string>();     // used by CreatingQuiz
         public int CorrectAnswerIndex { get; set; }
 
         // === Additional quiz options ===
@@ -16,7 +18,6 @@ namespace QuizzyPop.ViewModels
         public int TimeLimit { get; set; } = 0;                 // in seconds; 0 = no limit
         public bool ShuffleAnswers { get; set; } = false;       // randomize order of answers
         public bool Required { get; set; } = true;              // must be answered before next
-
 
         public string Explanation { get; set; } = string.Empty;
     }

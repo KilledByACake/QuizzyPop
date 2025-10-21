@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace QuizzyPop.Controllers
 {
@@ -31,39 +32,83 @@ namespace QuizzyPop.Controllers
         [HttpGet]
         public IActionResult CreateQuiz()
         {
-            var model = new QuizMetaDataViewModel();
-            return View(model);
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(new QuizMetaDataViewModel());
         }
 
         // ==================== CREATE QUIZ (POST) ====================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult CreateQuiz(QuizMetaDataViewModel model)  // Changed from Create to CreateQuiz
+        public async Task<IActionResult> CreateQuiz(QuizMetaDataViewModel model)
         {
-            // Simple validation to proceed to questions page
-            if (!string.IsNullOrEmpty(model.Title))
+            if (string.IsNullOrEmpty(model.Title))
             {
-                return RedirectToAction("AddQuestions");
+                return View(model);
             }
-            return View(model);  // Changed from View("CreateQuiz", model)
+
+            //Checks current user
+            int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
+
+            var newQuiz = new Quiz
+            {
+                Title = model.Title,
+                Description = model.Description,
+                Difficulty = model.Difficulty,
+                CategoryId = model.CategoryId,
+                UserId = null,
+                CreatedAt = DateTime.Now
+            };
+
+            _context.Quiz.Add(newQuiz);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("AddQuestions", new { quizId = newQuiz.Id });
         }
 
-        public IActionResult AddQuestions(string quizId)
+        [HttpGet]
+        public IActionResult AddQuestions(int quizId)
         {
             var model = new QuizQuestionViewModel
             {
-                Text = string.Empty,
-                Image = string.Empty,
-                Choices = new List<string> { "", "", "", "" },  // Initialize 4 empty choices
-                Options = new List<string> { "", "", "", "" },  // Keep both for compatibility
-                CorrectAnswerIndex = 0,
-                Points = 1,
-                TimeLimit = 0,
-                ShuffleAnswers = false,
-                Required = true,
-                Explanation = string.Empty
+                QuizId = quizId,
+                Choices = new List<string> { "", "", "", "" }
             };
+            return View(new QuizQuestionViewModel());
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddQuestions(QuizQuestionViewModel model, string action)
+        {
+            // Temporary validation - we just want the UI flow for now
+            if (!string.IsNullOrEmpty(model.Text) && model.Choices.Any())
+            {
+                var question = new Question
+                {
+                    QuizId = model.QuizId,
+                    Text = model.Text,
+                    Choices = model.Choices,
+                    CorrectAnswerIndex = model.CorrectAnswerIndex,
+                };
+
+                _context.Questions.Add(question);
+                await _context.SaveChangesAsync();
+
+                // If "Add Another Question" was clicked
+                if (action == "addAnother")
+                {
+                    TempData["Success"] = "Question added successfully!";
+                    return RedirectToAction("AddQuestions", new { quizId = model.QuizId });
+                }
+
+                // If "Finish Quiz" was clicked
+                if (action == "finish")
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+
+            // If validation fails, return to the same view
             return View(model);
         }
 
@@ -151,7 +196,7 @@ namespace QuizzyPop.Controllers
 
             TempData["SelectedAnswers"] = System.Text.Json.JsonSerializer.Serialize(storedAnswers);
 
-            // Changes navigation based on button pressed
+            // Changes navigation based on button pressed.
             int nextIndex = model.CurrentQuestionIndex;
             if (action == "next") nextIndex++;
             else if (action == "previous") nextIndex--;
@@ -240,9 +285,7 @@ namespace QuizzyPop.Controllers
                 Category = "General",
                 Difficulty = "Medium",
                 Questions = new List<QuizQuestionViewModel>
-                {
-                    new QuizQuestionViewModel { Text = "Sample Question", Options = new List<string> { "A", "B", "C", "D" } }
-                }
+                {}
             };
             
             ViewBag.CreatorName = "Current User";

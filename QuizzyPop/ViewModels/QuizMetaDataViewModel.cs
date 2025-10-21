@@ -6,6 +6,8 @@ namespace QuizzyPop.ViewModels
 {
     public class QuizMetaDataViewModel
     {
+        public int Id { get; set; }
+
         [Required, StringLength(120)]
         public string Title { get; set; }
 
@@ -20,11 +22,9 @@ namespace QuizzyPop.ViewModels
 
         [Range(0, 600)]
         public int? TimeLimit { get; set; }
-
+        public int CategoryId { get; set; } 
         public string Tags { get; set; }
-
         public bool IsPublic { get; set; }
-
         public IFormFile CoverImage { get; set; }
 
         public List<QuizQuestionViewModel> Questions { get; set; } = new List<QuizQuestionViewModel>();

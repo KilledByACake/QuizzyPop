@@ -11,6 +11,13 @@
             <input type="hidden" name="QuizId" value="@Model.QuizId" />
             <input type="hidden" name="CurrentQuestionIndex" value="@Model.CurrentQuestionIndex" />
 
+
+            <!-- Storing previously selected answers --></>
+            @for (int i = 0; i < Model.SelectedAnswers.Count; i++)
+            {
+                <input type="hidden" name="SelectedAnswers[@i]" value="@Model.SelectedAnswers[i]" />
+            }
+
             <div class="quiz-card">
                 <h2>@Model.CurrentQuestion.Text</h2>
 

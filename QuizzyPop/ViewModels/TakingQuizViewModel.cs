@@ -20,5 +20,7 @@ namespace QuizzyPop.ViewModels
         // Navigation helpers for "Next" and "Previous" buttons
         public bool HasNext => CurrentQuestionIndex < TotalQuestions - 1;
         public bool HasPrevious => CurrentQuestionIndex > 0;
+
+        public List<int> SelectedAnswers { get; set; } = new();
     }
 }

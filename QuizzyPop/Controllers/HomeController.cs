@@ -118,39 +118,74 @@ namespace QuizzyPop.Controllers
                     CorrectAnswerIndex = question.CorrectAnswerIndex
                 }
             };
-    
+            model.SelectedAnswers = Enumerable.Repeat(-1, totalQuestions).ToList();
 
         return View("TakingQuiz", model);
 }
 
         // ==================== SUBMIT QUIZ ====================
         [HttpPost]
-        public IActionResult SubmitQuiz(TakingQuizViewModel model, string action)
+        public async Task<IActionResult> SubmitQuiz(TakingQuizViewModel model, string action, int SelectedAnswer)
         {
-            // Determine navigation logic based on button pressed
-            int nextIndex = model.CurrentQuestionIndex;
+            var quiz = await _context.Quiz
+            .Include(q => q.Questions)
+            .FirstOrDefaultAsync(q => q.Id == model.QuizId);
 
+            if (quiz == null)
+            {
+                return NotFound();
+            }
+
+            // Retrieve stored answers from Tempdata, to calculate score later
+            var storedJson = TempData["SelectedAnswers"] as string;
+            List<int>? storedAnswers = !string.IsNullOrEmpty(storedJson) 
+                ? System.Text.Json.JsonSerializer.Deserialize<List<int>>(storedJson)
+                : null;
+
+            if (storedAnswers == null || storedAnswers.Count != quiz.Questions.Count)
+            {
+                storedAnswers = Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
+            }
+
+            storedAnswers[model.CurrentQuestionIndex] = SelectedAnswer;
+
+            TempData["SelectedAnswers"] = System.Text.Json.JsonSerializer.Serialize(storedAnswers);
+
+            // Changes navigation based on button pressed
+            int nextIndex = model.CurrentQuestionIndex;
             if (action == "next") nextIndex++;
             else if (action == "previous") nextIndex--;
             else if (action == "finish")
             {
-                // TODO: Calculate score and display result page
-                return RedirectToAction("QuizCompleted");
+                int CorrectAnswers = 0;
+                for (int i = 0; i < quiz.Questions.Count; i++)
+                {
+                    if (storedAnswers[i] == quiz.Questions[i].CorrectAnswerIndex)
+                    {
+                        CorrectAnswers++; 
+                    }
+                }
+                return RedirectToAction("QuizCompleted", new
+                {
+                    quizId = model.QuizId,
+                    totalQuestions = quiz.Questions.Count,
+                    correctAnswers = CorrectAnswers
+                });
             }
-
-            // Redirect to the same quiz with updated question index
             return RedirectToAction("StartQuiz", new { id = model.QuizId, questionIndex = nextIndex });
         }
 
         // ==================== QUIZ COMPLETED PAGE ====================
-        public IActionResult QuizCompleted()
+        public IActionResult QuizCompleted(int quizId, int totalQuestions, int correctAnswers)
         {
+            var quiz = _context.Quiz.FirstOrDefault(q => q.Id == quizId);
+             
             var result = new QuizResultViewModel
             {
-                QuizTitle = "Animals of Savanna",
-                TotalQuestions = 3,
-                CorrectAnswers = 2,
-                Difficulty = "Easy"
+                QuizTitle = quiz?.Title ?? "Completed Quiz",
+                TotalQuestions = totalQuestions,
+                CorrectAnswers = correctAnswers,
+                Difficulty = quiz?.Difficulty ?? "Any"
             };
 
             // Calculate the percentage score

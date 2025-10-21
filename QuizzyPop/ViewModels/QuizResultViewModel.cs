@@ -2,6 +2,7 @@ namespace QuizzyPop.ViewModels
 {
     public class QuizResultViewModel
     {
+        public int QuizId { get; set; }
         public string QuizTitle { get; set; } = string.Empty;
         public int TotalQuestions { get; set; }
         public int CorrectAnswers { get; set; }

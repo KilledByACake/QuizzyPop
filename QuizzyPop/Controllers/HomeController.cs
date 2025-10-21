@@ -179,9 +179,10 @@ namespace QuizzyPop.Controllers
         public IActionResult QuizCompleted(int quizId, int totalQuestions, int correctAnswers)
         {
             var quiz = _context.Quiz.FirstOrDefault(q => q.Id == quizId);
-             
+
             var result = new QuizResultViewModel
             {
+                QuizId = quiz?.Id ?? 0,
                 QuizTitle = quiz?.Title ?? "Completed Quiz",
                 TotalQuestions = totalQuestions,
                 CorrectAnswers = correctAnswers,
@@ -195,6 +196,11 @@ namespace QuizzyPop.Controllers
             if (percentage >= 80)
             {
                 result.FeedbackMessages = new List<string> { "🎉 Great job! You know your stuff!" };
+
+            }
+            else if (percentage >= 50)
+            {
+                result.FeedbackMessages = new List<string> { "👍 Not bad! A little more effort and you'll do even better!" };
             }
             else
             {
@@ -202,6 +208,15 @@ namespace QuizzyPop.Controllers
             }
 
             return View(result);
+        }
+
+        [HttpPost]
+        public IActionResult RetryQuiz(int quizId)
+        {
+            // Clear any stored answers
+            TempData.Remove("SelectedAnswers");
+
+            return RedirectToAction("StartQuiz", new { id = quizId, questionIndex = 0 });
         }
 
 

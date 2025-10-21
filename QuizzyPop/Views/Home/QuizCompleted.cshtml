@@ -42,8 +42,12 @@
     <!-- Actions -->
     <div class="qp-publish__actions">
         <a asp-controller="Home" asp-action="TakeQuiz" class="qp-btn qp-btn--primary">Take another quiz</a>
-        <a asp-controller="Home" asp-action="StartQuiz" asp-route-id="@Model.QuizTitle" class="qp-btn">Retake quiz
-            🔁</a>
+        
+        <form asp-controller="Home" asp-action="RetryQuiz" method="post">
+        <input type="hidden" name="quizId" value="@Model.QuizId" />
+        <button type="submit" class="qp-btn qp-btn--link">Retake quiz
+            🔁</button>
+        </form>
     </div>
 </section>
 

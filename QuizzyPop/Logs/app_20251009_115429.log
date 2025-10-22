@@ -1,0 +1,23 @@
+2025-10-09 11:54:29.143 +02:00 [INF] User profile is available. Using '/Users/mathiasjudre/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-10-09 11:54:29.205 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-09 11:54:29.206 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-09 11:54:29.206 +02:00 [INF] Hosting environment: Development
+2025-10-09 11:54:29.207 +02:00 [INF] Content root path: /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop
+2025-10-09 11:54:38.513 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/ - null null
+2025-10-09 11:54:38.518 +02:00 [WRN] Failed to determine the https port for redirect.
+2025-10-09 11:54:38.524 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-09 11:54:38.536 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-09 11:54:38.541 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-09 11:54:38.562 +02:00 [INF] Executed ViewResult - view Index executed in 21.8397ms.
+2025-10-09 11:54:38.564 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 27.4233ms
+2025-10-09 11:54:38.564 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-09 11:54:38.566 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/ - 200 null text/html; charset=utf-8 53.3179ms
+2025-10-09 11:54:39.876 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - null null
+2025-10-09 11:54:39.880 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:54:39.883 +02:00 [INF] Route matched with {action = "CreateQuiz", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult CreateQuiz() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-09 11:54:39.885 +02:00 [INF] Executing ViewResult, running view CreateQuiz.
+2025-10-09 11:54:39.933 +02:00 [INF] Executed ViewResult - view CreateQuiz executed in 49.109ms.
+2025-10-09 11:54:39.933 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop) in 50.3518ms
+2025-10-09 11:54:39.933 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.CreateQuiz (QuizzyPop)'
+2025-10-09 11:54:39.933 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/Home/CreateQuiz - 200 null text/html; charset=utf-8 57.8457ms
+2025-10-09 11:55:07.445 +02:00 [INF] Application is shutting down...

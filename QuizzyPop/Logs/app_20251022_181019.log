@@ -1,0 +1,9 @@
+2025-10-22 18:10:20.332 +02:00 [INF] User profile is available. Using '/Users/mathiasjudre/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-10-22 18:10:20.526 +02:00 [INF] Now listening on: https://localhost:7037
+2025-10-22 18:10:20.527 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-22 18:10:20.529 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-22 18:10:20.530 +02:00 [INF] Hosting environment: Development
+2025-10-22 18:10:20.530 +02:00 [INF] Content root path: /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop
+2025-10-22 18:10:20.852 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/Home/Index - null null
+2025-10-22 18:10:20.883 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-22 18:10:20.889 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).

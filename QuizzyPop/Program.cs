@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuizzyPop.Models;
+using QuizzyPop.DAL;
 using Serilog;
 using Serilog.Events;
 

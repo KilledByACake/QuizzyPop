@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using QuizzyPop.Models;
 using QuizzyPop.ViewModels;
+using QuizzyPop.DAL;
 
 namespace QuizzyPop.Controllers
 {

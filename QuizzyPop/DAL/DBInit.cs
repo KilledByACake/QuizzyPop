@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
+using QuizzyPop.Models;
 
-namespace QuizzyPop.Models;
+namespace QuizzyPop.DAL;
 
 public static class DBInit
 {
@@ -8,7 +9,6 @@ public static class DBInit
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
         UserDbContext context = serviceScope.ServiceProvider.GetRequiredService<UserDbContext>();
-        context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
         if (!context.Users.Any())

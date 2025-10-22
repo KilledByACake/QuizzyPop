@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
+using QuizzyPop.DAL;
 using QuizzyPop.ViewModels;
 using System.Collections.Generic;
 using System.Linq;

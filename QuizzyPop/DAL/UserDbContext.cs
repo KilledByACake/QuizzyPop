@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
+using QuizzyPop.Models;
 
-namespace QuizzyPop.Models;
+namespace QuizzyPop.DAL;
 
 public class UserDbContext : DbContext
 {

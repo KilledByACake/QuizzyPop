@@ -1,7 +1,7 @@
 namespace QuizzyPop.Services;
 
 using Microsoft.Extensions.Logging;
-using QuizzyPop.DAL.Repositories.Interfaces;
+using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 

@@ -1,5 +1,6 @@
 namespace QuizzyPop.Services;
 
+using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 

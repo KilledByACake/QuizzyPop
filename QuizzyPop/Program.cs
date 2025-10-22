@@ -37,6 +37,13 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 
+
+//Service layer DI
+builder.Services.AddScoped<IQuizService, QuizService>();
+builder.Services.AddScoped<IQuizQuestionService, QuizQuestionService>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

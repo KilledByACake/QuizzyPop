@@ -4,15 +4,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using QuizzyPop.Models;
+using QuizzyPop.DAL;
 
 #nullable disable
 
 namespace QuizzyPop.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20251020122634_RevisedClasses")]
-    partial class RevisedClasses
+    [Migration("20251022190814_DALCompatibility")]
+    partial class DALCompatibility
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,7 +93,7 @@ namespace QuizzyPop.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("UserId")
+                    b.Property<int?>("UserId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
@@ -172,9 +172,7 @@ namespace QuizzyPop.Migrations
 
                     b.HasOne("QuizzyPop.Models.User", "User")
                         .WithMany("CreatedQuizzes")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Category");
 

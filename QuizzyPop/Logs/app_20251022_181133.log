@@ -1,0 +1,26 @@
+2025-10-22 18:11:33.875 +02:00 [INF] User profile is available. Using '/Users/mathiasjudre/.aspnet/DataProtection-Keys' as key repository; keys will not be encrypted at rest.
+2025-10-22 18:11:34.093 +02:00 [INF] Now listening on: https://localhost:7037
+2025-10-22 18:11:34.094 +02:00 [INF] Now listening on: http://localhost:5299
+2025-10-22 18:11:34.099 +02:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-10-22 18:11:34.100 +02:00 [INF] Hosting environment: Development
+2025-10-22 18:11:34.100 +02:00 [INF] Content root path: /Users/mathiasjudre/Desktop/Skole/5. Semester/ITPE3200 - Webapplikasjoner/QuizzyPop/QuizzyPop
+2025-10-22 18:11:34.300 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/Home/Index - null null
+2025-10-22 18:11:34.315 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-22 18:11:34.323 +02:00 [INF] Route matched with {action = "Index", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult Index() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).
+2025-10-22 18:11:34.327 +02:00 [INF] Executing ViewResult, running view Index.
+2025-10-22 18:11:34.360 +02:00 [INF] Executed ViewResult - view Index executed in 32.892ms.
+2025-10-22 18:11:34.362 +02:00 [INF] Executed action QuizzyPop.Controllers.HomeController.Index (QuizzyPop) in 38.7568ms
+2025-10-22 18:11:34.362 +02:00 [INF] Executed endpoint 'QuizzyPop.Controllers.HomeController.Index (QuizzyPop)'
+2025-10-22 18:11:34.366 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7037/Home/Index - 200 null text/html; charset=utf-8 67.4452ms
+2025-10-22 18:11:34.454 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/images/quizzy-no-arms.png - null null
+2025-10-22 18:11:34.454 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/images/quizzy-blueberry.png - null null
+2025-10-22 18:11:34.457 +02:00 [INF] The file /images/quizzy-no-arms.png was not modified
+2025-10-22 18:11:34.457 +02:00 [INF] The file /images/quizzy-blueberry.png was not modified
+2025-10-22 18:11:34.457 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7037/images/quizzy-blueberry.png - 304 null image/png 3.374ms
+2025-10-22 18:11:34.457 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7037/images/quizzy-no-arms.png - 304 null image/png 3.3742ms
+2025-10-22 18:11:34.535 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/fonts/Baloo2-Regular.ttf - null null
+2025-10-22 18:11:34.557 +02:00 [INF] Request finished HTTP/2 GET https://localhost:7037/fonts/Baloo2-Regular.ttf - 404 0 null 22.9875ms
+2025-10-22 18:11:34.558 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET https://localhost:7037/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-22 18:11:38.308 +02:00 [INF] Request starting HTTP/2 GET https://localhost:7037/Home/About - null null
+2025-10-22 18:11:38.316 +02:00 [INF] Executing endpoint 'QuizzyPop.Controllers.HomeController.About (QuizzyPop)'
+2025-10-22 18:11:38.319 +02:00 [INF] Route matched with {action = "About", controller = "Home"}. Executing controller action with signature Microsoft.AspNetCore.Mvc.IActionResult About() on controller QuizzyPop.Controllers.HomeController (QuizzyPop).

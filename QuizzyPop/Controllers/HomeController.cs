@@ -73,43 +73,38 @@ namespace QuizzyPop.Controllers
                 QuizId = quizId,
                 Choices = new List<string> { "", "", "", "" }
             };
-            return View(new QuizQuestionViewModel());
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddQuestions(QuizQuestionViewModel model, string action)
         {
-            // Temporary validation - we just want the UI flow for now
-            if (!string.IsNullOrEmpty(model.Text) && model.Choices.Any())
+            if (!ModelState.IsValid)
+                return View("AddQuestions", model);
+
+            var quiz = await _context.Quiz.FindAsync(model.QuizId);
+            if (quiz == null)
+                return NotFound();
+
+            var question = new Question
             {
-                var question = new Question
-                {
-                    QuizId = model.QuizId,
-                    Text = model.Text,
-                    Choices = model.Choices,
-                    CorrectAnswerIndex = model.CorrectAnswerIndex,
-                };
+                QuizId = model.QuizId,
+                Text = model.Text,
+                Choices = model.Choices,
+                CorrectAnswerIndex = model.CorrectAnswerIndex
+            };
 
-                _context.Questions.Add(question);
-                await _context.SaveChangesAsync();
+            _context.Questions.Add(question);
+            await _context.SaveChangesAsync();
 
-                // If "Add Another Question" was clicked
-                if (action == "addAnother")
-                {
-                    TempData["Success"] = "Question added successfully!";
-                    return RedirectToAction("AddQuestions", new { quizId = model.QuizId });
-                }
+            if (action == "finish")
+                return RedirectToAction("Index");
 
-                // If "Finish Quiz" was clicked
-                if (action == "finish")
-                {
-                    return RedirectToAction("Index");
-                }
-            }
-
-            // If validation fails, return to the same view
-            return View(model);
+            ModelState.Clear();
+            model.Text = "";
+            model.Choices = new List<string> { "", "", "", "" };
+            return View("AddQuestions", model);
         }
 
         // ==================== ABOUT PAGE ====================

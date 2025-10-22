@@ -43,9 +43,11 @@ namespace QuizzyPop.Controllers
         {
             if (string.IsNullOrEmpty(model.Title))
             {
+                _logger.LogWarning("Create Quiz attempted without title");
                 return View(model);
             }
 
+            try{
             //Checks current user
             int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
 
@@ -63,6 +65,21 @@ namespace QuizzyPop.Controllers
             await _context.SaveChangesAsync();
 
             return RedirectToAction("AddQuestions", new { quizId = newQuiz.Id });
+            }
+            catch (DbUpdateException dbEx){
+                //Logger fullstendig databasefeil
+                _logger.LogError(dbEx, "Database error while attempting to creade new quiz with Title: {Title}", model.Title);
+                ModelState.AddModelError(string.Empty, "Kunne ikke lagre quizen. Kontroller dataen dine og prøv igjen. ");
+                ViewBag.Categories = _context.Categories.ToList();
+                return View(model);
+            }
+            catch(Exception ex){
+                //Logger andre uventede feil
+                _logger.LogError(ex, "Unexpected error in CreateQuiz POST action for Title: {Title}", model.Title);
+                ModelState.AddModelError(string.Empty, "En uventet feil oppstod. Prøv igjen");
+                ViewBag.Categories = _context.Categories.ToList();
+                return View(model);
+            }
         }
 
         [HttpGet]

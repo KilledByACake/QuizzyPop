@@ -48,23 +48,23 @@ namespace QuizzyPop.Controllers
             }
 
             try{
-            //Checks current user
-            int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
+                //Checks current user
+                int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
 
-            var newQuiz = new Quiz
-            {
-                Title = model.Title,
-                Description = model.Description,
-                Difficulty = model.Difficulty,
-                CategoryId = model.CategoryId,
-                UserId = null,
-                CreatedAt = DateTime.Now
-            };
+                var newQuiz = new Quiz
+                {
+                    Title = model.Title,
+                    Description = model.Description,
+                    Difficulty = model.Difficulty,
+                    CategoryId = model.CategoryId,
+                    UserId = null,
+                    CreatedAt = DateTime.Now
+                };
 
-            _context.Quiz.Add(newQuiz);
-            await _context.SaveChangesAsync();
+                _context.Quiz.Add(newQuiz);
+                await _context.SaveChangesAsync();
 
-            return RedirectToAction("AddQuestions", new { quizId = newQuiz.Id });
+                return RedirectToAction("AddQuestions", new { quizId = newQuiz.Id });
             }
             catch (DbUpdateException dbEx){
                 //Logger fullstendig databasefeil
@@ -137,52 +137,67 @@ namespace QuizzyPop.Controllers
         // ==================== TAKE QUIZ PAGE ====================
         public async Task<IActionResult> TakeQuiz()
         {
-            var quizzes = await _context.Quiz
-                .Include(q => q.Category)
-                .Include(q => q.User)
-                .Include(q => q.Questions)
-                .ToListAsync();
+            try{
+                var quizzes = await _context.Quiz
+                    .Include(q => q.Category)
+                    .Include(q => q.User)
+                    .Include(q => q.Questions)
+                    .ToListAsync();
 
-            _logger.LogInformation($"Loaded {quizzes.Count} quizzes from database.");
-            return View(quizzes);
+                _logger.LogInformation($"Loaded {quizzes.Count} quizzes from database.");
+                return View(quizzes);
+            }
+            catch(Exception ex){
+                //Logg feil hvis henting av quiz feiler
+                _logger.LogError(ex, "Failed to load quizzes from database in TakeQuiz action. ");
+                ViewBag.ErrorMessage = "Kunne ikke laste inn quizzer akkurat nå. Prøv igjen senere.";
+                return View(new List<Quiz>());
+            }
         }
 
 
         // ==================== START QUIZ ====================
         public async Task<IActionResult> StartQuiz(int id, int questionIndex = 0)
     {
-        var quiz = await _context.Quiz
-            .Include(q => q.Questions)
-            .FirstOrDefaultAsync(q => q.Id == id);
+        try{
+            var quiz = await _context.Quiz
+                .Include(q => q.Questions)
+                .FirstOrDefaultAsync(q => q.Id == id);
 
-            if (quiz == null)
-                return NotFound();
+                if (quiz == null)
+                    return NotFound();
 
-        var totalQuestions = quiz.Questions.Count;
-            if (totalQuestions == 0)
-            return View("EmptyQuiz", quiz);
+            var totalQuestions = quiz.Questions.Count;
+                if (totalQuestions == 0)
+                return View("EmptyQuiz", quiz);
 
-        if (questionIndex < 0) questionIndex = 0;
-        if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
+            if (questionIndex < 0) questionIndex = 0;
+            if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
 
-        var question = quiz.Questions[questionIndex];
+            var question = quiz.Questions[questionIndex];
 
-            var model = new TakingQuizViewModel
-            {
-                QuizId = quiz.Id,
-                Title = quiz.Title,
-                CurrentQuestionIndex = questionIndex,
-                TotalQuestions = totalQuestions,
-                CurrentQuestion = new QuizQuestionViewModel
+                var model = new TakingQuizViewModel
                 {
-                    Text = question.Text,
-                    Choices = question.Choices,
-                    CorrectAnswerIndex = question.CorrectAnswerIndex
-                }
-            };
-            model.SelectedAnswers = Enumerable.Repeat(-1, totalQuestions).ToList();
+                    QuizId = quiz.Id,
+                    Title = quiz.Title,
+                    CurrentQuestionIndex = questionIndex,
+                    TotalQuestions = totalQuestions,
+                    CurrentQuestion = new QuizQuestionViewModel
+                    {
+                        Text = question.Text,
+                        Choices = question.Choices,
+                        CorrectAnswerIndex = question.CorrectAnswerIndex
+                    }
+                };
+                model.SelectedAnswers = Enumerable.Repeat(-1, totalQuestions).ToList();
 
-        return View("TakingQuiz", model);
+            return View("TakingQuiz", model);
+        }
+        catch(Exception ex){
+            //Logg feil under quiz-oppstart
+            _logger.LogError(ex, "Unexpected error starting Quiz ID: {QuizId}", id);
+            return RedirectToAction("Error");
+        }
 }
 
         // ==================== SUBMIT QUIZ ====================

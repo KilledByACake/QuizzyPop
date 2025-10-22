@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System.Text.Json;
 using QuizzyPop.Models;
 
+
 namespace QuizzyPop.DAL;
 
 public class UserDbContext : DbContext
@@ -22,12 +23,11 @@ public class UserDbContext : DbContext
 		base.OnModelCreating(modelBuilder);
 		
          modelBuilder.Entity<Question>()
-             .Property(q => q.Choices)
-             .HasConversion(
-            	new ValueConverter<List<string>, string>(
-            	v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null),
-                        v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions)null) ?? new List<string>()
-					)
-        		);
+        .Property(q => q.Choices)
+		.HasConversion(
+			v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
+			v => JsonSerializer.Deserialize<List<string>>(v, new JsonSerializerOptions()) ?? new List<string>()
+		);
+
      }
 }

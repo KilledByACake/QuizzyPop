@@ -1,26 +1,29 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
 using QuizzyPop.DAL;
+using QuizzyPop.DAL.Repositories;
 using QuizzyPop.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace QuizzyPop.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserDbContext _context;
+        private readonly IQuizRepository _quizRepo;
+        private readonly IQuestionRepository _questionRepo;
 
-        public HomeController(UserDbContext context, ILogger<HomeController> logger)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IQuizRepository quizRepo,
+            IQuestionRepository questionRepo)
         {
             _logger = logger;
-            _context = context;
+            _quizRepo = quizRepo;
+            _questionRepo = questionRepo;
         }
 
         // ==================== HOME PAGE ====================
@@ -31,9 +34,10 @@ namespace QuizzyPop.Controllers
 
         // ==================== CREATE QUIZ (GET) ====================
         [HttpGet]
-        public IActionResult CreateQuiz()
+        public async Task<IActionResult> CreateQuiz()
         {
-            ViewBag.Categories = _context.Categories.ToList();
+            var categories = await _quizRepo.GetAllCategoriesAsync();
+            ViewBag.Categories = categories;
             return View(new QuizMetaDataViewModel());
         }
 
@@ -48,8 +52,8 @@ namespace QuizzyPop.Controllers
                 return View(model);
             }
 
-            try{
-                //Checks current user
+            try
+            {
                 int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
 
                 var newQuiz = new Quiz
@@ -62,27 +66,28 @@ namespace QuizzyPop.Controllers
                     CreatedAt = DateTime.Now
                 };
 
-                _context.Quiz.Add(newQuiz);
-                await _context.SaveChangesAsync();
+                await _quizRepo.AddAsync(newQuiz);
+                _logger.LogInformation("Quiz '{Title}' created successfully with ID {Id}", newQuiz.Title, newQuiz.Id);
 
                 return RedirectToAction("AddQuestions", new { quizId = newQuiz.Id });
             }
-            catch (DbUpdateException dbEx){
-                //Logger fullstendig databasefeil
-                _logger.LogError(dbEx, "Database error while attempting to creade new quiz with Title: {Title}", model.Title);
-                ModelState.AddModelError(string.Empty, "Kunne ikke lagre quizen. Kontroller dataen dine og prøv igjen. ");
-                ViewBag.Categories = _context.Categories.ToList();
+            catch (DbUpdateException dbEx)
+            {
+                _logger.LogError(dbEx, "Database error while attempting to create new quiz with Title: {Title}", model.Title);
+                ModelState.AddModelError(string.Empty, "Kunne ikke lagre quizen. Kontroller dataene dine og prøv igjen.");
+                ViewBag.Categories = await _quizRepo.GetAllCategoriesAsync();
                 return View(model);
             }
-            catch(Exception ex){
-                //Logger andre uventede feil
+            catch (Exception ex)
+            {
                 _logger.LogError(ex, "Unexpected error in CreateQuiz POST action for Title: {Title}", model.Title);
-                ModelState.AddModelError(string.Empty, "En uventet feil oppstod. Prøv igjen");
-                ViewBag.Categories = _context.Categories.ToList();
+                ModelState.AddModelError(string.Empty, "En uventet feil oppstod. Prøv igjen.");
+                ViewBag.Categories = await _quizRepo.GetAllCategoriesAsync();
                 return View(model);
             }
         }
 
+        // ==================== ADD QUESTIONS ====================
         [HttpGet]
         public IActionResult AddQuestions(int quizId)
         {
@@ -101,7 +106,7 @@ namespace QuizzyPop.Controllers
             if (!ModelState.IsValid)
                 return View("AddQuestions", model);
 
-            var quiz = await _context.Quiz.FindAsync(model.QuizId);
+            var quiz = await _quizRepo.GetByIdAsync(model.QuizId);
             if (quiz == null)
                 return NotFound();
 
@@ -113,8 +118,8 @@ namespace QuizzyPop.Controllers
                 CorrectAnswerIndex = model.CorrectAnswerIndex
             };
 
-            _context.Questions.Add(question);
-            await _context.SaveChangesAsync();
+            await _questionRepo.AddAsync(question);
+            _logger.LogInformation("Added question to quiz {QuizId}", model.QuizId);
 
             if (action == "finish")
                 return RedirectToAction("Index");
@@ -125,52 +130,38 @@ namespace QuizzyPop.Controllers
             return View("AddQuestions", model);
         }
 
-        // ==================== ABOUT PAGE ====================
-        public IActionResult About()
-        {
-            return View();
-        }
-        // ==================== TAKE QUIZ PAGE ====================
+        // ==================== TAKE QUIZ ====================
         public async Task<IActionResult> TakeQuiz()
         {
-            try{
-                var quizzes = await _context.Quiz
-                    .Include(q => q.Category)
-                    .Include(q => q.User)
-                    .Include(q => q.Questions)
-                    .ToListAsync();
-
-                _logger.LogInformation($"Loaded {quizzes.Count} quizzes from database.");
+            try
+            {
+                var quizzes = await _quizRepo.GetAllWithDetailsAsync();
+                _logger.LogInformation("Loaded {Count} quizzes from repository.", quizzes.Count());
                 return View(quizzes);
             }
-            catch(Exception ex){
-                //Logg feil hvis henting av quiz feiler
-                _logger.LogError(ex, "Failed to load quizzes from database in TakeQuiz action. ");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to load quizzes from repository in TakeQuiz action.");
                 ViewBag.ErrorMessage = "Kunne ikke laste inn quizzer akkurat nå. Prøv igjen senere.";
                 return View(new List<Quiz>());
             }
         }
 
-
         // ==================== START QUIZ ====================
         public async Task<IActionResult> StartQuiz(int id, int questionIndex = 0)
-    {
-        try{
-            var quiz = await _context.Quiz
-                .Include(q => q.Questions)
-                .FirstOrDefaultAsync(q => q.Id == id);
-
+        {
+            try
+            {
+                var quiz = await _quizRepo.GetQuizWithQuestionsAsync(id);
                 if (quiz == null)
                     return NotFound();
 
-            var totalQuestions = quiz.Questions.Count;
+                var totalQuestions = quiz.Questions.Count;
                 if (totalQuestions == 0)
-                return View("EmptyQuiz", quiz);
+                    return View("EmptyQuiz", quiz);
 
-            if (questionIndex < 0) questionIndex = 0;
-            if (questionIndex >= totalQuestions) questionIndex = totalQuestions - 1;
-
-            var question = quiz.Questions[questionIndex];
+                questionIndex = Math.Clamp(questionIndex, 0, totalQuestions - 1);
+                var question = quiz.Questions[questionIndex];
 
                 var model = new TakingQuizViewModel
                 {
@@ -183,76 +174,62 @@ namespace QuizzyPop.Controllers
                         Text = question.Text,
                         Choices = question.Choices,
                         CorrectAnswerIndex = question.CorrectAnswerIndex
-                    }
+                    },
+                    SelectedAnswers = Enumerable.Repeat(-1, totalQuestions).ToList()
                 };
-                model.SelectedAnswers = Enumerable.Repeat(-1, totalQuestions).ToList();
 
-            return View("TakingQuiz", model);
+                return View("TakingQuiz", model);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Unexpected error starting Quiz ID: {QuizId}", id);
+                return RedirectToAction("Error");
+            }
         }
-        catch(Exception ex){
-            //Logg feil under quiz-oppstart
-            _logger.LogError(ex, "Unexpected error starting Quiz ID: {QuizId}", id);
-            return RedirectToAction("Error");
-        }
-}
 
         // ==================== SUBMIT QUIZ ====================
         [HttpPost]
         public async Task<IActionResult> SubmitQuiz(TakingQuizViewModel model, string action, int SelectedAnswer)
         {
-            var quiz = await _context.Quiz
-            .Include(q => q.Questions)
-            .FirstOrDefaultAsync(q => q.Id == model.QuizId);
-
+            var quiz = await _quizRepo.GetQuizWithQuestionsAsync(model.QuizId);
             if (quiz == null)
-            {
                 return NotFound();
-            }
 
-            // Retrieve stored answers from Tempdata, to calculate score later
             var storedJson = TempData["SelectedAnswers"] as string;
-            List<int>? storedAnswers = !string.IsNullOrEmpty(storedJson) 
-                ? System.Text.Json.JsonSerializer.Deserialize<List<int>>(storedJson)
-                : null;
-
-            if (storedAnswers == null || storedAnswers.Count != quiz.Questions.Count)
-            {
-                storedAnswers = Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
-            }
+            List<int>? storedAnswers = !string.IsNullOrEmpty(storedJson)
+                ? JsonSerializer.Deserialize<List<int>>(storedJson)
+                : Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
 
             storedAnswers[model.CurrentQuestionIndex] = SelectedAnswer;
+            TempData["SelectedAnswers"] = JsonSerializer.Serialize(storedAnswers);
 
-            TempData["SelectedAnswers"] = System.Text.Json.JsonSerializer.Serialize(storedAnswers);
-
-            // Changes navigation based on button pressed.
             int nextIndex = model.CurrentQuestionIndex;
             if (action == "next") nextIndex++;
             else if (action == "previous") nextIndex--;
             else if (action == "finish")
             {
-                int CorrectAnswers = 0;
+                int correctAnswers = 0;
                 for (int i = 0; i < quiz.Questions.Count; i++)
                 {
                     if (storedAnswers[i] == quiz.Questions[i].CorrectAnswerIndex)
-                    {
-                        CorrectAnswers++; 
-                    }
+                        correctAnswers++;
                 }
+
                 return RedirectToAction("QuizCompleted", new
                 {
                     quizId = model.QuizId,
                     totalQuestions = quiz.Questions.Count,
-                    correctAnswers = CorrectAnswers
+                    correctAnswers
                 });
             }
+
             return RedirectToAction("StartQuiz", new { id = model.QuizId, questionIndex = nextIndex });
         }
 
         // ==================== QUIZ COMPLETED PAGE ====================
-        public IActionResult QuizCompleted(int quizId, int totalQuestions, int correctAnswers)
+        public async Task<IActionResult> QuizCompleted(int quizId, int totalQuestions, int correctAnswers)
         {
-            var quiz = _context.Quiz.FirstOrDefault(q => q.Id == quizId);
-
+            var quiz = await _quizRepo.GetByIdAsync(quizId);
             var result = new QuizResultViewModel
             {
                 QuizId = quiz?.Id ?? 0,
@@ -262,150 +239,34 @@ namespace QuizzyPop.Controllers
                 Difficulty = quiz?.Difficulty ?? "Any"
             };
 
-            // Calculate the percentage score
             double percentage = (double)result.CorrectAnswers / result.TotalQuestions * 100;
 
-            // Choose feedback based on score
             if (percentage >= 80)
-            {
                 result.FeedbackMessages = new List<string> { "🎉 Great job! You know your stuff!" };
-
-            }
             else if (percentage >= 50)
-            {
                 result.FeedbackMessages = new List<string> { "👍 Not bad! A little more effort and you'll do even better!" };
-            }
             else
-            {
                 result.FeedbackMessages = new List<string> { "💪 Keep practicing to score even higher next time!" };
-            }
 
             return View(result);
         }
 
+        // ==================== OTHER PAGES ====================
+        public IActionResult About() => View();
+
         [HttpPost]
         public IActionResult RetryQuiz(int quizId)
         {
-            // Clear any stored answers
             TempData.Remove("SelectedAnswers");
-
             return RedirectToAction("StartQuiz", new { id = quizId, questionIndex = 0 });
         }
 
-
-        // ==================== ERROR PAGE ====================
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
-
             _logger.LogError("Error page displayed for RequestId: {RequestId}", requestId);
-            return View(new ErrorViewModel { RequestId = requestId});
-        }
-
-        [HttpGet]
-        public IActionResult PublishedQuiz(string id)
-        {
-            // TODO: Backend team will load actual quiz data from database using the id
-            
-            // For now, show a simple success page with placeholder data
-            var model = new QuizMetaDataViewModel
-            {
-                Title = "Your Quiz",
-                Description = "Quiz has been published successfully!",
-                Category = "General",
-                Difficulty = "Medium",
-                Questions = new List<QuizQuestionViewModel>
-                {}
-            };
-            
-            ViewBag.CreatorName = "Current User";
-            ViewBag.QuizId = id ?? "QZ123456";
-            
-            return View(model);
-        }
-
-        [HttpGet]
-        public IActionResult MyPage()
-        {
-            // Get user from session
-            var userJson = HttpContext.Session.GetString("CurrentUser");
-            if (userJson == null)
-            {
-                return RedirectToAction("Login", "Account");
-            }
-            
-            var user = JsonSerializer.Deserialize<User>(userJson);
-            return View(user);
-        }
-
-        [HttpGet]
-        public IActionResult EditQuiz(int id)
-        {
-            // TODO: Backend Implementation Required
-            // 1. Use the 'id' parameter to fetch the quiz and its questions from the database
-            // 2. Include all quiz data:
-            //    - Quiz metadata (title, description, etc.)
-            //    - All questions with their complete data
-            //    - Correct answer indices
-            //    - Points and time limits
-            //    - Any quiz-specific settings
-            // 3. Map the database entities to QuizQuestionViewModel
-            // 4. Ensure all form fields are populated with existing data
-            // 5. Consider adding audit info (last edited, created by, etc.)
-            
-            // Example of expected data structure:
-            var questions = new List<QuizQuestionViewModel>
-            {
-                new QuizQuestionViewModel
-                {
-                    Text = "Sample Question 1",
-                    Choices = new List<string> { "Option 1", "Option 2", "Option 3", "Option 4" },
-                    CorrectAnswerIndex = 0,
-                    Points = 10,
-                    TimeLimit = 30,
-                    Required = true,
-                    ShuffleAnswers = false,
-                    Explanation = "Sample explanation"
-                }
-            };
-
-            return View(questions);
-        }
-
-        [HttpPost]
-        public IActionResult EditQuiz(List<QuizQuestionViewModel> questions)
-        {
-            if (ModelState.IsValid)
-            {
-                // TODO: Save changes to database
-                return RedirectToAction("Index");
-            }
-            return View(questions);
-        }
-
-        [HttpPost]
-        public IActionResult AddQuestion(QuizQuestionViewModel model, string action)
-        {
-            // Temporary validation - we just want the UI flow for now
-            if (!string.IsNullOrEmpty(model.Text) && model.Choices.Any())
-            {
-                // If "Add Another Question" was clicked
-                if (action == "addAnother")
-                {
-                    TempData["Success"] = "Question added successfully!";
-                    return RedirectToAction("AddQuestions");
-                }
-                
-                // If "Finish Quiz" was clicked
-                if (action == "finish")
-                {
-                    return RedirectToAction("Index");
-                }
-            }
-
-            // If validation fails, return to the same view
-            return View("AddQuestions", model);
+            return View(new ErrorViewModel { RequestId = requestId });
         }
     }
 }

@@ -3,6 +3,7 @@ using QuizzyPop.Models;
 using QuizzyPop.DAL;
 using Serilog;
 using Serilog.Events;
+using QuizzyPop.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceCont
 
 var logger = loggerConfiguration.CreateLogger();
 builder.Logging.AddSerilog(logger);
+
+builder.Services.AddScoped<IQuizRepository, QuizRepository>();
+builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 
 var app = builder.Build();
 

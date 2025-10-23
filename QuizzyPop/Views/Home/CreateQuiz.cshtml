@@ -30,8 +30,8 @@
             <!-- New Fields -->
             <div class="form-group">
                 <label asp-for="CoverImage">Cover Image</label>
-                <div class="file-upload">
-                    <input type="file" asp-for="CoverImage" class="file-input" accept="image/*" />
+                <div class="file-upload" id="fileUploadArea">
+                    <input type="file" asp-for="CoverImage" class="file-input" id="coverImageInput" accept="image/*" />
                     <div class="file-placeholder">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <span>Choose an image or drag it here</span>
@@ -177,24 +177,40 @@
 
 /* File Upload Styling */
 .file-upload {
+    position: relative;
     border: 2px dashed var(--qp-gray-200);
     border-radius: var(--qp-radius-md);
     padding: var(--qp-space-lg);
     text-align: center;
     cursor: pointer;
-    transition: border-color 0.2s;
+    transition: border-color 0.2s, background-color 0.2s;
 }
 
 .file-upload:hover {
     border-color: var(--qp-primary);
+    background-color: var(--qp-gray-100);
 }
 
 .file-input {
-    display: none;
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    cursor: pointer;
 }
 
 .file-placeholder {
     color: var(--qp-gray-500);
+    pointer-events: none; /* Allow clicks to pass through to the file input */
+}
+
+.file-placeholder i {
+    display: block;
+    font-size: 2rem;
+    margin-bottom: var(--qp-space-sm);
+    color: var(--qp-primary);
 }
 
 /* Time Input Styling */
@@ -205,6 +221,8 @@
 .time-suffix {
     position: absolute;
     right: var(--qp-space-md);
+    top: 50%;
+    transform: translateY(-50%);
     color: var(--qp-gray-500);
 }
 
@@ -286,6 +304,9 @@ input:checked + .slider:before {
     padding: var(--qp-space-md) var(--qp-space-xl);
     cursor: pointer;
     transition: transform 0.2s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .btn-next {
@@ -329,3 +350,56 @@ input:checked + .slider:before {
     }
 }
 </style>
+
+<script>
+    // Make the entire file upload area clickable
+    document.addEventListener('DOMContentLoaded', function() {
+        const fileUploadArea = document.getElementById('fileUploadArea');
+        const fileInput = document.getElementById('coverImageInput');
+        
+        // Click handler for the upload area
+        fileUploadArea.addEventListener('click', function(e) {
+            // Only trigger if not clicking directly on the input
+            if (e.target !== fileInput) {
+                fileInput.click();
+            }
+        });
+        
+        // Show selected file name
+        fileInput.addEventListener('change', function(e) {
+            const fileName = e.target.files[0]?.name;
+            if (fileName) {
+                const placeholder = fileUploadArea.querySelector('.file-placeholder span');
+                placeholder.textContent = `Selected: ${fileName}`;
+                fileUploadArea.style.borderColor = 'var(--qp-primary)';
+            }
+        });
+        
+        // Drag and drop support
+        fileUploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--qp-primary)';
+            fileUploadArea.style.backgroundColor = 'rgba(147, 51, 234, 0.1)';
+        });
+        
+        fileUploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--qp-gray-200)';
+            fileUploadArea.style.backgroundColor = 'transparent';
+        });
+        
+        fileUploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            fileUploadArea.style.borderColor = 'var(--qp-gray-200)';
+            fileUploadArea.style.backgroundColor = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const placeholder = fileUploadArea.querySelector('.file-placeholder span');
+                placeholder.textContent = `Selected: ${files[0].name}`;
+                fileUploadArea.style.borderColor = 'var(--qp-primary)';
+            }
+        });
+    });
+</script>

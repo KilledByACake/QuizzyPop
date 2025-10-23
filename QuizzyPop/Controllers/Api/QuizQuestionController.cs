@@ -16,17 +16,17 @@ public class QuizQuestionController : ControllerBase
 
     // GET /api/quiz-questions/{id}
     [HttpGet("{id:int}")]
-    public async Task<ActionResult<QuizQuestion>> Get(int id)
+    public async Task<ActionResult<Question>> Get(int id)
         => (await _service.GetAsync(id)) is { } q ? Ok(q) : NotFound();
 
     // GET /api/quiz-questions/by-quiz/{quizId}
     [HttpGet("by-quiz/{quizId:int}")]
-    public async Task<ActionResult<IEnumerable<QuizQuestion>>> ListByQuiz(int quizId)
+    public async Task<ActionResult<IEnumerable<Question>>> ListByQuiz(int quizId)
         => Ok(await _service.ListByQuizAsync(quizId));
 
     // POST /api/quiz-questions
     [HttpPost]
-    public async Task<ActionResult<QuizQuestion>> Create([FromBody] QuizQuestionCreateDto dto)
+    public async Task<ActionResult<Question>> Create([FromBody] QuizQuestionCreateDto dto)
     {
         var created = await _service.CreateAsync(dto);
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);

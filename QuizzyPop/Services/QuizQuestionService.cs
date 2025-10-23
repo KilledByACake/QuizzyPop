@@ -1,21 +1,19 @@
 namespace QuizzyPop.Services;
 
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
-//Mellomleddet mellom API og databasen.
-//Validerer data, sjekker at quiz eksisterer og Oppdatering of sletting med riktig logikk. 
-
 public sealed class QuizQuestionService : IQuizQuestionService
 {
-    private readonly IQuizQuestionRepository _repo;
+    private readonly IQuestionRepository _repo;
     private readonly IQuizRepository _quizRepo;
     private readonly ILogger<QuizQuestionService> _logger;
 
     public QuizQuestionService(
-        IQuizQuestionRepository repo,
+        IQuestionRepository repo,
         IQuizRepository quizRepo,
         ILogger<QuizQuestionService> logger)
     {
@@ -23,39 +21,46 @@ public sealed class QuizQuestionService : IQuizQuestionService
         _quizRepo = quizRepo;
         _logger = logger;
     }
-    // Oppretter et nytt spørsmål for en bestemt quiz.
-    // Utfører server-side validering og sjekker at quizen finnes før lagring.
-    public async Task<QuizQuestion> CreateAsync(QuizQuestionCreateDto dto)
+
+    public async Task<Question> CreateAsync(QuizQuestionCreateDto dto)
     {
-        // Server-side inputvalidering
         if (dto.QuizId <= 0) throw new ArgumentException("QuizId is required", nameof(dto.QuizId));
         if (string.IsNullOrWhiteSpace(dto.Text)) throw new ArgumentException("Text is required", nameof(dto.Text));
-        if (!string.IsNullOrWhiteSpace(dto.CorrectOption) &&
-            dto.CorrectOption is not ("A" or "B" or "C" or "D"))
-            throw new ArgumentException("CorrectOption must be A, B, C or D", nameof(dto.CorrectOption));
 
-        // Sjekk at quiz finnes 
+        // Normaliser choices: trim og fjern tomme
+        var normalized = (dto.Choices ?? new())
+            .Select(c => c?.Trim() ?? string.Empty)
+            .Where(c => !string.IsNullOrWhiteSpace(c))
+            .ToList();
+
+        if (normalized.Count < 2)
+            throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
+
+        if (dto.CorrectAnswerIndex < 0 || dto.CorrectAnswerIndex >= normalized.Count)
+            throw new ArgumentOutOfRangeException(nameof(dto.CorrectAnswerIndex),
+                "CorrectAnswerIndex must be a valid index into Choices.");
+
         var quiz = await _quizRepo.GetByIdAsync(dto.QuizId);
         if (quiz is null) throw new InvalidOperationException($"Quiz {dto.QuizId} not found");
 
-        // Lager et nytt spørsmål basert på data fra DTO
-        var entity = new QuizQuestion
+        var entity = new Question
         {
             QuizId = dto.QuizId,
             Text = dto.Text.Trim(),
-            OptionA = dto.OptionA,
-            OptionB = dto.OptionB,
-            OptionC = dto.OptionC,
-            OptionD = dto.OptionD,
-            CorrectOption = dto.CorrectOption
+            Choices = normalized,
+            CorrectAnswerIndex = dto.CorrectAnswerIndex,
         };
 
-        return await _repo.AddAsync(entity);
+        // Hvis IQuestionRepository.AddAsync ikke returnerer entity, gjør vi slik:
+        await _repo.AddAsync(entity);
+        return entity;
+        // Hvis AddAsync faktisk returnerer Question hos deg, kan du bytte til:
+        // return await _repo.AddAsync(entity);
     }
-    //henting av spørsmål, if not null
-    public Task<QuizQuestion?> GetAsync(int id) => _repo.GetByIdAsync(id);
-    //henter alle spørsmål fra en quiz
-    public Task<IReadOnlyList<QuizQuestion>> ListByQuizAsync(int quizId)
+
+    public Task<Question?> GetAsync(int id) => _repo.GetByIdAsync(id);
+
+    public Task<IReadOnlyList<Question>> ListByQuizAsync(int quizId)
         => _repo.GetByQuizIdAsync(quizId);
 
     public async Task<bool> UpdateAsync(int id, QuizQuestionUpdateDto dto)
@@ -63,16 +68,35 @@ public sealed class QuizQuestionService : IQuizQuestionService
         var existing = await _repo.GetByIdAsync(id);
         if (existing is null) return false;
 
-        if (!string.IsNullOrWhiteSpace(dto.Text)) existing.Text = dto.Text.Trim();
-        if (dto.OptionA is not null) existing.OptionA = dto.OptionA;
-        if (dto.OptionB is not null) existing.OptionB = dto.OptionB;
-        if (dto.OptionC is not null) existing.OptionC = dto.OptionC;
-        if (dto.OptionD is not null) existing.OptionD = dto.OptionD;
-        if (dto.CorrectOption is not null)
+        if (!string.IsNullOrWhiteSpace(dto.Text))
+            existing.Text = dto.Text.Trim();
+
+        if (dto.Choices is not null)
         {
-            if (dto.CorrectOption is not ("A" or "B" or "C" or "D"))
-                throw new ArgumentException("CorrectOption must be A, B, C or D", nameof(dto.CorrectOption));
-            existing.CorrectOption = dto.CorrectOption;
+            var normalized = dto.Choices
+                .Select(c => c?.Trim() ?? string.Empty)
+                .Where(c => !string.IsNullOrWhiteSpace(c))
+                .ToList();
+
+            if (normalized.Count < 2)
+                throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
+
+            existing.Choices = normalized;
+
+            // Sørg for at korrekt indeks fortsatt er gyldig om den ikke eksplisitt settes
+            if (existing.CorrectAnswerIndex < 0 || existing.CorrectAnswerIndex >= existing.Choices.Count)
+            {
+                existing.CorrectAnswerIndex = 0; // fallback
+            }
+        }
+
+        if (dto.CorrectAnswerIndex is not null)
+        {
+            var idx = dto.CorrectAnswerIndex.Value;
+            if (idx < 0 || idx >= existing.Choices.Count)
+                throw new ArgumentOutOfRangeException(nameof(dto.CorrectAnswerIndex),
+                    "CorrectAnswerIndex must be a valid index into Choices.");
+            existing.CorrectAnswerIndex = idx;
         }
 
         return await _repo.UpdateAsync(existing);

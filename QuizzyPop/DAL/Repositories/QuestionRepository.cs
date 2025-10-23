@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
@@ -28,7 +29,7 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Question>> GetByQuizIdAsync(int quizId)
+        public async Task<IReadOnlyList<Question>> GetByQuizIdAsync(int quizId)
         {
             try
             {
@@ -43,13 +44,14 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task AddAsync(Question question)
+        public async Task<Question> AddAsync(Question question)
         {
             try
             {
                 await _context.Questions.AddAsync(question);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("Question added to quiz {QuizId}", question.QuizId);
+                _logger.LogInformation("Question added to quiz {QuizId} with Id {Id}", question.QuizId, question.Id);
+                return question; // EF setter Id etter SaveChanges
             }
             catch (Exception ex)
             {
@@ -58,13 +60,14 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task UpdateAsync(Question question)
+        public async Task<bool> UpdateAsync(Question question)
         {
             try
             {
                 _context.Questions.Update(question);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Question {Id} updated successfully", question.Id);
+                var changed = await _context.SaveChangesAsync();
+                _logger.LogInformation("Question {Id} updated ({Changed} changes)", question.Id, changed);
+                return changed > 0;
             }
             catch (Exception ex)
             {
@@ -73,17 +76,21 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             try
             {
                 var question = await _context.Questions.FindAsync(id);
-                if (question != null)
+                if (question is null)
                 {
-                    _context.Questions.Remove(question);
-                    await _context.SaveChangesAsync();
-                    _logger.LogInformation("Question {Id} deleted successfully", id);
+                    _logger.LogWarning("Tried to delete question {Id}, but it does not exist", id);
+                    return false;
                 }
+
+                _context.Questions.Remove(question);
+                var changed = await _context.SaveChangesAsync();
+                _logger.LogInformation("Question {Id} deleted ({Changed} changes)", id, changed);
+                return changed > 0;
             }
             catch (Exception ex)
             {

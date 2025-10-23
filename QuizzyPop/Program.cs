@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using QuizzyPop.Models;
-using QuizzyPop.DAL;
-using QuizzyPop.DAL.Repositories;
+
 using Serilog;
 using Serilog.Events;
-using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Services;  
-
+using QuizzyPop.DAL;
+using QuizzyPop.DAL.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 

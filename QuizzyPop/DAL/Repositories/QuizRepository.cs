@@ -19,7 +19,10 @@ namespace QuizzyPop.DAL.Repositories
         {
             try
             {
-                return await _context.Quiz.FindAsync(id);
+                return await _context.Quiz
+                    .Include(q => q.Category)
+                    .Include(q => q.User)
+                    .FirstOrDefaultAsync(q => q.Id == id);
             }
             catch (Exception ex)
             {
@@ -28,7 +31,7 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Quiz>> GetAllWithDetailsAsync()
+        public async Task<IReadOnlyList<Quiz>> GetAllWithDetailsAsync()
         {
             try
             {
@@ -45,7 +48,7 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task<IEnumerable<Category>> GetAllCategoriesAsync()
+        public async Task<IReadOnlyList<Category>> GetAllCategoriesAsync()
         {
             try
             {
@@ -63,6 +66,8 @@ namespace QuizzyPop.DAL.Repositories
             try
             {
                 return await _context.Quiz
+                    .Include(q => q.Category)
+                    .Include(q => q.User)
                     .Include(q => q.Questions)
                     .FirstOrDefaultAsync(q => q.Id == id);
             }
@@ -73,17 +78,57 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task AddAsync(Quiz quiz)
+        public async Task<Quiz> AddAsync(Quiz quiz)
         {
             try
             {
                 await _context.Quiz.AddAsync(quiz);
                 await _context.SaveChangesAsync();
-                _logger.LogInformation("Quiz '{Title}' added successfully (ID: {Id})", quiz.Title, quiz.Id);
+                _logger.LogInformation("Quiz '{Title}' added (ID: {Id})", quiz.Title, quiz.Id);
+                return quiz;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding quiz '{Title}'", quiz.Title);
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateAsync(Quiz quiz)
+        {
+            try
+            {
+                _context.Quiz.Update(quiz);
+                var changed = await _context.SaveChangesAsync();
+                _logger.LogInformation("Quiz {Id} updated ({Changed} changes)", quiz.Id, changed);
+                return changed > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error updating quiz {Id}", quiz.Id);
+                throw;
+            }
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            try
+            {
+                var quiz = await _context.Quiz.FindAsync(id);
+                if (quiz is null)
+                {
+                    _logger.LogWarning("Tried to delete quiz {Id}, but it does not exist", id);
+                    return false;
+                }
+
+                _context.Quiz.Remove(quiz);
+                var changed = await _context.SaveChangesAsync();
+                _logger.LogInformation("Quiz {Id} deleted ({Changed} changes)", id, changed);
+                return changed > 0;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting quiz {Id}", id);
                 throw;
             }
         }

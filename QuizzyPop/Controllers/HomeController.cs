@@ -125,13 +125,17 @@ namespace QuizzyPop.Controllers
             await _questionRepo.AddAsync(question);
             _logger.LogInformation("Added question to quiz {QuizId}", model.QuizId);
 
-            if (action == "finish")
+            if (action == "finish"){
                 return RedirectToAction("Index");
-
-            ModelState.Clear();
-            model.Text = "";
-            model.Choices = new List<string> { "", "", "", "" };
-            return View("AddQuestions", model);
+            }
+            else{
+                ModelState.Clear();
+                model.Text = "";
+                model.Choices = new List<string> { "", "", "", "" };
+                model.Explanation = null;
+                return View("AddQuestions", model);
+                
+            }
         }
 
         // ==================== TAKE QUIZ ====================

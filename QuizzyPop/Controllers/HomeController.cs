@@ -196,9 +196,16 @@ namespace QuizzyPop.Controllers
                 return NotFound();
 
             var storedJson = TempData["SelectedAnswers"] as string;
-            List<int>? storedAnswers = !string.IsNullOrEmpty(storedJson)
-                ? JsonSerializer.Deserialize<List<int>>(storedJson)
-                : Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
+            List<int> storedAnswers;
+            if (!string.IsNullOrEmpty(storedJson))
+            {
+                storedAnswers = JsonSerializer.Deserialize<List<int>>(storedJson)
+                    ?? Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
+            }
+            else
+            {
+                storedAnswers = Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
+            }
 
             storedAnswers[model.CurrentQuestionIndex] = SelectedAnswer;
             TempData["SelectedAnswers"] = JsonSerializer.Serialize(storedAnswers);

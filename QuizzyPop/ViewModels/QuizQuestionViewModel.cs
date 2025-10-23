@@ -19,6 +19,6 @@ namespace QuizzyPop.ViewModels
         public bool ShuffleAnswers { get; set; } = false;       // randomize order of answers
         public bool Required { get; set; } = true;              // must be answered before next
 
-        public string Explanation { get; set; } = string.Empty;
+        public string? Explanation { get; set; }
     }
 }

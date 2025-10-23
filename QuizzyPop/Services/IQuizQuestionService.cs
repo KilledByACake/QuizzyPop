@@ -3,6 +3,9 @@ namespace QuizzyPop.Services;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
+
+//Logikk som håndterer spørsmål
+//implementeres av QuizQuestionService,
 public interface IQuizQuestionService
 {
     Task<QuizQuestion> CreateAsync(QuizQuestionCreateDto dto);

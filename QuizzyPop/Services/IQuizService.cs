@@ -5,6 +5,9 @@ using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 using Microsoft.Extensions.Logging;
 
+
+//Service Class for håndtering av Quizer.
+//logikk fo roppretting, oppdatering, henting og sletting.
 public sealed class QuizService : IQuizService
 {
     private readonly IQuizRepository _repo;
@@ -16,8 +19,10 @@ public sealed class QuizService : IQuizService
         _logger = logger;
     }
 
+    //Oppretter ny quiz
     public async Task<Quiz> CreateAsync(QuizCreateDto dto)
     {
+        //sjekker for navn (ikke tom)
         if (string.IsNullOrWhiteSpace(dto.Title))
             throw new ArgumentException("Title is required", nameof(dto.Title));
 
@@ -30,15 +35,16 @@ public sealed class QuizService : IQuizService
         };
         return await _repo.AddAsync(entity);
     }
-
+        // henter Quiz fra ID, hvis ikke null
     public Task<Quiz?> GetAsync(int id) => _repo.GetByIdAsync(id);
 
+    // hent er alle Quiz
     public async Task<IReadOnlyList<Quiz>> ListAsync(bool? published = null)
     {
         var all = await _repo.GetAllAsync();
         return published is null ? all : all.Where(q => q.Published == published).ToList();
     }
-
+        // Oppdaterer eksisterende quizzer,
     public async Task<bool> UpdateAsync(int id, QuizUpdateDto dto)
     {
         var existing = await _repo.GetByIdAsync(id);
@@ -50,6 +56,6 @@ public sealed class QuizService : IQuizService
 
         return await _repo.UpdateAsync(existing);
     }
-
+//sletter en quiz, fra ID -> Retrur True
     public Task<bool> DeleteAsync(int id) => _repo.DeleteAsync(id);
 }

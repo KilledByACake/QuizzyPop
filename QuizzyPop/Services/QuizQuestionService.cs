@@ -5,6 +5,9 @@ using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
+//Mellomleddet mellom API og databasen.
+//Validerer data, sjekker at quiz eksisterer og Oppdatering of sletting med riktig logikk. 
+
 public sealed class QuizQuestionService : IQuizQuestionService
 {
     private readonly IQuizQuestionRepository _repo;
@@ -20,7 +23,8 @@ public sealed class QuizQuestionService : IQuizQuestionService
         _quizRepo = quizRepo;
         _logger = logger;
     }
-
+    // Oppretter et nytt spørsmål for en bestemt quiz.
+    // Utfører server-side validering og sjekker at quizen finnes før lagring.
     public async Task<QuizQuestion> CreateAsync(QuizQuestionCreateDto dto)
     {
         // Server-side inputvalidering
@@ -30,10 +34,11 @@ public sealed class QuizQuestionService : IQuizQuestionService
             dto.CorrectOption is not ("A" or "B" or "C" or "D"))
             throw new ArgumentException("CorrectOption must be A, B, C or D", nameof(dto.CorrectOption));
 
-        // Sjekk at quiz finnes (fornuftig for referanseintegritet)
+        // Sjekk at quiz finnes 
         var quiz = await _quizRepo.GetByIdAsync(dto.QuizId);
         if (quiz is null) throw new InvalidOperationException($"Quiz {dto.QuizId} not found");
 
+        // Lager et nytt spørsmål basert på data fra DTO
         var entity = new QuizQuestion
         {
             QuizId = dto.QuizId,
@@ -47,9 +52,9 @@ public sealed class QuizQuestionService : IQuizQuestionService
 
         return await _repo.AddAsync(entity);
     }
-
+    //henting av spørsmål, if not null
     public Task<QuizQuestion?> GetAsync(int id) => _repo.GetByIdAsync(id);
-
+    //henter alle spørsmål fra en quiz
     public Task<IReadOnlyList<QuizQuestion>> ListByQuizAsync(int quizId)
         => _repo.GetByQuizIdAsync(quizId);
 

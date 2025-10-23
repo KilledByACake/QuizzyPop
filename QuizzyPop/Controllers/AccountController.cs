@@ -1,121 +1,94 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
+using QuizzyPop.Models; // This should include UserDbContext and User model
+using QuizzyPop.ViewModels; // This should include LoginViewModel and RegisterViewModel
 using System.Text.Json;
-using QuizzyPop.Models;
-using QuizzyPop.ViewModels;
-using QuizzyPop.DAL;
+using QuizzyPop.DAL; // Add this line to include UserDbContext
+using Microsoft.Extensions.Logging;
 
-namespace QuizzyPop.Controllers
+public class AccountController : Controller
 {
-    public class AccountController : Controller
+    private readonly UserDbContext _context; // Ensure you have your DbContext injected
+    private readonly ILogger<AccountController> _logger; // Add this line to include ILogger
+
+    public AccountController(UserDbContext context, ILogger<AccountController> logger)
     {
-        private readonly UserDbContext _context;
-        public AccountController(UserDbContext context)
-        {
-            _context = context;
-        }
+        _context = context;
+        _logger = logger;
+    }
 
-        /* === LOGIN PAGE === */
-        [HttpGet]
-        public IActionResult Login()
-        {
-            return View();
-        }
+    [HttpGet]
+    public IActionResult Login()
+    {
+        return View();
+    }
 
-        [HttpPost]
-        public IActionResult Login(LoginViewModel model)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Login(LoginViewModel model)
+    {
+        if (!ModelState.IsValid)
         {
-            if (!ModelState.IsValid)
+            _logger.LogWarning("Login attempted with invalid model state");
             return View(model);
+        }
 
-        var user = _context.Users.FirstOrDefault(u => u.Email == model.Email);
-
+        var user = _context.Users.FirstOrDefault(u => u.Email == model.Email); // Synchronous version
+        
         if (user == null || user.Password != model.Password)
         {
+            _logger.LogWarning("Failed login attempt for email: {Email}", model.Email);
             ModelState.AddModelError("", "Invalid email or password");
             return View(model);
         }
 
+        // Store user info in session
         HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(user));
-
+        
+        _logger.LogInformation("User {Email} logged in successfully", user.Email);
+        
         return RedirectToAction("MyPage", "Home");
-        }
+    }
 
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Register(RegisterViewModel model)
+    {
+        if (!ModelState.IsValid)
+            return View(model);
 
-        /* === REGISTER PAGE === */
-        [HttpGet]
-        public IActionResult Register()
+        // Check if the email is already registered
+        if (_context.Users.Any(u => u.Email == model.Email))
         {
-            // Show registration page
-            return View();
+            ModelState.AddModelError("", "Email already registered.");
+            return View(model);
         }
 
-        [HttpPost]
-        public IActionResult Register(IFormCollection form)
+        // Create a new user without hashing
+        var newUser = new User
         {
-            var email = form["email"].ToString();
-            var password = form["password"].ToString();
-            var confirmPassword = form["confirmPassword"].ToString();
-            var role = form["role"].ToString().ToLower();
-            var phone = form["phone"].ToString();
-            var birthdate = DateTime.TryParse(form["birthdate"], out var b) ? b : DateTime.Now;
+            Email = model.Email,
+            Password = model.Password, // No hashing for now
+            Role = "student",
+            CreatedAt = DateTime.UtcNow
+        };
 
-            if (string.IsNullOrWhiteSpace(email) ||
-                string.IsNullOrWhiteSpace(password) ||
-                password != confirmPassword ||
-                string.IsNullOrWhiteSpace(role))
-            {
-                ModelState.AddModelError("", "Please fill out all required fields correctly.");
-                return View();
-            }
+        _context.Users.Add(newUser);
+        await _context.SaveChangesAsync();
 
-            // Check if email exists
-            if (_context.Users.Any(u => u.Email == email))
-            {
-                ModelState.AddModelError("", "Email already registered.");
-                return View();
-            }
+        return RedirectToAction("Login"); // Redirect to Login after successful registration
+    }
 
-            var newUser = new User
-            {
-                Email = email,
-                Password = password,
-                Role = role,
-                Phone = phone,
-                CreatedAt = DateTime.UtcNow
-            };
-
-            _context.Users.Add(newUser);
-            _context.SaveChanges();
-
-            HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(newUser));
-            return RedirectToAction("MyPage", "Home");
-        }
-
-        /* === LOGOUT === */
-        [HttpPost]
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            return RedirectToAction("Index", "Home");
-        }
-
-        /* === HELPER METHODS === */
-        private bool IsValidLogin(string email, string password)
-        {
-            // Simple demo email/password validation
-            var validCredentials = new Dictionary<string, string>
-            {
-                ["demo@quizzypop.com"] = "demo123",
-                ["test@quizzypop.com"] = "test123",
-                ["admin@quizzypop.com"] = "admin123"
-            };
-
-            // Check predefined accounts or allow any password for other emails
-            return validCredentials.ContainsKey(email.ToLower())
-                ? validCredentials[email.ToLower()] == password
-                : password == "password"; // Default password for any other email
-        }
+    // Add Logout action
+    [HttpPost]
+    public IActionResult Logout()
+    {
+        HttpContext.Session.Remove("CurrentUser");
+        return RedirectToAction("Index", "Home");
     }
 }

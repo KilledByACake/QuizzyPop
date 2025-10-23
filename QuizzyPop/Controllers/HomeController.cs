@@ -7,6 +7,7 @@ using QuizzyPop.DAL;
 using QuizzyPop.DAL.Repositories;
 using QuizzyPop.ViewModels;
 using System.Text.Json;
+using System.Linq;
 
 namespace QuizzyPop.Controllers
 {
@@ -15,15 +16,18 @@ namespace QuizzyPop.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IQuizRepository _quizRepo;
         private readonly IQuestionRepository _questionRepo;
+        private readonly UserDbContext _context;
 
         public HomeController(
             ILogger<HomeController> logger,
             IQuizRepository quizRepo,
-            IQuestionRepository questionRepo)
+            IQuestionRepository questionRepo,
+            UserDbContext context)
         {
             _logger = logger;
             _quizRepo = quizRepo;
             _questionRepo = questionRepo;
+            _context = context;
         }
 
         // ==================== HOME PAGE ====================
@@ -274,6 +278,53 @@ namespace QuizzyPop.Controllers
             var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             _logger.LogError("Error page displayed for RequestId: {RequestId}", requestId);
             return View(new ErrorViewModel { RequestId = requestId });
+        }
+
+        // ==================== MY PAGE ====================
+        public IActionResult MyPage()
+        {
+            _logger.LogInformation("MyPage action called");
+            
+            // Get user from session
+            var userJson = HttpContext.Session.GetString("CurrentUser");
+            
+            _logger.LogInformation("User JSON from session: {UserJson}", userJson ?? "NULL");
+            
+            if (string.IsNullOrEmpty(userJson))
+            {
+                _logger.LogWarning("No user in session, redirecting to login");
+                return RedirectToAction("Login", "Account");
+            }
+
+            try
+            {
+                var user = JsonSerializer.Deserialize<User>(userJson);
+                
+                if (user == null)
+                {
+                    _logger.LogWarning("Failed to deserialize user from session");
+                    return RedirectToAction("Login", "Account");
+                }
+
+                _logger.LogInformation("User deserialized: ID={Id}, Email={Email}", user.Id, user.Email);
+
+                var dbUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+                
+                if (dbUser == null)
+                {
+                    _logger.LogWarning("User ID {Id} not found in database", user.Id);
+                    HttpContext.Session.Clear();
+                    return RedirectToAction("Login", "Account");
+                }
+
+                _logger.LogInformation("Rendering MyPage for user {Email}", dbUser.Email);
+                return View(dbUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error in MyPage action");
+                return RedirectToAction("Login", "Account");
+            }
         }
     }
 }

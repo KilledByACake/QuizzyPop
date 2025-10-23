@@ -1,5 +1,6 @@
 namespace QuizzyPop.Models;
 using System;
+using System.Collections.Generic; // Ensure this is included for List<T>
 
 public class User
 {

@@ -26,3 +26,15 @@ project.assets.json
 *.sqlite3
 *.db-wal
 *.db-shm
+
+# Logs
+*.log
+logs/
+log/
+*.trace
+*.etl
+
+# Temp/backup
+*.tmp
+*.bak
+*.swp

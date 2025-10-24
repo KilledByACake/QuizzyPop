@@ -1,5 +1,7 @@
 using QuizzyPop.Models;
 
+
+//struktur for quiz-objekter
 namespace QuizzyPop.DAL.Repositories
 {
     public interface IQuizRepository

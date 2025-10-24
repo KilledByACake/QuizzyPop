@@ -3,8 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
 
+
+//håndterer databaseoperasjoner for Question
 namespace QuizzyPop.DAL.Repositories
 {
+    //repository for CRUD - operasjoner
     public class QuestionRepository : IQuestionRepository
     {
         private readonly UserDbContext _context;

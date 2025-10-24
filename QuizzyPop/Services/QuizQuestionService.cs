@@ -6,8 +6,10 @@ using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
+//imput validering + normalisering
 public sealed class QuizQuestionService : IQuizQuestionService
 {
+    //Crud og Verfisering
     private readonly IQuestionRepository _repo;
     private readonly IQuizRepository _quizRepo;
     private readonly ILogger<QuizQuestionService> _logger;
@@ -21,7 +23,7 @@ public sealed class QuizQuestionService : IQuizQuestionService
         _quizRepo = quizRepo;
         _logger = logger;
     }
-
+    //nytt sorlsmål for quiz
     public async Task<Question> CreateAsync(QuizQuestionCreateDto dto)
     {
         if (dto.QuizId <= 0) throw new ArgumentException("QuizId is required", nameof(dto.QuizId));

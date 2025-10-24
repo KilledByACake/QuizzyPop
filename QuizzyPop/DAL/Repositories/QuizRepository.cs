@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
-
+//implementerer iQuizRepository håndtering av database for Quiz
 namespace QuizzyPop.DAL.Repositories
 {
     public class QuizRepository : IQuizRepository

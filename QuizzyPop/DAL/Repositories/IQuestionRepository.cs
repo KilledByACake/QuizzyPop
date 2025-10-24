@@ -1,6 +1,11 @@
 using QuizzyPop.Models;
 
-
+//deifnerer hvilke operasjoner man kan gjøre på spørsmål i databsen.
+//hneter et spørsmål by ID-
+//henter alle fra ID
+//Legger til spørmsål
+//Oppdaterer eksiterende 
+//letter Fra ID
 namespace QuizzyPop.DAL.Repositories
 {
     public interface IQuestionRepository

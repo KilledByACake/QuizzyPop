@@ -43,6 +43,7 @@ public class AccountController : Controller
 
         // Store user info in session
         HttpContext.Session.SetString("CurrentUser", JsonSerializer.Serialize(user));
+        HttpContext.Session.SetInt32("CurrentUserId", user.Id);
         
         _logger.LogInformation("User {Email} logged in successfully", user.Email);
         

@@ -25,7 +25,7 @@ namespace QuizzyPop.ViewModels
         public int CategoryId { get; set; } 
         public string Tags { get; set; }
         public bool IsPublic { get; set; }
-        public IFormFile CoverImage { get; set; }
+        public IFormFile? CoverImage { get; set; }
 
         public List<QuizQuestionViewModel> Questions { get; set; } = new List<QuizQuestionViewModel>();
     }

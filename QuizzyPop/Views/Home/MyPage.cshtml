@@ -1,7 +1,8 @@
-@model QuizzyPop.Models.User
+@model QuizzyPop.ViewModels.MyPageViewModel
+
 
 @{
-    ViewData["Title"] = "My Page - " + (Model.DisplayName ?? Model.Name);
+    ViewData["Title"] = "My Page - " + (Model.User.DisplayName ?? Model.User.Name);
 }
 
 <div class=" qp-page my-page-container">
@@ -15,22 +16,22 @@
         <div class="user-info">
             <img src="~/images/test.jpg" alt="Profile" class="profile-image" />
             <div class="user-details">
-                <h2>@(Model.DisplayName ?? Model.Name)</h2>
-                <p class="user-address">📍 @Model.Address</p>
-                <p class="user-since">Member since @Model.CreatedAt.ToString("MMMM yyyy")</p>
+                <h2>@(Model.User.DisplayName ?? Model.User.Name)</h2>
+                <p class="user-address">📍 @Model.User.Address</p>
+                <p class="user-since">Member since @Model.User.CreatedAt.ToString("MMMM yyyy")</p>
             </div>
         </div>
         <div class="user-stats">
             <div class="stat">
-                <span class="stat-number">@Model.QuizzesCreated</span>
+                <span class="stat-number">@Model.User.QuizzesCreated</span>
                 <span class="stat-label">Created</span>
             </div>
             <div class="stat">
-                <span class="stat-number">@Model.QuizzesTaken</span>
+                <span class="stat-number">@Model.User.QuizzesTaken</span>
                 <span class="stat-label">Taken</span>
             </div>
             <div class="stat">
-                <span class="stat-number">@((Model.QuizzesCreated.HasValue && Model.QuizzesTaken.HasValue && Model.QuizzesTaken.Value > 0 ? (int)((Model.QuizzesCreated.Value / (double)Model.QuizzesTaken.Value) * 100) : 0))%</span>
+                <span class="stat-number">@((Model.User.QuizzesCreated.HasValue && Model.User.QuizzesTaken.HasValue && Model.User.QuizzesTaken.Value > 0 ? (int)((Model.User.QuizzesCreated.Value / (double)Model.User.QuizzesTaken.Value) * 100) : 0))%</span>
                 <span class="stat-label">Success</span>
             </div>
         </div>
@@ -42,19 +43,27 @@
         <div class="card quiz-card">
             <h2>My Created Quizzes</h2>
             <div class="quiz-list">
-                @for (int i = 0; i < 3; i++)
+                @if (Model.CreatedQuizzes.Any())
                 {
-                    <div class="quiz-item">
-                        <div class="quiz-item-info">
-                            <h3>Sample Quiz @(i + 1)</h3>
-                            <p>Category: General • Questions: 10</p>
+                    @foreach (var quiz in Model.CreatedQuizzes)
+                    {
+                        <div class="quiz-item">
+                            <div class="quiz-item-info">
+                                <h3>@quiz.Title</h3>
+                                <p>Category: @quiz.CategoryId • Created: @quiz.CreatedAt.ToString("MMM dd, yyyy")</p>
+                            </div>
+                            <div class="quiz-item-actions">
+                                <a class="btn-action" asp-action="TakeQuiz" asp-route-quizId="@quiz.Id">Details</a>
+                                <a class="btn-action btn-edit" asp-action="EditQuiz" asp-route-id="@quiz.Id">Edit</a>
+                                <a class="btn-action btn-delete" asp-action="DeleteQuiz" asp-route-id="@quiz.Id">Delete</a>
+                            </div>
                         </div>
-                        <div class="quiz-item-actions">
-                            <button class="btn-action" onclick="showDetails(@i)">Details</button>
-                            <button class="btn-action btn-edit" onclick="location.href='@Url.Action("EditQuiz", new { id = i })'">Edit</button>
-                            <button class="btn-action btn-delete" onclick="deleteQuiz(@i)">Delete</button>
-                        </div>
-                    </div>
+                    }
+                }
+
+                else
+                {
+                    <p>You haven't created any quizzes yet.</p>
                 }
             </div>
         </div>

@@ -30,3 +30,4 @@
 2025-10-23 12:19:27.971 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - null null
 2025-10-23 12:19:27.972 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost:5299/fonts/Baloo2-Regular.ttf - 404 0 null 1.2479ms
 2025-10-23 12:19:27.972 +02:00 [INF] Request reached the end of the middleware pipeline without being handled by application code. Request path: GET http://localhost:5299/fonts/Baloo2-Regular.ttf, Response status code: 404
+2025-10-23 12:21:06.898 +02:00 [INF] Application is shutting down...

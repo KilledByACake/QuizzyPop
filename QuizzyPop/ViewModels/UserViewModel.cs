@@ -47,4 +47,12 @@ namespace QuizzyPop.ViewModels
         [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
     }
+
+    public class MyPageViewModel
+    {
+        public User User { get; set; }
+        public List<Quiz> CreatedQuizzes { get; set; } = new();
+        public List<Quiz> TakenQuizzes { get; set; } = new();
+    }
+
 }

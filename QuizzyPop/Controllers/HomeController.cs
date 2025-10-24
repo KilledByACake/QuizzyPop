@@ -59,15 +59,35 @@ namespace QuizzyPop.Controllers
             try
             {
                 int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
+                string? imagePath = null;
 
+                // Handle image upload so quiz has a cover image 
+                if (model.CoverImage != null && model.CoverImage.Length > 0)
+                {
+                    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                    if (!Directory.Exists(uploadsFolder))
+                        Directory.CreateDirectory(uploadsFolder);
+
+                    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.CoverImage.FileName)}";
+                    var filePath = Path.Combine(uploadsFolder, fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await model.CoverImage.CopyToAsync(stream);
+                    }
+
+                    imagePath = $"/uploads/{fileName}";
+                }
+                
                 var newQuiz = new Quiz
                 {
                     Title = model.Title,
                     Description = model.Description,
                     Difficulty = model.Difficulty,
                     CategoryId = model.CategoryId,
-                    UserId = null,
-                    CreatedAt = DateTime.Now
+                    UserId = currentUserId,
+                    CreatedAt = DateTime.Now,
+                    ImageUrl = imagePath ?? "/images/placeholder.jpg",
                 };
 
                 await _quizRepo.AddAsync(newQuiz);
@@ -125,16 +145,16 @@ namespace QuizzyPop.Controllers
             await _questionRepo.AddAsync(question);
             _logger.LogInformation("Added question to quiz {QuizId}", model.QuizId);
 
-            if (action == "finish"){
+            if (action == "finish") {
                 return RedirectToAction("Index");
             }
-            else{
+            else {
                 ModelState.Clear();
                 model.Text = "";
                 model.Choices = new List<string> { "", "", "", "" };
                 model.Explanation = null;
                 return View("AddQuestions", model);
-                
+
             }
         }
 
@@ -215,7 +235,23 @@ namespace QuizzyPop.Controllers
                 storedAnswers = Enumerable.Repeat(-1, quiz.Questions.Count).ToList();
             }
 
-            storedAnswers[model.CurrentQuestionIndex] = SelectedAnswer;
+            while (storedAnswers.Count < quiz.Questions.Count)
+            {
+                storedAnswers.Add(-1);
+            }
+
+            if (model.CurrentQuestionIndex >= 0 && model.CurrentQuestionIndex < storedAnswers.Count)
+            {
+                storedAnswers[model.CurrentQuestionIndex] = SelectedAnswer;
+            }
+            else
+            {
+                _logger.LogWarning(
+                    "Invalid question index {Index} for quiz {QuizId}. StoredAnswers count = {Count}",
+                    model.CurrentQuestionIndex, model.QuizId, storedAnswers.Count
+                );
+            }
+            
             TempData["SelectedAnswers"] = JsonSerializer.Serialize(storedAnswers);
 
             int nextIndex = model.CurrentQuestionIndex;
@@ -287,48 +323,32 @@ namespace QuizzyPop.Controllers
         // ==================== MY PAGE ====================
         public IActionResult MyPage()
         {
-            _logger.LogInformation("MyPage action called");
-            
-            // Get user from session
             var userJson = HttpContext.Session.GetString("CurrentUser");
-            
-            _logger.LogInformation("User JSON from session: {UserJson}", userJson ?? "NULL");
-            
+
             if (string.IsNullOrEmpty(userJson))
-            {
-                _logger.LogWarning("No user in session, redirecting to login");
                 return RedirectToAction("Login", "Account");
-            }
 
-            try
-            {
-                var user = JsonSerializer.Deserialize<User>(userJson);
-                
-                if (user == null)
-                {
-                    _logger.LogWarning("Failed to deserialize user from session");
-                    return RedirectToAction("Login", "Account");
-                }
-
-                _logger.LogInformation("User deserialized: ID={Id}, Email={Email}", user.Id, user.Email);
-
-                var dbUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
-                
-                if (dbUser == null)
-                {
-                    _logger.LogWarning("User ID {Id} not found in database", user.Id);
-                    HttpContext.Session.Clear();
-                    return RedirectToAction("Login", "Account");
-                }
-
-                _logger.LogInformation("Rendering MyPage for user {Email}", dbUser.Email);
-                return View(dbUser);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error in MyPage action");
+            var user = JsonSerializer.Deserialize<User>(userJson);
+            if (user == null)
                 return RedirectToAction("Login", "Account");
-            }
+
+            var dbUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+            if (dbUser == null)
+                return RedirectToAction("Login", "Account");
+
+            // 🟢 Get quizzes created by this user
+            var createdQuizzes = _context.Quiz
+                .Where(q => q.UserId == dbUser.Id)
+                .ToList();
+
+            var viewModel = new MyPageViewModel
+            {
+                User = dbUser,
+                CreatedQuizzes = createdQuizzes,
+                TakenQuizzes = new List<Quiz>()
+            };
+
+            return View(viewModel);
         }
     }
 }

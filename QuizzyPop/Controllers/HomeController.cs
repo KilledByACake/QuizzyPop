@@ -78,7 +78,7 @@ namespace QuizzyPop.Controllers
 
                     imagePath = $"/uploads/{fileName}";
                 }
-                
+
                 var newQuiz = new Quiz
                 {
                     Title = model.Title,
@@ -251,7 +251,7 @@ namespace QuizzyPop.Controllers
                     model.CurrentQuestionIndex, model.QuizId, storedAnswers.Count
                 );
             }
-            
+
             TempData["SelectedAnswers"] = JsonSerializer.Serialize(storedAnswers);
 
             int nextIndex = model.CurrentQuestionIndex;
@@ -301,6 +301,38 @@ namespace QuizzyPop.Controllers
 
             return View(result);
         }
+
+        // ==================== Delete Quiz ====================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteQuiz(int quizId)
+        {
+            try
+            {
+                int? currentUserId = HttpContext.Session.GetInt32("CurrentUserId");
+                if (currentUserId == null) return RedirectToAction("Login", "Account");
+
+                var quiz = await _quizRepo.GetByIdAsync(quizId);
+                if (quiz == null) return NotFound();
+
+                // Delete image
+                if (!string.IsNullOrEmpty(quiz.ImageUrl))
+                {
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", quiz.ImageUrl.TrimStart('/'));
+                    if (System.IO.File.Exists(filePath))
+                        System.IO.File.Delete(filePath);
+                }
+
+                await _quizRepo.DeleteAsync(quiz.Id);
+                _logger.LogInformation("Quiz {QuizId} deleted by {UserId}", quizId, currentUserId);
+                return RedirectToAction("MyPage");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting quiz {QuizId}", quizId);
+                return RedirectToAction("MyPage");
+            }
+        } 
 
         // ==================== OTHER PAGES ====================
         public IActionResult About() => View();

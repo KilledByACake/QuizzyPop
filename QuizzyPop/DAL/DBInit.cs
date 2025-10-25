@@ -21,6 +21,7 @@ public static class DBInit
                     Email = "demo@quizzypop.com",
                     Name = "Demo User",
                     Role = "student",
+                    Password = "Demo12345",
                     DisplayName = "Demo User",
                     QuizzesCreated = 5,
                     QuizzesTaken = 12
@@ -30,6 +31,7 @@ public static class DBInit
                     Email = "test@quizzypop.com",
                     Name = "Test User",
                     Role = "teacher",
+                    Password = "Test12345",
                     DisplayName = "Test User",
                     QuizzesCreated = 3,
                     QuizzesTaken = 8
@@ -39,6 +41,7 @@ public static class DBInit
                     Email = "admin@quizzypop.com",
                     Name = "Admin User",
                     Role = "admin",
+                    Password = "Admin12345",
                     DisplayName = "Admin User",
                     QuizzesCreated = 15,
                     QuizzesTaken = 25

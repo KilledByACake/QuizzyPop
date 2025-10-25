@@ -50,6 +50,13 @@ namespace QuizzyPop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateQuiz(QuizMetaDataViewModel model)
         {
+            int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
+            if (currentUserId == 0)
+            {
+                TempData["AlertMessage"] = "You need to be logged in to create a quiz!";
+                return RedirectToAction("Login", "Account");
+            }
+
             if (string.IsNullOrEmpty(model.Title))
             {
                 _logger.LogWarning("Create Quiz attempted without title");
@@ -58,7 +65,6 @@ namespace QuizzyPop.Controllers
 
             try
             {
-                int currentUserId = HttpContext.Session.GetInt32("CurrentUserId") ?? 0;
                 string? imagePath = null;
 
                 // Handle image upload so quiz has a cover image 
@@ -78,7 +84,7 @@ namespace QuizzyPop.Controllers
 
                     imagePath = $"/uploads/{fileName}";
                 }
-
+                
                 var newQuiz = new Quiz
                 {
                     Title = model.Title,

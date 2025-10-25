@@ -7,6 +7,13 @@
         <img src="~/images/quizzy-blueberry.png" alt="Quizzy Pop mascot" class="login-mascot" />
         <h1>Welcome Back!</h1>
         <p class="subtitle">Log in!</p>
+        
+        @if (TempData["AlertMessage"] != null)
+        {
+            <div class="alert alert-warning" role="alert">
+                @TempData["AlertMessage"]
+            </div>
+        }
 
         <form class="login-form" method="post">
             <div class="form-group">

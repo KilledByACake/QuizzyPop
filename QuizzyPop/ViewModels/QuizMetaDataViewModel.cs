@@ -15,7 +15,7 @@ namespace QuizzyPop.ViewModels
         public string Description { get; set; }
 
         [StringLength(80)]
-        public string Category { get; set; }
+        public string? Category { get; set; }
 
         [Required]
         public string Difficulty { get; set; }
@@ -23,7 +23,7 @@ namespace QuizzyPop.ViewModels
         [Range(0, 600)]
         public int? TimeLimit { get; set; }
         public int CategoryId { get; set; } 
-        public string Tags { get; set; }
+        public string? Tags { get; set; }
         public bool IsPublic { get; set; }
         public IFormFile? CoverImage { get; set; }
 

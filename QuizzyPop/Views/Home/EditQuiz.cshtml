@@ -11,6 +11,7 @@
     <div class="edit-quiz-card">
         <form class="edit-quiz-form" asp-action="EditQuiz" method="post" enctype="multipart/form-data">
             @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
 
             <!-- Quiz Info -->
             <div class="form-group">
@@ -22,6 +23,14 @@
             <div class="form-group">
                 <label asp-for="Description">Description</label>
                 <textarea asp-for="Description" class="edit-form-input"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId">Category</label>
+                <select asp-for="CategoryId"
+                        asp-items="@(new SelectList(ViewBag.Categories, "Id", "Name", Model.CategoryId))"
+                        class="edit-form-input">
+                </select>
             </div>
 
             <div class="form-group">
@@ -50,6 +59,8 @@
                             <h3>Question @(i + 1)</h3>
                         </div>
 
+                        <input type="hidden" name="Questions[@i].Id" value="@Model.Questions[i].Id" />
+
                         <div class="edit-form-group">
                             <label>Question Text</label>
                             <textarea name="Questions[@i].Text" class="edit-form-input" rows="3">@Model.Questions[i].Text</textarea>
@@ -61,14 +72,17 @@
                                 @for (int j = 0; j < Model.Questions[i].Choices.Count; j++)
                                 {
                                     <div class="option-row @(j == Model.Questions[i].CorrectAnswerIndex ? "correct-option" : "")">
+                                        <!-- Radioknapp for riktig svar -->
+                                        <input type="radio"
+                                            name="Questions[@i].CorrectAnswerIndex"
+                                            value="@j"
+                                            @(j == Model.Questions[i].CorrectAnswerIndex ? "checked" : "") />
+
+                                        <!-- Tekstfelt for svaralternativ -->
                                         <input type="text"
-                                               name="Questions[@i].Choices[@j]"
-                                               value="@Model.Questions[i].Choices[j]"
-                                               class="edit-form-input" />
-                                        @if (j == Model.Questions[i].CorrectAnswerIndex)
-                                        {
-                                            <span class="correct-badge">✓</span>
-                                        }
+                                            name="Questions[@i].Choices[@j]"
+                                            value="@Model.Questions[i].Choices[j]"
+                                            class="edit-form-input" />
                                     </div>
                                 }
                             </div>

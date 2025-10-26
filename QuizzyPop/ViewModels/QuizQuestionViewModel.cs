@@ -3,6 +3,7 @@ namespace QuizzyPop.ViewModels
     public class QuizQuestionViewModel
     {
         // === Identification ===
+        public int Id { get; set; }
         public int QuizId { get; set; }                      
         // === Core question data ===
         public string Text { get; set; } = string.Empty;

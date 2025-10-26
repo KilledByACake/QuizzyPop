@@ -69,6 +69,7 @@ namespace QuizzyPop.DAL.Repositories
                     .Include(q => q.Category)
                     .Include(q => q.User)
                     .Include(q => q.Questions)
+                    .AsTracking()
                     .FirstOrDefaultAsync(q => q.Id == id);
             }
             catch (Exception ex)
@@ -99,8 +100,28 @@ namespace QuizzyPop.DAL.Repositories
             try
             {
                 _context.Quiz.Update(quiz);
+
+                var dbQuestions = await _context.Questions
+                .Where(q => q.QuizId == quiz.Id)
+                .ToListAsync();
+
+                // Oppdater eksisterende spørsmål
+                foreach (var q in quiz.Questions)
+        {
+            var existing = dbQuestions.FirstOrDefault(d => d.Id == q.Id);
+            if (existing is null) continue; // ikke legg til nye her
+
+            existing.Text = q.Text;
+            existing.Choices = q.Choices;
+            existing.CorrectAnswerIndex = q.CorrectAnswerIndex;
+
+            _context.Entry(existing).State = EntityState.Modified;
+        }
+
+
                 var changed = await _context.SaveChangesAsync();
                 _logger.LogInformation("Quiz {Id} updated ({Changed} changes)", quiz.Id, changed);
+
                 return changed > 0;
             }
             catch (Exception ex)

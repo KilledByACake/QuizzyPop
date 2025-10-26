@@ -379,6 +379,7 @@ namespace QuizzyPop.Controllers
                 CoverImage = null,
                 Questions = quiz.Questions.Select(q => new QuizQuestionViewModel
                 {
+                    Id = q.Id,
                     QuizId = quiz.Id,
                     Text = q.Text,
                     Choices = q.Choices.Count == 4 ? q.Choices.ToList() : new List<string> { "", "", "", "" },
@@ -394,8 +395,10 @@ namespace QuizzyPop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditQuiz(QuizMetaDataViewModel model)
         {
+            
             if (!ModelState.IsValid)
             {
+                
                 ViewBag.Categories = await _quizRepo.GetAllCategoriesAsync();
                 return View(model);
             }
@@ -425,16 +428,16 @@ namespace QuizzyPop.Controllers
             }
 
             // Update questions
-            for (int i = 0; i < model.Questions.Count; i++)
-            {
-                var qvm = model.Questions[i];
-                var existingQuestion = quiz.Questions.ElementAtOrDefault(i);
-                if (existingQuestion == null) continue;
+            foreach (var qvm in model.Questions)
+    {
+        var existing = quiz.Questions.FirstOrDefault(x => x.Id == qvm.Id);
+        if (existing is null) continue; // vi legger ikke til nye i Edit
 
-                existingQuestion.Text = qvm.Text;
-                existingQuestion.Choices = qvm.Choices.ToList();
-                existingQuestion.CorrectAnswerIndex = qvm.CorrectAnswerIndex;
-            }
+        existing.Text = qvm.Text;
+        existing.Choices = qvm.Choices?.ToList() ?? new List<string> { "", "", "", "" };
+        existing.CorrectAnswerIndex = qvm.CorrectAnswerIndex;
+        existing.QuizId = quiz.Id;
+    }
 
             await _quizRepo.UpdateAsync(quiz);
             TempData["SuccessMessage"] = "Quiz updated successfully!";

@@ -429,15 +429,15 @@ namespace QuizzyPop.Controllers
 
             // Update questions
             foreach (var qvm in model.Questions)
-    {
-        var existing = quiz.Questions.FirstOrDefault(x => x.Id == qvm.Id);
-        if (existing is null) continue; // vi legger ikke til nye i Edit
+            {
+                var existing = quiz.Questions.FirstOrDefault(x => x.Id == qvm.Id);
+                if (existing is null) continue;
 
-        existing.Text = qvm.Text;
-        existing.Choices = qvm.Choices?.ToList() ?? new List<string> { "", "", "", "" };
-        existing.CorrectAnswerIndex = qvm.CorrectAnswerIndex;
-        existing.QuizId = quiz.Id;
-    }
+                existing.Text = qvm.Text;
+                existing.Choices = qvm.Choices?.ToList() ?? new List<string> { "", "", "", "" };
+                existing.CorrectAnswerIndex = qvm.CorrectAnswerIndex;
+                existing.QuizId = quiz.Id;
+            }
 
             await _quizRepo.UpdateAsync(quiz);
             TempData["SuccessMessage"] = "Quiz updated successfully!";

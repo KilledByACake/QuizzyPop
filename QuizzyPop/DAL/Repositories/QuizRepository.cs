@@ -107,16 +107,16 @@ namespace QuizzyPop.DAL.Repositories
 
                 // Oppdater eksisterende spørsmål
                 foreach (var q in quiz.Questions)
-        {
-            var existing = dbQuestions.FirstOrDefault(d => d.Id == q.Id);
-            if (existing is null) continue; // ikke legg til nye her
+                {
+                    var existing = dbQuestions.FirstOrDefault(d => d.Id == q.Id);
+                    if (existing is null) continue;
 
-            existing.Text = q.Text;
-            existing.Choices = q.Choices;
-            existing.CorrectAnswerIndex = q.CorrectAnswerIndex;
+                    existing.Text = q.Text;
+                    existing.Choices = q.Choices;
+                    existing.CorrectAnswerIndex = q.CorrectAnswerIndex;
 
-            _context.Entry(existing).State = EntityState.Modified;
-        }
+                    _context.Entry(existing).State = EntityState.Modified;
+                }
 
 
                 var changed = await _context.SaveChangesAsync();

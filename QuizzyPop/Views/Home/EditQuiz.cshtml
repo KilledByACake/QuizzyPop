@@ -1,4 +1,4 @@
-@model List<QuizzyPop.ViewModels.QuizQuestionViewModel>
+@model QuizzyPop.ViewModels.QuizMetaDataViewModel
 @{
     ViewData["Title"] = "Edit Quiz";
 }
@@ -9,34 +9,63 @@
     </div>
 
     <div class="edit-quiz-card">
-        <form class="edit-quiz-form" asp-action="EditQuiz" method="post">
+        <form class="edit-quiz-form" asp-action="EditQuiz" method="post" enctype="multipart/form-data">
+            @Html.AntiForgeryToken()
+
+            <!-- Quiz Info -->
+            <div class="form-group">
+                <label asp-for="Title">Title</label>
+                <input asp-for="Title" class="edit-form-input" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Description">Description</label>
+                <textarea asp-for="Description" class="edit-form-input"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Difficulty">Difficulty</label>
+                <select asp-for="Difficulty" class="edit-form-input">
+                    <option value="Easy">Easy</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Hard">Hard</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CoverImage">Cover Image</label>
+                <input type="file" asp-for="CoverImage" class="edit-form-input" />
+            </div>
+
             <!-- Questions Section -->
+            <hr />
+            <h2>Questions</h2>
+
             <div id="questions">
-                @for (int i = 0; i < Model.Count; i++)
+                @for (int i = 0; i < Model.Questions.Count; i++)
                 {
                     <div class="question-card">
                         <div class="question-header">
                             <h3>Question @(i + 1)</h3>
-                            <div class="question-controls">
-                                <button type="button" class="move-up-btn" title="Move up">↑</button>
-                                <button type="button" class="move-down-btn" title="Move down">↓</button>
-                                <button type="button" class="remove-question-btn" title="Remove">×</button>
-                            </div>
                         </div>
 
                         <div class="edit-form-group">
                             <label>Question Text</label>
-                            <textarea asp-for="@Model[i].Text" class="edit-form-input" rows="3"></textarea>
+                            <textarea name="Questions[@i].Text" class="edit-form-input" rows="3">@Model.Questions[i].Text</textarea>
                         </div>
 
                         <div class="edit-form-group">
                             <label>Answer Options</label>
                             <div class="options-container">
-                                @for (int j = 0; j < Model[i].Choices.Count; j++)
+                                @for (int j = 0; j < Model.Questions[i].Choices.Count; j++)
                                 {
-                                    <div class="option-row @(j == Model[i].CorrectAnswerIndex ? "correct-option" : "")">
-                                        <input asp-for="@Model[i].Choices[j]" class="edit-form-input" />
-                                        @if (j == Model[i].CorrectAnswerIndex)
+                                    <div class="option-row @(j == Model.Questions[i].CorrectAnswerIndex ? "correct-option" : "")">
+                                        <input type="text"
+                                               name="Questions[@i].Choices[@j]"
+                                               value="@Model.Questions[i].Choices[j]"
+                                               class="edit-form-input" />
+                                        @if (j == Model.Questions[i].CorrectAnswerIndex)
                                         {
                                             <span class="correct-badge">✓</span>
                                         }
@@ -47,25 +76,21 @@
 
                         <div class="form-row">
                             <div class="edit-form-group half">
-                                <label asp-for="@Model[i].Points">Points</label>
-                                <input asp-for="@Model[i].Points" type="number" class="edit-form-input" min="1" max="100" />
+                                <label>Points</label>
+                                <input type="number" name="Questions[@i].Points" value="@Model.Questions[i].Points" class="edit-form-input" min="1" />
                             </div>
                             <div class="edit-form-group half">
-                                <label asp-for="@Model[i].TimeLimit">Time Limit (seconds)</label>
-                                <input asp-for="@Model[i].TimeLimit" type="number" class="edit-form-input" min="0" />
+                                <label>Time Limit (seconds)</label>
+                                <input type="number" name="Questions[@i].TimeLimit" value="@Model.Questions[i].TimeLimit" class="edit-form-input" min="0" />
                                 <span class="form-hint">0 = no time limit</span>
                             </div>
                         </div>
                     </div>
                 }
             </div>
-            
-            <div class="add-question-container">
-                <button type="button" id="addQuestionBtn" class="btn-add">+ Add Question</button>
-            </div>
 
             <div class="edit-button-row">
-                <a asp-action="Index" class="btn-cancel">Cancel</a>
+                <a asp-action="MyPage" class="btn-cancel">Cancel</a>
                 <button type="submit" class="btn-save">Save Changes</button>
             </div>
         </form>

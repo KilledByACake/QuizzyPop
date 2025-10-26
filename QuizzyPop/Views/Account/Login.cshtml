@@ -7,7 +7,7 @@
         <img src="~/images/quizzy-blueberry.png" alt="Quizzy Pop mascot" class="login-mascot" />
         <h1>Welcome Back!</h1>
         <p class="subtitle">Log in!</p>
-        
+
         @if (TempData["AlertMessage"] != null)
         {
             <div class="alert alert-warning" role="alert">
@@ -108,6 +108,16 @@
     .form-group input:focus {
         border-color: #0F766E;
         background: #fffef7;
+    }
+    
+    /* === Alert === */
+    .alert {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 1rem;
     }
 
     /* === Button === */

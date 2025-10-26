@@ -356,6 +356,89 @@ namespace QuizzyPop.Controllers
             var requestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
             _logger.LogError("Error page displayed for RequestId: {RequestId}", requestId);
             return View(new ErrorViewModel { RequestId = requestId });
+
+
+
+        }
+
+        // ==================== EDIT QUIZ ====================
+        
+        [HttpGet]
+        public async Task<IActionResult> EditQuiz(int id)
+        {
+            var quiz = await _quizRepo.GetQuizWithQuestionsAsync(id);
+            if (quiz == null) return NotFound();
+
+            var model = new QuizMetaDataViewModel
+            {
+                Id = quiz.Id,
+                Title = quiz.Title,
+                Description = quiz.Description,
+                Difficulty = quiz.Difficulty,
+                CategoryId = quiz.CategoryId,
+                CoverImage = null,
+                Questions = quiz.Questions.Select(q => new QuizQuestionViewModel
+                {
+                    QuizId = quiz.Id,
+                    Text = q.Text,
+                    Choices = q.Choices.Count == 4 ? q.Choices.ToList() : new List<string> { "", "", "", "" },
+                    CorrectAnswerIndex = q.CorrectAnswerIndex,
+                }).ToList()
+            };
+
+            ViewBag.Categories = await _quizRepo.GetAllCategoriesAsync();
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditQuiz(QuizMetaDataViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = await _quizRepo.GetAllCategoriesAsync();
+                return View(model);
+            }
+
+            var quiz = await _quizRepo.GetQuizWithQuestionsAsync(model.Id);
+            if (quiz == null) return NotFound();
+
+            // Update quiz metadata
+            quiz.Title = model.Title;
+            quiz.Description = model.Description;
+            quiz.Difficulty = model.Difficulty;
+            quiz.CategoryId = model.CategoryId;
+
+            // Handle cover image upload
+            if (model.CoverImage != null && model.CoverImage.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                if (!Directory.Exists(uploadsFolder)) Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = $"{Guid.NewGuid()}{Path.GetExtension(model.CoverImage.FileName)}";
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await model.CoverImage.CopyToAsync(stream);
+
+                quiz.ImageUrl = $"/uploads/{fileName}";
+            }
+
+            // Update questions
+            for (int i = 0; i < model.Questions.Count; i++)
+            {
+                var qvm = model.Questions[i];
+                var existingQuestion = quiz.Questions.ElementAtOrDefault(i);
+                if (existingQuestion == null) continue;
+
+                existingQuestion.Text = qvm.Text;
+                existingQuestion.Choices = qvm.Choices.ToList();
+                existingQuestion.CorrectAnswerIndex = qvm.CorrectAnswerIndex;
+            }
+
+            await _quizRepo.UpdateAsync(quiz);
+            TempData["SuccessMessage"] = "Quiz updated successfully!";
+            return RedirectToAction("MyPage", "Home");
         }
 
         // ==================== MY PAGE ====================
@@ -374,7 +457,7 @@ namespace QuizzyPop.Controllers
             if (dbUser == null)
                 return RedirectToAction("Login", "Account");
 
-            // 🟢 Get quizzes created by this user
+            // Get quizzes created by this user
             var createdQuizzes = _context.Quiz
                 .Where(q => q.UserId == dbUser.Id)
                 .ToList();

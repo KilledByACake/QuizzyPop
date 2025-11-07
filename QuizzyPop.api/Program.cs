@@ -1,15 +1,20 @@
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
 using Serilog;
 using Serilog.Events;
 
 using QuizzyPop.DAL;
 using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Services;
+using QuizzyPop.Api.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Serilog
+//Logging (Serilog)
 var loggerConfiguration = new LoggerConfiguration()
     .MinimumLevel.Information()
     .WriteTo.File($"APILogs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
@@ -25,7 +30,7 @@ builder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("UserDbContextConnection")));
 
-//CORS
+// CORS
 var allowed = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 builder.Services.AddCors(opt =>
 {
@@ -33,15 +38,69 @@ builder.Services.AddCors(opt =>
         p.WithOrigins(allowed).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
 });
 
+//JWT Auth
+builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(o =>
+    {
+        o.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = true,
+            ValidIssuer = jwt.Issuer,
+            ValidAudience = jwt.Audience,
+            IssuerSigningKey = key,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+builder.Services.AddAuthorization();
+
+// JWT token generator
+builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
+
 //Controllers & Swagger
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizzyPop.Api", Version = "v1" });
+
+   
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "Put your access token here",
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT"
+    });
+
+   
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new List<string>()
+        }
+    });
 });
 
-//Repos & Services
+
+
+//Repositories & Services
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuizService, QuizService>();
@@ -49,7 +108,7 @@ builder.Services.AddScoped<IQuizQuestionService, QuizQuestionService>();
 
 var app = builder.Build();
 
-//Global error handler
+//Global Error Handler
 app.Use(async (ctx, next) =>
 {
     try { await next(); }
@@ -67,6 +126,7 @@ app.Use(async (ctx, next) =>
     }
 });
 
+//Middleware Pipeline
 if (app.Environment.IsDevelopment())
 {
     DBInit.Seed(app);
@@ -75,7 +135,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors("CorsPolicy");
+app.UseAuthentication(); 
+app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();

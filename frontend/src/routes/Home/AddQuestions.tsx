@@ -1,23 +1,22 @@
 import { useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
-import { api } from "../api";
-import QuizQuestion from "../components/QuizQuestion";
-import "./AddQuestions.css";
-
+import { api } from "../../api";
+import QuizQuestion from "../../components/QuizQuestion";
+import "../AddQuestions.css";
 
 type Question = {
   text: string;
   image: File | null;
   options: string[];
   points: number;
-  timeLimit: number;      // seconds
+  timeLimit: number; // seconds
   explanation: string;
   shuffleAnswers: boolean;
   required: boolean;
 };
 
 export default function AddQuestions() {
-  const { quizId } = useParams(); // forvent route: /admin/quizzes/:quizId/add-questions
+  const { quizId } = useParams(); // expects route: /admin/quizzes/:quizId/add-questions
   const nav = useNavigate();
 
   const [questions, setQuestions] = useState<Question[]>([
@@ -84,7 +83,6 @@ export default function AddQuestions() {
         required: false,
       },
     ]);
-    // ruller automatisk inn i viewport kan legges til med scrollIntoView om ønskelig
   };
 
   const removeQuestion = (index: number) => {
@@ -109,31 +107,32 @@ export default function AddQuestions() {
     });
   };
 
-  // Hjelpefunksjon: bygg FormData om du støtter opplasting av bilder
+  // Build FormData (supports optional images)
   const toFormData = () => {
     const fd = new FormData();
     fd.append("quizId", String(quizId ?? ""));
-    fd.append("questionsJson", JSON.stringify(
-      questions.map(q => ({
-        text: q.text,
-        options: q.options,
-        points: q.points,
-        timeLimit: q.timeLimit,
-        explanation: q.explanation,
-        shuffleAnswers: q.shuffleAnswers,
-        required: q.required,
-      }))
-    ));
-    // legg ved filer med unike keys
+    fd.append(
+      "questionsJson",
+      JSON.stringify(
+        questions.map(q => ({
+          text: q.text,
+          options: q.options,
+          points: q.points,
+          timeLimit: q.timeLimit,
+          explanation: q.explanation,
+          shuffleAnswers: q.shuffleAnswers,
+          required: q.required,
+        }))
+      )
+    );
     questions.forEach((q, i) => {
       if (q.image) fd.append(`image_${i}`, q.image);
     });
     return fd;
   };
 
-  // POST til API – juster endpoint etter din backend
+  // POST to API
   const saveQuestions = async () => {
-    // Eksempel: /api/quizzes/{quizId}/questions (multipart)
     const endpoint = `/quizzes/${quizId}/questions`;
     const fd = toFormData();
     await api.post(endpoint, fd, { headers: { "Content-Type": "multipart/form-data" } });
@@ -146,7 +145,7 @@ export default function AddQuestions() {
 
   const onClickPublish = async () => {
     await saveQuestions();
-    nav(`/quizzes/${quizId}`); // gå til visning/oversikt etter publisering
+    nav(`/quizzes/${quizId}`);
   };
 
   return (
@@ -192,7 +191,6 @@ export default function AddQuestions() {
               </div>
             </div>
 
-            {/* Skjema for hver question */}
             <QuizQuestion
               index={i}
               text={q.text}

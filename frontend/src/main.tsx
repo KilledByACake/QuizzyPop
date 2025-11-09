@@ -1,18 +1,16 @@
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Index from "./views/Quiz/Index";
-import Details from "./views/Quiz/Details";
-import Create from "./views/Quiz/Create";
-import Edit from "./views/Quiz/Edit";
-import Login from "./views/Account/Login";
+import ComponentTest from "./routes/ComponentTest";
 
 const router = createBrowserRouter([
-  { path: "/quizzes", element: <Index /> },
-  { path: "/quizzes/:id", element: <Details /> },
-  { path: "/admin/quizzes/new", element: <Create /> },
-  { path: "/admin/quizzes/:id/edit", element: <Edit /> },
-  { path: "/login", element: <Login /> },
+  { path: "/", element: <ComponentTest /> },
+  { path: "/test", element: <ComponentTest /> },
 ]);
 
-export default function Root() {
-  return <RouterProvider router={router} />;
-}
+// Mount React to the DOM
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <RouterProvider router={router} />
+  </StrictMode>
+);

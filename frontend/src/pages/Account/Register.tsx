@@ -6,7 +6,6 @@ import { registerSchema, type RegisterFormData } from '../../schemas/authSchemas
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
-import Clouds from '../../components/Clouds';
 import { api } from '../../api';
 import styles from './Register.module.css';
 
@@ -62,7 +61,6 @@ export default function Register() {
 
   return (
     <div className={styles.registerPage}>
-      <Clouds />
       <div className={styles.registerContainer}>
         <h1 className={styles.title}>Create Your Account</h1>
         <p className={styles.subtitle}>Join the fun! 💫</p>

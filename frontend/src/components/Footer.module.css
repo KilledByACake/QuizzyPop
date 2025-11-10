@@ -1,0 +1,118 @@
+.siteFooter {
+  margin-top: auto;
+  position: relative;
+  width: 100%;
+  background: var(--qp-deep);
+  color: var(--qp-white);
+  padding: var(--qp-space-xl) 0 var(--qp-space-md);
+  font-size: 1rem;
+  border: none;
+  box-shadow: none;
+  z-index: 1000;
+}
+
+.footerContent {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--qp-space-xl);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--qp-space-lg);
+}
+
+.footerBrand {
+  display: flex;
+  align-items: center;
+  gap: var(--qp-space-sm);
+}
+
+.footerLogo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.footerTitle {
+  font-family: var(--qp-font-main);
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: var(--qp-white);
+}
+
+.footerNav {
+  display: flex;
+  gap: var(--qp-space-lg);
+}
+
+.footerNav a {
+  color: var(--qp-white);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity 0.2s;
+  font-family: var(--qp-font-main);
+}
+
+.footerNav a:hover {
+  opacity: 0.8;
+}
+
+.footerCopy {
+  flex-basis: 100%;
+  text-align: center;
+  margin-top: var(--qp-space-sm);
+  font-size: 0.95rem;
+  opacity: 0.8;
+  font-family: var(--qp-font-main);
+}
+
+.footerConfetti {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footerConfetti::before,
+.footerConfetti::after {
+  content: "";
+  position: absolute;
+  width: 220px;
+  height: 100%;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+.footerConfetti::before {
+  left: 0;
+  background:
+    radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 20px 20px/32px 32px repeat,
+    radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 60px 10px/36px 36px repeat;
+}
+
+.footerConfetti::after {
+  right: 0;
+  background:
+    radial-gradient(circle 5px, var(--qp-primary-light) 98%, transparent 100%) 10px 30px/28px 28px repeat,
+    radial-gradient(circle 4px, var(--qp-sky) 98%, transparent 100%) 0 0/36px 36px repeat;
+}
+
+@media (max-width: 700px) {
+  .footerContent {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--qp-space-sm);
+  }
+
+  .footerNav {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

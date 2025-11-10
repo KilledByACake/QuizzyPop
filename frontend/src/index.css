@@ -14,6 +14,7 @@ body {
   background-color: #eaf7ff;
   min-height: 100vh;
   color: #1f2937;
+  line-height: 1.4;
 }
 
 #root {
@@ -31,4 +32,28 @@ a:hover {
 
 button {
   font-family: inherit;
+}
+
+:root {
+  --qp-white: #ffffff;
+  --qp-blue: #004b74;
+  --qp-deep: #002c44;
+  --qp-primary-light: #1ea672;
+  --qp-sky: #57c5e8;
+
+  /* spacing scale */
+  --qp-space-xs: 0.25rem;
+  --qp-space-sm: 0.5rem;
+  --qp-space-md: 0.9rem;
+  --qp-space-lg: 1.4rem;
+  --qp-space-xl: 2.2rem;
+
+  /* radius */
+  --qp-radius-sm: 12px;
+
+  /* shadows */
+  --qp-shadow-sm: 0 2px 6px rgba(0,0,0,0.08);
+
+  /* fonts */
+  --qp-font-main: 'Baloo 2', system-ui, sans-serif;
 }

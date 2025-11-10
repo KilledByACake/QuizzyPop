@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import styles from "./NavBar.module.css";
 
 export default function NavBar() {
   const { pathname } = useLocation();
@@ -7,7 +8,7 @@ export default function NavBar() {
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   const isActive = (path: string) =>
-    pathname === path ? "active" : "";
+    pathname === path ? styles.active : "";
 
   function logout() {
     localStorage.removeItem("token");
@@ -16,38 +17,34 @@ export default function NavBar() {
   }
 
   return (
-    <header className="navbar">
-      <div className="navbar-inner">
-        {/* Brand */}
-        <Link to="/" className="navbar-brand">
+    <header className={styles.navbar}>
+      <div className={styles.navbarInner}>
+        <Link to="/" className={styles.navbarBrand}>
           <img
             src="/images/quizzy-no-arms.png"
             alt="Blueberry mascot logo"
-            height="60"
           />
-          <span className="brand-text">QuizzyPop</span>
+          <span className={styles.brandText}>QuizzyPop</span>
         </Link>
 
-        {/* Main navigation */}
-        <nav className="navbar-nav" aria-label="Main navigation">
+        <nav className={styles.navbarNav} aria-label="Main navigation">
           <Link to="/" className={isActive("/")}>Home</Link>
           <Link to="/quizzes" className={isActive("/quizzes")}>Take Quiz</Link>
           <Link to="/admin/quizzes/new" className={isActive("/admin/quizzes/new")}>Make Quiz</Link>
         </nav>
 
-        {/* Right side actions */}
-        <div className="navbar-actions">
+        <div className={styles.navbarActions}>
           {token ? (
             <>
-              <Link to="/mypage" className="btn-outline-green">Account</Link>
-              <button onClick={logout} className="btn-outline-green">
+              <Link to="/mypage" className={styles.btnOutlineGreen}>Account</Link>
+              <button onClick={logout} className={styles.btnOutlineGreen}>
                 Log Out
               </button>
             </>
           ) : (
             <>
-              <Link to="/login" className="btn-outline-green">Log In</Link>
-              <Link to="/register" className="btn-outline-green">Sign Up</Link>
+              <Link to="/login" className={styles.btnOutlineGreen}>Log In</Link>
+              <Link to="/register" className={styles.btnOutlineGreen}>Sign Up</Link>
             </>
           )}
         </div>

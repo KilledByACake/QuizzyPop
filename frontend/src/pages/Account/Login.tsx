@@ -7,8 +7,8 @@ import { useAuth } from '../../contexts/AuthContext';
 import { api } from '../../api';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-import Clouds from '../../components/Clouds';
 import styles from './Login.module.css';
+import Mascot from '../../components/Mascot';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -55,8 +55,8 @@ export default function Login() {
 
   return (
     <div className={styles.loginPage}>
-      <Clouds />
       <div className={styles.loginContainer}>
+        <Mascot variant="blueberry" size="medium" alt="Quizzy Pop mascot" />   {/* ADD THIS LINE */}
         <h1 className={styles.title}>Welcome Back!</h1>
         <p className={styles.subtitle}>Log in to your QuizzyPop account</p>
 

@@ -1,5 +1,8 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: "https://localhost:5001/api" // endre port hvis backend bruker annen port
+  baseURL: "http://localhost:5239", // Changed from 5000 to 5239
+  headers: {
+    "Content-Type": "application/json",
+  },
 });

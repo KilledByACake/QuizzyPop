@@ -1,79 +1,99 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { api } from "../../api";
-import "./Login.css";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { loginSchema, type LoginFormData } from '../../schemas/authSchemas';
+import { useAuth } from '../../contexts/AuthContext';
+import { api } from '../../api';
+import Input from '../../components/Input';
+import Button from '../../components/Button';
+import styles from './Login.module.css';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const nav = useNavigate();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+  const [serverError, setServerError] = useState('');
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting }
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema)
+  });
+
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      const { data } = await api.post("/auth/login", { email, password });
-      const token = data.token ?? data.accessToken;
-      localStorage.setItem("token", token);
-      api.defaults.headers.common.Authorization = `Bearer ${token}`;
-      nav("/");
-    } catch {
-      setError("Wrong Username or Password");
+      setServerError('');
+      
+      // Call backend API
+      const response = await api.post('/api/auth/login', {
+        email: data.email,
+        password: data.password
+      });
+
+      // Extract token from response
+      const token = response.data.token;
+      
+      // Store token in context and localStorage
+      login(token);
+      
+      // Redirect to homepage
+      navigate('/');
+      
+    } catch (error: any) {
+      // Handle errors
+      if (error.response?.status === 401) {
+        setServerError('Invalid email or password');
+      } else {
+        setServerError('An error occurred. Please try again.');
+      }
+      console.error('Login error:', error);
     }
-  }
+  };
 
   return (
-    <section className="login-page">
-      <div className="login-container">
-        <img
-          src="/images/quizzy-blueberry.png"
-          alt="Quizzy Pop mascot"
-          className="login-mascot"
-        />
-        <h1>Welcome Back!</h1>
-        <p className="subtitle">Log in!</p>
+    <div className={styles.loginPage}>
+      <div className={styles.loginContainer}>
+        <h1 className={styles.title}>Welcome Back!</h1>
+        <p className={styles.subtitle}>Log in to your QuizzyPop account</p>
 
-        {error && (
-          <div className="alert" role="alert">
-            {error}
-          </div>
-        )}
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          {serverError && (
+            <div className={styles.serverError}>{serverError}</div>
+          )}
 
-        <form className="login-form" onSubmit={submit}>
-          <div className="form-group">
-            <label htmlFor="email">Email address</label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              placeholder="you@example.com"
-            />
-          </div>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+            error={errors.email?.message}
+            {...register('email')}
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              placeholder="••••••••"
-            />
-          </div>
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter your password"
+            error={errors.password?.message}
+            {...register('password')}
+          />
 
-          <button type="submit" className="btn-primary">
-            Log In
-          </button>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Logging in...' : 'Log In'}
+          </Button>
 
-          <p className="footer-text">
-            Don’t have an account? <Link to="/register">Sign up!</Link>
+          <p className={styles.footer}>
+            Don't have an account?{' '}
+            <a href="/register">Sign up</a>
           </p>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

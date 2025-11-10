@@ -1,12 +1,15 @@
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Index from "./routes/Home/Index";
-import TakeQuiz from "./routes/Home/TakeQuiz";
-import CreateQuiz from "./routes/Home/CreateQuiz";
-import MyPage from "./routes/Home/MyPage";
-import TakingQuiz from "./routes/Home/TakingQuiz";
-import PublishedQuiz from "./routes/Home/PublishedQuiz";
-import QuizCompleted from "./routes/Home/QuizCompleted";
+import Index from "./pages/Home/Index";
+import TakeQuiz from "./pages/Home/TakeQuiz";
+import CreateQuiz from "./pages/Home/CreateQuiz";
+import MyPage from "./pages/Home/MyPage";
+import TakingQuiz from "./pages/Home/TakingQuiz";
+import PublishedQuiz from "./pages/Home/PublishedQuiz";
+import QuizCompleted from "./pages/Home/QuizCompleted";
+
+//må endre ved behov, error nå fordi de ikke finnes
+
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>

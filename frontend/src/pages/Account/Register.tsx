@@ -1,155 +1,154 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { api } from "../../api";
-import "./Register.css";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate, Link } from 'react-router-dom';
+import { registerSchema, type RegisterFormData } from '../../schemas/authSchemas';
+import Input from '../../components/Input';
+import Select from '../../components/Select';
+import Button from '../../components/Button';
+import Clouds from '../../components/Clouds';
+import { api } from '../../api';
+import styles from './Register.module.css';
 
 export default function Register() {
-  const [form, setForm] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    role: "",
-    phone: "",
-    birthdate: "",
+  const navigate = useNavigate();
+  const [serverError, setServerError] = useState('');
+  const [notImplemented] = useState(true); // flip to false when backend adds endpoint
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors, isSubmitting }
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    defaultValues: {
+      role: 'student'
+    }
   });
-  const [error, setError] = useState<string | null>(null);
-  const nav = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
+  const role = watch('role');
 
-  const showExtra = form.role === "teacher" || form.role === "parent";
+  const onSubmit = async (data: RegisterFormData) => {
+    setServerError('');
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
-    setError(null);
-
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords must match.");
+    if (notImplemented) {
+      setServerError('Registration API not implemented yet.');
       return;
     }
 
     try {
-      await api.post("/auth/register", form);
-      nav("/login");
-    } catch {
-      setError("Registration failed. Try again.");
+      // Adjust endpoint when backend adds /api/auth/register
+      const response = await api.post('/api/auth/register', {
+        email: data.email,
+        password: data.password,
+        role: data.role,
+        phone: data.phone || null,
+        birthdate: data.birthdate || null
+      });
+
+      // If backend returns a token immediately you could auto-login:
+      if (response.data?.token) {
+        // Optionally call useAuth().login(response.data.token)
+      }
+
+      navigate('/login');
+    } catch (err: any) {
+      setServerError(err.response?.data?.message || 'Failed to register.');
     }
-  }
+  };
+
+  const showExtra = role === 'teacher' || role === 'parent';
 
   return (
-    <section className="signup-page">
-      <div className="signup-container">
-        <img
-          src="/images/quizzy-blueberry.png"
-          alt="Quizzy Pop mascot"
-          className="signup-mascot"
-        />
-        <h1>Create Your Account</h1>
-        <p className="subtitle">Join the fun! 💫</p>
+    <div className={styles.registerPage}>
+      <Clouds />
+      <div className={styles.registerContainer}>
+        <h1 className={styles.title}>Create Your Account</h1>
+        <p className={styles.subtitle}>Join the fun! 💫</p>
 
-        {error && <div className="alert">{error}</div>}
+        {serverError && (
+          <div className={styles.serverError}>{serverError}</div>
+        )}
 
-        <form className="signup-form" onSubmit={submit}>
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              value={form.email}
-              onChange={handleChange}
-            />
+        {notImplemented && (
+          <div className={styles.notImplemented}>
+            The backend registration endpoint isn’t live yet. You can still design & validate the form.
           </div>
+        )}
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+          <Input
+            label="Email"
+            type="email"
+            placeholder="you@example.com"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+
+            <Input
+              label="Password"
               type="password"
-              id="password"
-              name="password"
-              required
-              minLength={6}
               placeholder="Enter a strong password"
-              value={form.password}
-              onChange={handleChange}
+              error={errors.password?.message}
+              {...register('password')}
             />
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="confirmPassword">Confirm Password</label>
-            <input
+            <Input
+              label="Confirm Password"
               type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              required
               placeholder="Repeat your password"
-              value={form.confirmPassword}
-              onChange={handleChange}
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
             />
-          </div>
 
-          <div className="form-group dropdown">
-            <label htmlFor="role">Select Your Role</label>
-            <div className="dropdown-wrapper">
-              <select
-                id="role"
-                name="role"
-                required
-                value={form.role}
-                onChange={handleChange}
-              >
-                <option value="">Choose one...</option>
-                <option value="student">🎓 Student</option>
-                <option value="teacher">🍎 Teacher</option>
-                <option value="parent">👨‍👩‍👧 Parent</option>
-              </select>
-            </div>
-            <p className="role-hint">
-              Teachers and parents must be at least 18 years old.
-            </p>
-          </div>
+          <Select
+            label="Select Your Role"
+            error={errors.role?.message}
+            {...register('role')}
+            options={[
+              { value: 'student', label: '🎓 Student' },
+              { value: 'teacher', label: '🍎 Teacher' },
+              { value: 'parent', label: '👨‍👩‍👧 Parent' }
+            ]}
+          />
+          <p className={styles.roleHint}>
+            Teachers and parents must be at least 18 years old.
+          </p>
 
           {showExtra && (
-            <div className="extra-fields">
-              <div className="form-group">
-                <label htmlFor="phone">Mobile Number</label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  placeholder="+47 999 99 999"
-                  value={form.phone}
-                  onChange={handleChange}
-                />
-              </div>
+            <div className={styles.extraFields}>
+              <Input
+                label="Mobile Number"
+                type="tel"
+                placeholder="+47 999 99 999"
+                error={errors.phone?.message}
+                {...register('phone')}
+              />
 
-              <div className="form-group">
-                <label htmlFor="birthdate">Date of Birth</label>
-                <input
-                  type="date"
-                  id="birthdate"
-                  name="birthdate"
-                  value={form.birthdate}
-                  onChange={handleChange}
-                />
-              </div>
+              <Input
+                label="Date of Birth"
+                type="date"
+                error={errors.birthdate?.message}
+                {...register('birthdate')}
+              />
             </div>
           )}
 
-          <button type="submit" className="btn-primary">
-            Sign Up
-          </button>
+          <Button
+            type="submit"
+            variant="primary"
+            fullWidth
+            disabled={isSubmitting || notImplemented}
+          >
+            {isSubmitting ? 'Creating account...' : 'Sign Up'}
+          </Button>
 
-          <p className="footer-text">
+          <p className={styles.footer}>
             Already have an account? <Link to="/login">Log in!</Link>
           </p>
         </form>
       </div>
-    </section>
+    </div>
   );
 }

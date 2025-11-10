@@ -3,7 +3,6 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from './contexts/AuthContext';
 import './index.css';
-
 import Layout from './components/Layout';
 import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";

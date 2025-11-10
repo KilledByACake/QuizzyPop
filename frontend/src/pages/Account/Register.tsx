@@ -6,6 +6,7 @@ import { registerSchema, type RegisterFormData } from '../../schemas/authSchemas
 import Input from '../../components/Input';
 import Select from '../../components/Select';
 import Button from '../../components/Button';
+import Mascot from '../../components/Mascot';
 import { api } from '../../api';
 import styles from './Register.module.css';
 
@@ -62,6 +63,7 @@ export default function Register() {
   return (
     <div className={styles.registerPage}>
       <div className={styles.registerContainer}>
+        <Mascot variant="celebrate" size="medium" alt="Quizzy Pop mascot" />
         <h1 className={styles.title}>Create Your Account</h1>
         <p className={styles.subtitle}>Join the fun! 💫</p>
 
@@ -71,7 +73,7 @@ export default function Register() {
 
         {notImplemented && (
           <div className={styles.notImplemented}>
-            The backend registration endpoint isn’t live yet. You can still design & validate the form.
+            The backend registration endpoint isn't live yet. You can still design & validate the form.
           </div>
         )}
 
@@ -84,21 +86,21 @@ export default function Register() {
             {...register('email')}
           />
 
-            <Input
-              label="Password"
-              type="password"
-              placeholder="Enter a strong password"
-              error={errors.password?.message}
-              {...register('password')}
-            />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="Enter a strong password"
+            error={errors.password?.message}
+            {...register('password')}
+          />
 
-            <Input
-              label="Confirm Password"
-              type="password"
-              placeholder="Repeat your password"
-              error={errors.confirmPassword?.message}
-              {...register('confirmPassword')}
-            />
+          <Input
+            label="Confirm Password"
+            type="password"
+            placeholder="Repeat your password"
+            error={errors.confirmPassword?.message}
+            {...register('confirmPassword')}
+          />
 
           <Select
             label="Select Your Role"

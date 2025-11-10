@@ -20,6 +20,11 @@
   text-align: center;
 }
 
+.registerContainer img {
+  margin: 0 auto 0.75rem;
+  display: block;
+}
+
 .title {
   font-size: 2.3rem;
   color: #004b74;

@@ -10,8 +10,8 @@ function App() {
   // 👇 tester kobling til backend
   useEffect(() => {
     api.get("/quizzes")
-      .then(res => console.log("✅ API-svar:", res.data))
-      .catch(err => console.error("❌ API-feil:", err))
+      .then(res => console.log("✅ API-answer:", res.data))
+      .catch(err => console.error("❌ API-wrong:", err))
   }, [])
 
   return (

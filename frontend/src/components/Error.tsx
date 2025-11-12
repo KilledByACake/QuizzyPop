@@ -1,19 +1,22 @@
-@{
-    ViewData["Title"] = "Feil";
+import styles from "./Error.module.css";
+
+interface ErrorProps {
+  message?: string;
+  requestId?: string;
 }
 
-<h1 class="text-danger">Feil</h1>
-<h2 class="text-danger">Det har oppstått en fel under behandling av din forespørsel</h2>
-
-<hr />
-
-@if (Model != null && !string.IsNullOrEmpty(Model.RequestId)){
-    <p>
-        <strong>Referanse-ID:</strong><code>@Model.RequestId</code>
-    </p>
+export default function Error({ message, requestId }: ErrorProps) {
+  return (
+    <div className={styles.error}>
+      <h1>Feil</h1>
+      <h2>{message ?? "Det har oppstått en feil under behandling av din forespørsel."}</h2>
+      {requestId && (
+        <p>
+          <strong>Referanse-ID:</strong> <code>{requestId}</code>
+        </p>
+      )}
+      <h3>Utviklerinformasjon (kun i produksjon)</h3>
+      <p>Kontakt systemadministrator. Denne informasjonen er logget.</p>
+    </div>
+  );
 }
-
-<h3>Utviklerinformasjon (Kun i produksjon)</h3>
-<p>
-    Kontakt systemadministrator. Denne informasjonen er logget.
-</p>

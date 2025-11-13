@@ -1,0 +1,21 @@
+/* frontend/src/components/Mascot.module.css */
+.mascot {
+  display: block;
+  width: auto;
+  height: auto;
+}
+
+.small {
+  max-width: 80px;
+  max-height: 80px;
+}
+
+.medium {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+.large {
+  max-width: 250px;
+  max-height: 250px;
+}

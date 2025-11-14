@@ -13,6 +13,7 @@ import About from "./pages/About";
 import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
@@ -22,11 +23,21 @@ createRoot(document.getElementById("root")!).render(
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
+              {/* Public routes */}
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
-              <Route path="/test" element={<ComponentTest />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+
+              {/* Example of a protected route */}
+              <Route
+                path="/test"
+                element={
+                  <ProtectedRoute>
+                    <ComponentTest />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Catch-all: Redirect unknown URLs to home */}
               <Route path="*" element={<Navigate to="/" replace />} />

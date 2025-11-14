@@ -1,5 +1,4 @@
-// frontend/src/routes/ComponentTest.tsx
-import { useState } from 'react';
+import { useState, type FormEvent } from 'react';
 import Button from '../components/Button';
 import Input from '../components/Input';
 import Select from '../components/Select';
@@ -11,6 +10,9 @@ import StatCard from '../components/StatCard';
 import Mascot from '../components/Mascot';
 import Badge from '../components/Badge';
 import Clouds from '../components/Clouds';
+import Card from '../components/Card';
+import Modal from '../components/Modal';
+import Loader from '../components/Loader';
 
 export default function ComponentTest() {
   const [email, setEmail] = useState('');
@@ -19,15 +21,16 @@ export default function ComponentTest() {
   const [description, setDescription] = useState('');
   const [showErrors, setShowErrors] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const categoryOptions = [
-    { value: 1, label: 'Math' },
-    { value: 2, label: 'Entertainment' },
-    { value: 3, label: 'History' }
+    { value: '1', label: 'Math' },
+    { value: '2', label: 'Entertainment' },
+    { value: '3', label: 'History' }
   ];
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setShowErrors(true);
     console.log('Form submitted:', { email, password, category, description });
@@ -48,137 +51,147 @@ export default function ComponentTest() {
           🎨 Component Test Page
         </h1>
 
-        {/* Mascots Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Mascots</h2>
-          <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ textAlign: 'center' }}>
-              <Mascot variant="blueberry" size="small" />
-              <p>Small Blueberry</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <Mascot variant="celebrate" size="medium" />
-              <p>Medium Celebrate</p>
-            </div>
-            <div style={{ textAlign: 'center' }}>
-              <Mascot variant="no-arms" size="large" />
-              <p>Large No Arms</p>
-            </div>
+        {/* NEW COMPONENTS */}
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Card Components</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+            <Card variant="default">
+              <h3>Default Card</h3>
+              <p>This is a default card with subtle shadow.</p>
+            </Card>
+            <Card variant="elevated">
+              <h3>Elevated Card</h3>
+              <p>This card has more shadow and lifts on hover.</p>
+            </Card>
+            <Card variant="outlined">
+              <h3>Outlined Card</h3>
+              <p>This card has a border instead of shadow.</p>
+            </Card>
           </div>
         </section>
 
-        {/* Badges Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Badges</h2>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', alignItems: 'center' }}>
-            <Badge variant="default">Default</Badge>
-            <Badge variant="difficulty">Easy</Badge>
-            <Badge variant="category">Math</Badge>
-            <Badge variant="success">Completed</Badge>
-            <Badge variant="danger">Failed</Badge>
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Modal</h2>
+          <Button variant="primary" onClick={() => setIsModalOpen(true)}>
+            Open Modal
+          </Button>
+          <Modal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            title="Example Modal"
+            footer={
+              <>
+                <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="primary" onClick={() => setIsModalOpen(false)}>
+                  Confirm
+                </Button>
+              </>
+            }
+          >
+            <p>This is the modal body. You can put any content here!</p>
+            <Input label="Test Input" placeholder="Try typing..." />
+          </Modal>
+        </section>
+
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Loaders</h2>
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+            <Loader size="small" />
+            <Loader size="medium" text="Loading..." />
+            <Loader size="large" text="Please wait..." />
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Stat Cards</h2>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-            <StatCard number={15} label="Created" variant="primary" />
-            <StatCard number={32} label="Taken" variant="primary" />
-            <StatCard number="87%" label="Success Rate" variant="secondary" />
+        {/* EXISTING COMPONENTS */}
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Buttons</h2>
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <Button variant="primary">Primary</Button>
+            <Button variant="secondary">Secondary</Button>
+            <Button variant="outline">Outline</Button>
+            <Button variant="danger">Danger</Button>
+            <Button variant="success">Success</Button>
+            <Button variant="gray">Gray</Button>
+            <Button variant="link">Link</Button>
+            <Button variant="primary" disabled>Disabled</Button>
           </div>
         </section>
 
-        {/* Search & Filters Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Search & Filters</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <SearchBar 
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Form Inputs</h2>
+          <div style={{ maxWidth: '400px' }}>
+            <Input label="Email" type="email" placeholder="Enter email" />
+            <Input label="Password" type="password" error="Password is required" />
+            <Select
+              label="Category"
+              options={[
+                { value: '', label: 'Select category' },
+                { value: 'math', label: 'Math' },
+                { value: 'science', label: 'Science' }
+              ]}
+            />
+            <Textarea label="Description" placeholder="Enter description" />
+          </div>
+        </section>
+
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Search & Filter</h2>
+            <div style={{ display: 'flex', gap: '1rem', maxWidth: '600px' }}>
+            <SearchBar
               value={searchQuery}
               onChange={setSearchQuery}
               placeholder="Search quizzes..."
             />
-            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
-              <FilterDropdown
-                label="Category"
-                options={['Math', 'Entertainment', 'History', 'Science']}
-                selected={selectedFilter}
-                onSelect={setSelectedFilter}
-              />
-              <FilterDropdown
-                label="Difficulty"
-                options={['Easy', 'Medium', 'Hard']}
-                onSelect={(val) => console.log('Selected:', val)}
-              />
-              <FilterDropdown
-                label="Grade Level"
-                options={['Grade 1-3', 'Grade 4-6', 'Grade 7-9']}
-                onSelect={(val) => console.log('Selected:', val)}
-              />
+            <FilterDropdown
+              label="Filter"
+              selected={selectedFilter}
+              onSelect={setSelectedFilter}
+              options={['all', 'math', 'science']}
+            />
             </div>
-          </div>
         </section>
 
-        {/* Quiz Cards Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Quiz Cards</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.5rem' }}>
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Quiz Card</h2>
+          <div style={{ maxWidth: '350px' }}>
             <QuizCard
               id={1}
-              title="Geometry Basics"
+              title="Math Quiz"
               imageUrl="/images/geometry.jpeg"
               difficulty="medium"
               questionCount={10}
-              onTakeQuiz={() => alert('Taking Geometry quiz!')}
-            />
-            <QuizCard
-              id={2}
-              title="Disney Characters"
-              imageUrl="/images/disney.webp"
-              difficulty="easy"
-              questionCount={8}
-              onTakeQuiz={() => alert('Taking Disney quiz!')}
-            />
-            <QuizCard
-              id={3}
-              title="World History"
-              difficulty="hard"
-              questionCount={15}
-              onTakeQuiz={() => alert('Taking History quiz!')}
+              onTakeQuiz={() => alert('Taking quiz!')}
             />
           </div>
         </section>
 
-        {/* Buttons Section */}
-        <section style={{ marginBottom: '3rem', background: 'white', padding: '2rem', borderRadius: '12px' }}>
-          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Buttons</h2>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="primary">Primary Button</Button>
-            <Button variant="secondary">Secondary Button</Button>
-            <Button variant="outline">Outline Button</Button>
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Stats</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+            <StatCard label="Total Quizzes" number={42} variant="primary" />
+            <StatCard label="Completed" number={28} variant="secondary" />
           </div>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="primary" size="small">Small</Button>
-            <Button variant="primary" size="medium">Medium</Button>
-            <Button variant="primary" size="large">Large</Button>
+        </section>
+
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Badges</h2>
+          <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+            <Badge>Default</Badge>
+            <Badge variant="difficulty">Difficulty</Badge>
+            <Badge variant="category">Category</Badge>
+            <Badge variant="success">Success</Badge>
+            <Badge variant="danger">Danger</Badge>
           </div>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="danger">Delete Quiz</Button>
-            <Button variant="success">Publish Quiz</Button>
-            <Button variant="gray">Cancel</Button>
-            <Button variant="link">Add Option</Button>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="primary" size="icon">↑</Button>
-            <Button variant="primary" size="icon">↓</Button>
-            <Button variant="danger" size="icon">✕</Button>
-          </div>
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <Button variant="primary" disabled>Disabled Primary</Button>
-            <Button variant="secondary" disabled>Disabled Secondary</Button>
-          </div>
-          <div style={{ marginTop: '1rem' }}>
-            <Button variant="primary" fullWidth>Full Width Button</Button>
+        </section>
+
+        <section style={{ marginBottom: '3rem' }}>
+          <h2 style={{ color: '#0F766E', marginBottom: '1rem' }}>Mascots</h2>
+          <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+            <Mascot variant="blueberry" size="small" />
+            <Mascot variant="celebrate" size="medium" />
+            <Mascot variant="no-arms" size="large" />
           </div>
         </section>
 
@@ -258,18 +271,20 @@ export default function ComponentTest() {
             placeholder="This is disabled"
             disabled
             value="Cannot edit this"
+            readOnly
           />
           <Select
             label="Disabled Select"
             options={categoryOptions}
             disabled
-            value={1}
+            value="1"
           />
           <Textarea
             label="Disabled Textarea"
             placeholder="This is disabled"
             disabled
             value="Cannot edit this text area"
+            readOnly
           />
         </section>
       </div>

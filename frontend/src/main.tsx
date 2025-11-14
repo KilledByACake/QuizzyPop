@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 
 import { AuthProvider } from "./contexts/AuthContext";
-import { QuizProvider } from "./contexts/QuizContext";
+// import { QuizProvider } from "./contexts/QuizContext";
 
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
@@ -15,18 +15,17 @@ import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
 
 // 
-// Må lages
+// Må lages (TODO: Create these files)
 //
-import MyPage from "./pages/Home/MyPage";     
-import CreateQuiz from "./pages/Home/CreateQuiz"; 
-
-import ProtectedRoute from "./routes/ProtectedRoute";
+// import MyPage from "./pages/Home/MyPage";     
+// import CreateQuiz from "./pages/Home/CreateQuiz"; 
+// import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      <QuizProvider>
+      {/* <QuizProvider> */}
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
@@ -35,9 +34,10 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/about" element={<About />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/test" element={<ComponentTest />} />
 
-              {/* Protected routes */}
-              <Route
+              {/* Protected routes - TODO: Uncomment when files are created */}
+              {/* <Route
                 path="/mypage"
                 element={
                   <ProtectedRoute>
@@ -53,23 +53,14 @@ createRoot(document.getElementById("root")!).render(
                     <CreateQuiz />
                   </ProtectedRoute>
                 }
-              />
-
-              <Route
-                path="/test"
-                element={
-                  <ProtectedRoute>
-                    <ComponentTest />
-                  </ProtectedRoute>
-                }
-              />
+              /> */}
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
         </BrowserRouter>
-      </QuizProvider>
+      {/* </QuizProvider> */}
     </AuthProvider>
   </StrictMode>
 );

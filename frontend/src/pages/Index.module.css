@@ -61,14 +61,14 @@
 .speech {
   position: absolute;
   right: -150px;          /* flytt nærmere maskoten */
-  top: -25px;              /* senk litt */
+  top: -5px;              /* senk litt */
   font-family: var(--qp-font-main);
   max-width: 220px;
   background: var(--qp-white);
   padding: var(--qp-space-sm) var(--qp-space-md);
   border-radius: var(--qp-radius-lg);
   font-weight: 700;
-  color: var(--qp-primary);
+  color: var(--qp-black);
   box-shadow: var(--qp-shadow-md);
   z-index: 3;
 }

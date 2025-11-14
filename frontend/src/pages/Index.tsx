@@ -28,7 +28,7 @@ export default function Index() {
     
       <div className={styles["cta-row"]}>
         <Link to="/takequiz">
-          <Button variant="primary">Take Quiz!</Button>
+          <Button variant="primary" size="xl">Take Quiz!</Button>
         </Link>
 
         <div className={styles["mascot-wrap"]}>
@@ -41,7 +41,7 @@ export default function Index() {
         </div>
 
         <Link to="/createquiz">
-          <Button variant="secondary">Make Quiz!</Button>
+          <Button variant="primary" size="xl">Make Quiz!</Button>
         </Link>
       </div>
     </section>

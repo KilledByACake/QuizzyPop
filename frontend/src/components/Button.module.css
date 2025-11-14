@@ -38,6 +38,12 @@
   font-size: 1.1rem;
 }
 
+.xl {
+  padding: 1.5rem 3rem;
+  font-size: 1.5rem;
+  box-shadow: 0 8px 0 #034943, 0 0 0 4px #fff inset;
+}
+
 /* ========== VARIANTS ========== */
 
 /* Primary - Green */
@@ -55,6 +61,20 @@
 .primary:active {
   transform: translateY(4px);
   box-shadow: none;
+}
+
+.primary.xl {
+  box-shadow: 0 8px 0 #034943, 0 0 0 4px #fff inset;
+}
+
+.primary.xl:hover:not(:disabled) {
+  transform: translateY(2px);
+  box-shadow: 0 6px 0 #034943, 0 0 0 4px #fff inset;
+}
+
+.primary.xl:active {
+  transform: translateY(4px);
+  box-shadow: 0 4px 0 #034943, 0 0 0 4px #fff inset;
 }
 
 /* Secondary - White with green border */

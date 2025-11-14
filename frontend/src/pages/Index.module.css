@@ -3,6 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
+    min-height: 100vh;
+    justify-content: center;
 }
 
 .arc-title {
@@ -29,30 +31,42 @@
 .cta-row {
     position: relative;
     z-index: 2;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    gap: var(--qp-space-xl);
+    display: flex;
+    justify-content: center;
     align-items: center;
-    justify-items: center;
     margin-top: var(--qp-space-xl);
     padding: 0 var(--qp-space-lg);
     width: 100%;
     max-width: 1400px;
 }
 
+.cta-row > a:first-child {
+    position: absolute;
+    left: 5%;
+    transform: translateY(-30px);
+}
+
+.cta-row > a:last-child {
+    position: absolute;
+    right: 5%;
+    transform: translateY(-30px);
+    
+}
+
+.cta-row > a {
+    align-self: center;
+}
+
 /* Mascot & Speech Bubble */
 .mascot-wrap {
     position: relative;
-    justify-self: center;
-    align-self: end;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -100px;
 }
 
 .mascot {
-    width: min(400px, 70vw);
+    width: min(500px, 80vw);  /* Changed from 450px, 70vw */
     height: auto;
     filter: drop-shadow(0 10px 0 rgba(0,0,0,.15));
     display: block;
@@ -60,8 +74,8 @@
 
 .speech {
   position: absolute;
-  right: -150px;          /* flytt nærmere maskoten */
-  top: -5px;              /* senk litt */
+  right: -150px;
+  top: -5px;
   font-family: var(--qp-font-main);
   max-width: 220px;
   background: var(--qp-white);
@@ -76,8 +90,8 @@
 .speech::after {
   content: "";
   position: absolute;
-  left: -17px;            /* juster halen */
-  top: 50%;               /* midt på høyden */
+  left: -17px;
+  top: 50%;
   transform: translateY(-50%) rotate(-15deg);
   width: 0;
   height: 0;
@@ -113,25 +127,24 @@
 @media (max-width: 768px) {
     .cta-row {
         grid-template-columns: 1fr;
-        gap: var(--qp-space-lg);
+        grid-template-rows: auto auto auto;
+        gap: var(--qp-space-md);
     }
-    .mascot-wrap{
-        margin-top: auto;
+    
+    .cta-row > a:first-child {
+        order: 1;
+    }
+    
+    .cta-row > a:last-child {
+        order: 2;
+    }
+    
+    .mascot-wrap {
+        order: 3;
+        margin-top: var(--qp-space-lg);
     }
 
     .speech {
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
-        top: -200px;
-    }
-    
-    .speech::after {
-        left: 50%;
-        transform: translateX(-50%) rotate(120deg);
-        top: auto;
-        bottom: -20px;
-        border-right-color: transparent;
-        border-top-color: var(--qp-white);
+        display: none;
     }
 }

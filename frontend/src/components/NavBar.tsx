@@ -21,8 +21,9 @@ export default function NavBar() {
       <div className={styles.navbarInner}>
         <Link to="/" className={styles.navbarBrand}>
           <img
-            src="/images/quizzy-no-arms.png"
+            src="/images/quizzy-nav.png"
             alt="Blueberry mascot logo"
+            className={styles.navbarBrandImg}
           />
           <span className={styles.brandText}>QuizzyPop</span>
         </Link>

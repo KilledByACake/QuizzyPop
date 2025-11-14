@@ -37,7 +37,7 @@
 }
 
 .footerTitle {
-  font-family: var(--qp-font-main);
+  font-family: var(--qp-font-special);  /* Changed from var(--qp-font-main) */
   font-size: 1.5rem;
   font-weight: bold;
   letter-spacing: 2px;

@@ -13,6 +13,13 @@ import About from "./pages/About";
 import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
+
+// 
+// Må lages
+//
+import MyPage from "./pages/Home/MyPage";     
+import CreateQuiz from "./pages/Home/CreateQuiz"; 
+
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Render the application
@@ -29,7 +36,25 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
 
-              {/* Example of a protected route */}
+              {/* Protected routes */}
+              <Route
+                path="/mypage"
+                element={
+                  <ProtectedRoute>
+                    <MyPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/create"
+                element={
+                  <ProtectedRoute>
+                    <CreateQuiz />
+                  </ProtectedRoute>
+                }
+              />
+
               <Route
                 path="/test"
                 element={
@@ -39,7 +64,7 @@ createRoot(document.getElementById("root")!).render(
                 }
               />
 
-              {/* Catch-all: Redirect unknown URLs to home */}
+              {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>

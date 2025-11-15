@@ -1,28 +1,36 @@
-// frontend/src/pages/Home/CreateQuiz.tsx
-import { useState } from 'react';
+// frontend/src/pages/CreateQuiz.tsx - UPDATED VERSION
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { createQuizSchema, type CreateQuizFormData } from '../schemas/quizSchemas';
+import { useAuth } from '../contexts/AuthContext';
 import api from '../api';
 import Input from '../components/Input';
 import Select from '../components/Select';
 import Textarea from '../components/Textarea';
 import Button from '../components/Button';
+import LoginPromptModal from '../components/LoginPromptModal';
 import styles from './CreateQuiz.module.css';
+
+const DRAFT_STORAGE_KEY = 'quiz_draft';
 
 export default function CreateQuiz() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { isAuthenticated } = useAuth();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
-    watch
+    watch,
+    reset
   } = useForm<CreateQuizFormData>({
     resolver: zodResolver(createQuizSchema),
     defaultValues: {
@@ -31,6 +39,27 @@ export default function CreateQuiz() {
   });
 
   const imageFile = watch('image');
+
+  // Restore draft on mount if returning from login
+  useEffect(() => {
+    const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
+    if (draft && location.state?.fromLogin) {
+      try {
+        const parsedDraft = JSON.parse(draft);
+        reset(parsedDraft);
+        
+        // Restore image preview if exists
+        if (parsedDraft.imagePreviewData) {
+          setImagePreview(parsedDraft.imagePreviewData);
+        }
+        
+        // Clear the draft after restoring
+        localStorage.removeItem(DRAFT_STORAGE_KEY);
+      } catch (err) {
+        console.error('Failed to restore draft:', err);
+      }
+    }
+  }, [location.state, reset]);
 
   // Handle image preview
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +74,25 @@ export default function CreateQuiz() {
     }
   };
 
+  // Save draft to localStorage
+  const saveDraft = () => {
+    const formData = watch();
+    const draft = {
+      ...formData,
+      imagePreviewData: imagePreview, // Store preview separately
+      image: undefined // Can't serialize File object
+    };
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+  };
+
   const onSubmit = async (data: CreateQuizFormData) => {
+    // Check if user is authenticated
+    if (!isAuthenticated) {  // <-- remove parentheses
+      saveDraft();
+      setShowLoginModal(true);
+      return;
+    }
+
     setIsSubmitting(true);
     setError(null);
 
@@ -66,6 +113,9 @@ export default function CreateQuiz() {
           'Content-Type': 'multipart/form-data',
         },
       });
+
+      // Clear any saved draft
+      localStorage.removeItem(DRAFT_STORAGE_KEY);
 
       // Navigate to add questions page
       navigate(`/quiz/${response.data.id}/questions`);
@@ -204,6 +254,12 @@ export default function CreateQuiz() {
           </Button>
         </div>
       </form>
+
+      <LoginPromptModal
+        isOpen={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onSaveDraft={saveDraft}
+      />
     </div>
   );
 }

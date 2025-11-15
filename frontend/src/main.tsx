@@ -45,11 +45,7 @@ createRoot(document.getElementById("root")!).render(
 
               <Route
                 path="/create"
-                element={
-                  <ProtectedRoute>
-                    <CreateQuiz />
-                  </ProtectedRoute>
-                }
+                element={<CreateQuiz />}
               />
 
               {/* Catch-all */}

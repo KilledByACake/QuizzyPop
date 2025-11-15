@@ -21,7 +21,7 @@ export default function NavBar() {
       <div className={styles.navbarInner}>
         <Link to="/" className={styles.navbarBrand}>
           <img
-            src="/images/quizzy-nav.png"
+            src="/images/quizzy-no-arms.png"
             alt="Blueberry mascot logo"
             className={styles.navbarBrandImg}
           />
@@ -31,7 +31,7 @@ export default function NavBar() {
         <nav className={styles.navbarNav} aria-label="Main navigation">
           <Link to="/" className={isActive("/")}>Home</Link>
           <Link to="/quizzes" className={isActive("/quizzes")}>Take Quiz</Link>
-          <Link to="/admin/quizzes/new" className={isActive("/admin/quizzes/new")}>Make Quiz</Link>
+          <Link to="/create" className={isActive("/create")}>Make Quiz</Link>
         </nav>
 
         <div className={styles.navbarActions}>

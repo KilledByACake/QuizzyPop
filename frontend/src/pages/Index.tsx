@@ -40,7 +40,7 @@ export default function Index() {
           <div className={styles.speech}>Let's play and learn together!</div>
         </div>
 
-        <Link to="/createquiz">
+        <Link to="/create">
           <Button variant="primary" size="xl">Make Quiz!</Button>
         </Link>
       </div>

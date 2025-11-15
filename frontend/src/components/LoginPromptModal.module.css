@@ -1,0 +1,23 @@
+
+.content {
+  padding: var(--qp-space-md) 0;
+}
+
+.message {
+  font-size: 1.1rem;
+  color: var(--qp-gray-700);
+  margin-bottom: var(--qp-space-lg);
+  line-height: 1.6;
+  font-family: var(--qp-font-main);
+}
+
+.assurance {
+  background: var(--qp-primary-light);
+  padding: var(--qp-space-md);
+  border-radius: var(--qp-radius-md);
+  color: var(--qp-primary-dark);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-left: 4px solid var(--qp-primary);
+  font-family: var(--qp-font-main);
+}

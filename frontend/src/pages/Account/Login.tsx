@@ -1,6 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useState } from 'react';
 import { loginSchema, type LoginFormData } from '../../schemas/authSchemas';
 import { useAuth } from '../../contexts/AuthContext';
@@ -12,6 +12,7 @@ import Mascot from '../../components/Mascot';
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
   const [serverError, setServerError] = useState('');
 
@@ -39,8 +40,9 @@ export default function Login() {
       // Store token in context and localStorage
       login(token);
       
-      // Redirect to homepage
-      navigate('/');
+      // Redirect back to where they came from, or homepage
+      const from = location.state?.from || '/';
+      navigate(from, { state: { fromLogin: true } });
       
     } catch (error: any) {
       // Handle errors
@@ -56,7 +58,7 @@ export default function Login() {
   return (
     <div className={styles.loginPage}>
       <div className={styles.loginContainer}>
-        <Mascot variant="blueberry" size="medium" alt="Quizzy Pop mascot" />   {/* ADD THIS LINE */}
+        <Mascot variant="blueberry" size="medium" />
         <h1 className={styles.title}>Welcome Back!</h1>
         <p className={styles.subtitle}>Log in to your QuizzyPop account</p>
 

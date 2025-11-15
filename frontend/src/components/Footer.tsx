@@ -9,7 +9,7 @@ export default function Footer() {
       <div className={styles.footerContent}>
         <div className={styles.footerBrand}>
             <img
-              src="/images/quizzy-no-arms.png"
+              src="/images/quizzy-nav.png"
               alt="Quizzy Pop logo"
               className={styles.footerLogo}
             />

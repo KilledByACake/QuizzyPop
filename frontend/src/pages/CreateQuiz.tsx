@@ -1,0 +1,209 @@
+// frontend/src/pages/Home/CreateQuiz.tsx
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from 'react-router-dom';
+import { createQuizSchema, type CreateQuizFormData } from '../schemas/quizSchemas';
+import api from '../api';
+import Input from '../components/Input';
+import Select from '../components/Select';
+import Textarea from '../components/Textarea';
+import Button from '../components/Button';
+import styles from './CreateQuiz.module.css';
+
+export default function CreateQuiz() {
+  const navigate = useNavigate();
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    setValue,
+    watch
+  } = useForm<CreateQuizFormData>({
+    resolver: zodResolver(createQuizSchema),
+    defaultValues: {
+      difficulty: 'easy'
+    }
+  });
+
+  const imageFile = watch('image');
+
+  // Handle image preview
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setValue('image', file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const onSubmit = async (data: CreateQuizFormData) => {
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      // Create FormData for file upload
+      const formData = new FormData();
+      formData.append('title', data.title);
+      formData.append('description', data.description);
+      formData.append('categoryId', data.categoryId);
+      formData.append('difficulty', data.difficulty);
+      
+      if (data.image) {
+        formData.append('image', data.image);
+      }
+
+      const response = await api.post('/api/quizzes', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      // Navigate to add questions page
+      navigate(`/quiz/${response.data.id}/questions`);
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Failed to create quiz. Please try again.');
+      console.error('Create quiz error:', err);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Mock categories - replace with API call when backend is ready
+  const categories = [
+    { value: '', label: 'Select a category' },
+    { value: '1', label: 'Math' },
+    { value: '2', label: 'Science' },
+    { value: '3', label: 'History' },
+    { value: '4', label: 'Geography' },
+    { value: '5', label: 'Entertainment' },
+  ];
+
+  const difficulties = [
+    { value: '', label: 'Select difficulty' },
+    { value: 'easy', label: 'Easy' },
+    { value: 'medium', label: 'Medium' },
+    { value: 'hard', label: 'Hard' },
+  ];
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h1 className={styles.title}>Create a New Quiz</h1>
+        <p className={styles.subtitle}>Fill in the details below to get started</p>
+      </div>
+
+      {error && (
+        <div className={styles.errorBanner}>
+          {error}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        <Input
+          label="Quiz Title"
+          placeholder="Enter quiz title"
+          error={errors.title?.message}
+          hint="Give your quiz a catchy title"
+          {...register('title')}
+          required
+        />
+
+        <Textarea
+          label="Description"
+          placeholder="Describe what your quiz is about..."
+          rows={4}
+          error={errors.description?.message}
+          hint="Help people understand what they'll learn"
+          {...register('description')}
+          required
+        />
+
+        <Select
+          label="Category"
+          options={categories}
+          error={errors.categoryId?.message}
+          {...register('categoryId')}
+          required
+        />
+
+        <Select
+          label="Difficulty Level"
+          options={difficulties}
+          error={errors.difficulty?.message}
+          {...register('difficulty')}
+          required
+        />
+
+        <div className={styles.imageUpload}>
+          <label className={styles.imageLabel}>
+            Quiz Cover Image
+            <span className={styles.optional}>(Optional)</span>
+          </label>
+          
+          <div className={styles.imagePreviewContainer}>
+            {imagePreview ? (
+              <div className={styles.imagePreview}>
+                <img src={imagePreview} alt="Quiz cover preview" />
+                <button
+                  type="button"
+                  className={styles.removeImage}
+                  onClick={() => {
+                    setImagePreview(null);
+                    setValue('image', undefined);
+                  }}
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <label className={styles.uploadBox}>
+                <input
+                  type="file"
+                  accept="image/jpeg,image/jpg,image/png,image/webp"
+                  onChange={handleImageChange}
+                  className={styles.fileInput}
+                />
+                <div className={styles.uploadContent}>
+                  <span className={styles.uploadIcon}>📷</span>
+                  <span className={styles.uploadText}>Click to upload image</span>
+                  <span className={styles.uploadHint}>PNG, JPG, WEBP up to 5MB</span>
+                </div>
+              </label>
+            )}
+          </div>
+          
+          {errors.image && (
+            <span className={styles.errorText}>{errors.image.message}</span>
+          )}
+        </div>
+
+        <div className={styles.actions}>
+          <Button
+            type="button"
+            variant="gray"
+            onClick={() => navigate(-1)}
+            disabled={isSubmitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            variant="primary"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Creating...' : 'Create Quiz & Add Questions'}
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
+}

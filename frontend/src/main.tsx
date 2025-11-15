@@ -13,13 +13,14 @@ import About from "./pages/About";
 import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
+import CreateQuiz from "./pages/CreateQuiz.tsx"; 
 
 // 
 // Må lages (TODO: Create these files)
 //
-// import MyPage from "./pages/Home/MyPage";     
+//import MyPage from "./pages/Home/MyPage";     
 // import CreateQuiz from "./pages/Home/CreateQuiz"; 
-// import ProtectedRoute from "./routes/ProtectedRoute";
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
@@ -37,13 +38,9 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/test" element={<ComponentTest />} />
 
               {/* Protected routes - TODO: Uncomment when files are created */}
-              {/* <Route
+              <Route
                 path="/mypage"
-                element={
-                  <ProtectedRoute>
-                    <MyPage />
-                  </ProtectedRoute>
-                }
+                element={<Navigate to="/" replace />}
               />
 
               <Route
@@ -53,7 +50,7 @@ createRoot(document.getElementById("root")!).render(
                     <CreateQuiz />
                   </ProtectedRoute>
                 }
-              /> */}
+              />
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />

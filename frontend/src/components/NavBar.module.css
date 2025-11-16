@@ -35,7 +35,7 @@
   font-weight: 800;
   font-size: 1.2rem;
   color: var(--qp-blue);
-  font-family: var(--qp-font-main);
+  font-family: var(--qp-font-special);
 }
 
 .navbarNav {

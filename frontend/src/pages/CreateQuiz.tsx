@@ -38,8 +38,6 @@ export default function CreateQuiz() {
     }
   });
 
-  const imageFile = watch('image');
-
   // Restore draft on mount if returning from login
   useEffect(() => {
     const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
@@ -86,8 +84,8 @@ export default function CreateQuiz() {
   };
 
   const onSubmit = async (data: CreateQuizFormData) => {
-    // Check if user is authenticated
-    if (!isAuthenticated) {  // <-- remove parentheses
+    // If not logged in, save draft and show modal
+    if (!isAuthenticated) {      // <-- boolean, no parentheses
       saveDraft();
       setShowLoginModal(true);
       return;

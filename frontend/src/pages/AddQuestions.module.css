@@ -1,0 +1,111 @@
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--qp-space-2xl) var(--qp-space-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--qp-space-xl);
+}
+
+.title {
+  font-family: var(--qp-font-special);
+  font-size: 2.2rem;
+  color: var(--qp-primary);
+}
+
+.subtitle {
+  color: var(--qp-gray-600);
+  margin-top: var(--qp-space-xs);
+}
+
+.notice {
+  background: #fffaf0;
+  color: #92400e;
+  border: 2px solid #f59e0b;
+  padding: var(--qp-space-md);
+  border-radius: var(--qp-radius-md);
+  margin-bottom: var(--qp-space-lg);
+  font-weight: 700;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--qp-space-xl);
+}
+
+.questionCard {
+  background: var(--qp-white);
+  padding: var(--qp-space-xl);
+  border-radius: var(--qp-radius-xl);
+  box-shadow: var(--qp-shadow-md);
+  border: 1px solid var(--qp-gray-200);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--qp-space-md);
+  margin-bottom: var(--qp-space-md);
+}
+
+.typeHint {
+  color: var(--qp-gray-600);
+  font-size: 0.95rem;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--qp-space-sm);
+  margin-top: var(--qp-space-sm);
+}
+
+.optionRow {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--qp-space-sm);
+  align-items: center;
+}
+
+.correctRadio,
+.correctCheckbox {
+  width: 20px;
+  height: 20px;
+}
+
+.errorText {
+  color: #dc2626;
+  font-weight: 700;
+  font-size: 0.9rem;
+  margin-top: var(--qp-space-xs);
+}
+
+.cardActions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--qp-space-md);
+}
+
+.footerActions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--qp-space-md);
+}
+
+.rightActions {
+  display: flex;
+  gap: var(--qp-space-sm);
+}
+
+@media (max-width: 700px) {
+  .container { padding: var(--qp-space-xl) var(--qp-space-md); }
+  .questionCard { padding: var(--qp-space-lg); }
+  .footerActions { flex-direction: column; align-items: stretch; }
+  .rightActions { justify-content: space-between; }
+}

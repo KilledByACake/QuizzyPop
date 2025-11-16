@@ -14,6 +14,7 @@ import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
 import CreateQuiz from "./pages/CreateQuiz.tsx"; 
+import AddQuestions from "./pages/AddQuestions";
 
 // 
 // Må lages (TODO: Create these files)
@@ -37,19 +38,24 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/register" element={<Register />} />
               <Route path="/test" element={<ComponentTest />} />
 
-              {/* Protected routes - TODO: Uncomment when files are created */}
-              <Route
-                path="/mypage"
-                element={<Navigate to="/" replace />}
-              />
+              {/* Create is PUBLIC (uses its own login modal when submitting) */}
+              <Route path="/create" element={<CreateQuiz />} />
 
+              {/* Add Questions is PROTECTED (must be logged in to access) */}
               <Route
-                path="/create"
-                element={<CreateQuiz />}
+                path="/quiz/:id/questions"
+                element={
+                  <ProtectedRoute>
+                    <AddQuestions />
+                  </ProtectedRoute>
+                }
               />
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />
+
+              {/* Temporary local testing route */}
+              <Route path="/dev/quiz/123/questions" element={<AddQuestions />} />
             </Route>
           </Routes>
         </BrowserRouter>

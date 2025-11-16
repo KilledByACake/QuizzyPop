@@ -1,4 +1,3 @@
-
 import { z } from 'zod';
 
 export const createQuizSchema = z.object({
@@ -17,6 +16,15 @@ export const createQuizSchema = z.object({
     message: 'Please select a difficulty level'
   }),
   
+  tags: z.array(
+    z.string()
+      .min(2, 'Tag must be at least 2 characters')
+      .max(20, 'Tag must be at most 20 characters')
+      .regex(/^[a-zA-Z0-9\-]+$/, 'Only letters, numbers and dashes')
+  )
+  .max(8, 'Maximum 8 tags')
+  .optional(),
+
   image: z.instanceof(File)
     .refine((file) => file.size <= 5000000, 'Image must be less than 5MB')
     .refine(

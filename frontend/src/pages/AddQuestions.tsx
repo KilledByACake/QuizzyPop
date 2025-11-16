@@ -200,22 +200,20 @@ export default function AddQuestions() {
                 <div className={styles.tfRow}>
                   <label className={styles.tfLabel}>Correct answer:</label>
                   <div className={styles.tfChoices}>
-                    <label className={styles.tfChoice}>
-                      <input
-                        type="radio"
-                        checked={watch(`questions.${index}.correctBool`) === true}
-                        onChange={() => setValue(`questions.${index}.correctBool`, true)}
-                      />
-                      True
-                    </label>
-                    <label className={styles.tfChoice}>
-                      <input
-                        type="radio"
-                        checked={watch(`questions.${index}.correctBool`) === false}
-                        onChange={() => setValue(`questions.${index}.correctBool`, false)}
-                      />
-                      False
-                    </label>
+                    {['True', 'False'].map(val => {
+                      const isActive = watch(`questions.${index}.correctBool`) === (val === 'True');
+                      return (
+                        <button
+                          type="button"
+                          key={val}
+                          className={`${styles.tfChoice} ${isActive ? styles.tfChoiceActive : ''}`}
+                          onClick={() => setValue(`questions.${index}.correctBool`, val === 'True')}
+                          aria-pressed={isActive}
+                        >
+                          {val}
+                        </button>
+                      );
+                    })}
                   </div>
                   {qErrors?.correctBool?.message && (
                     <span className={styles.errorText}>{qErrors.correctBool.message as string}</span>

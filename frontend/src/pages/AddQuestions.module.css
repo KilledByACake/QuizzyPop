@@ -109,3 +109,60 @@
   .footerActions { flex-direction: column; align-items: stretch; }
   .rightActions { justify-content: space-between; }
 }
+
+.tfRow {
+  margin-top: var(--qp-space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--qp-space-sm);
+}
+
+.tfLabel {
+  font-weight: 700;
+  color: var(--qp-gray-700);
+  font-size: 0.95rem;
+}
+
+.tfChoices {
+  display: flex;
+  gap: var(--qp-space-sm);
+}
+
+.tfChoice {
+  background: linear-gradient(145deg, var(--qp-gray-100), var(--qp-gray-200));
+  border: 1px solid var(--qp-gray-300);
+  padding: var(--qp-space-sm) var(--qp-space-lg);
+  border-radius: var(--qp-radius-pill);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--qp-gray-700);
+  box-shadow: var(--qp-shadow-sm);
+  transition: all 0.18s ease;
+}
+
+.tfChoice:hover {
+  box-shadow: var(--qp-shadow-md);
+  transform: translateY(-2px);
+}
+
+.tfChoiceActive {
+  background: linear-gradient(140deg, var(--qp-primary), var(--qp-primary-accent));
+  border-color: var(--qp-primary-dark);
+  color: var(--qp-white);
+  box-shadow: 0 6px 18px -4px rgba(0,0,0,0.25), 0 0 0 2px rgba(255,255,255,0.3) inset;
+}
+
+.tfChoiceActive:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+.tfChoice:focus-visible {
+  outline: 3px solid var(--qp-primary-accent);
+  outline-offset: 2px;
+}
+
+.tfChoiceActive:focus-visible {
+  outline: 3px solid var(--qp-primary-light);
+  outline-offset: 2px;
+}

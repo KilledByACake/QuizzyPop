@@ -11,6 +11,7 @@ import Select from '../components/Select';
 import Textarea from '../components/Textarea';
 import Button from '../components/Button';
 import LoginPromptModal from '../components/LoginPromptModal';
+import TagInput from '../components/TagInput';
 import styles from './CreateQuiz.module.css';
 
 const DRAFT_STORAGE_KEY = 'quiz_draft';
@@ -34,7 +35,8 @@ export default function CreateQuiz() {
   } = useForm<CreateQuizFormData>({
     resolver: zodResolver(createQuizSchema),
     defaultValues: {
-      difficulty: 'easy'
+      difficulty: 'easy',
+      tags: [] // <-- added
     }
   });
 
@@ -104,6 +106,10 @@ export default function CreateQuiz() {
       
       if (data.image) {
         formData.append('image', data.image);
+      }
+
+      if (data.tags && data.tags.length) {
+        formData.append('tags', JSON.stringify(data.tags));
       }
 
       const response = await api.post('/api/quizzes', formData, {
@@ -189,6 +195,14 @@ export default function CreateQuiz() {
           error={errors.difficulty?.message}
           {...register('difficulty')}
           required
+        />
+
+        <TagInput
+          label="Tags"
+          hint="Short keywords (e.g. math, algebra, grade-5). Press Enter or comma to add."
+          value={watch('tags') || []}
+          onChange={(tags) => setValue('tags', tags, { shouldValidate: true })}
+          error={errors.tags?.message}
         />
 
         <div className={styles.imageUpload}>

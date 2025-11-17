@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 using QuizzyPop.Services;
+using Microsoft.AspNetCore.Authorization;
 
+[Authorize]
 [ApiController]
 [Route("api/quizzes")]
 public class QuizController : ControllerBase

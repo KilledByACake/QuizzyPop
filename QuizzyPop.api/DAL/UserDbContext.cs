@@ -28,6 +28,15 @@ public class UserDbContext : DbContext
 			v => JsonSerializer.Serialize(v, new JsonSerializerOptions()),
 			v => JsonSerializer.Deserialize<List<string>>(v, new JsonSerializerOptions()) ?? new List<string>()
 		);
+		
+
+		modelBuilder.Entity<RefreshToken>()
+			.HasOne(rt => rt.User)
+			.WithMany(u => u.RefreshTokens)
+			.HasForeignKey(rt => rt.UserId)
+			.OnDelete(DeleteBehavior.Cascade);
 
      }
+	public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
 }

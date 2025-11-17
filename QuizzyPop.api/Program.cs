@@ -96,6 +96,9 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+    var xml = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
+    if (File.Exists(xml))
+        c.IncludeXmlComments(xml, includeControllerXmlComments: true);
 });
 
 

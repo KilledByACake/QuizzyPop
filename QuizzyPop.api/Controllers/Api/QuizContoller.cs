@@ -24,7 +24,7 @@ public class QuizController : ControllerBase
     public async Task<ActionResult<IEnumerable<Quiz>>> List()
         => Ok(await _service.ListAsync());
 
-    // (valgfritt) GET api/quizzes/5/with-questions
+    // GET api/quizzes/5/with-questions
     [HttpGet("{id:int}/with-questions")]
     public async Task<ActionResult<Quiz>> GetWithQuestions(int id)
         => (await _service.GetWithQuestionsAsync(id)) is { } q ? Ok(q) : NotFound();
@@ -37,5 +37,19 @@ public class QuizController : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
     }
 
-    // OBS: Ingen Update/Delete her, siden IQuizService ikke eksponerer disse metodene nå.
+    [HttpPut("{id:int}")]
+    public async Task<IActionResult> Update(int id, [FromBody] QuizUpdateDto dto)
+    {
+        var ok = await _service.UpdateAsync(id, dto);
+        if (!ok) return NotFound();
+        return NoContent();
+    }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var ok = await _service.DeleteAsync(id);
+        if (!ok) return NotFound();
+        return NoContent();
+    }
 }

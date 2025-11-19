@@ -46,5 +46,37 @@ namespace QuizzyPop.Services
         public async Task<IReadOnlyList<Quiz>> ListAsync() => await _repo.GetAllWithDetailsAsync();
 
         public async Task<IReadOnlyList<Category>> ListCategoriesAsync() => await _repo.GetAllCategoriesAsync();
+
+        public async Task<bool> UpdateAsync(int id, QuizUpdateDto dto)
+        {
+            var quiz = await _repo.GetByIdAsync(id);
+            if (quiz is null)
+            {
+                _logger.LogWarning("Quiz {Id} not found for update", id);
+                return false;
+            }
+
+            quiz.Title = dto.Title.Trim();
+            quiz.Description = dto.Description ?? string.Empty;
+            quiz.ImageUrl = dto.ImageUrl ?? string.Empty;
+            quiz.Difficulty = string.IsNullOrWhiteSpace(dto.Difficulty)
+                ? quiz.Difficulty
+                : dto.Difficulty.Trim();
+            quiz.CategoryId = dto.CategoryId;
+
+            await _repo.UpdateAsync(quiz);
+            _logger.LogInformation("Quiz {Id} updated", quiz.Id);
+            return true;
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var deleted = await _repo.DeleteAsync(id);
+            if (!deleted)
+                _logger.LogWarning("Quiz {Id} not found for delete", id);
+            else
+                _logger.LogInformation("Quiz {Id} deleted", id);
+            return deleted;
+        }
     }
 }

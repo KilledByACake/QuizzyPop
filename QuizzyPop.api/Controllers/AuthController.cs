@@ -30,22 +30,22 @@ public class AuthController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] RegisterRequest req)
     {
-        if (await _db.Users.AnyAsync(u => u.Username == req.Username))
+        if (await _db.Users.AnyAsync(u => u.Email == req.Email))
             return Conflict(new { message = "Username already exists." });
 
         PasswordHasher.CreateHash(req.Password, out var hash, out var salt);
 
         var user = new User
         {
-            Username = req.Username.Trim(),
             Email = req.Email.Trim(),
+            Role = req.Role ?? "student",
             PasswordHash = hash,
-            PasswordSalt = salt
+            PasswordSalt = salt,
         };
 
         _db.Users.Add(user);
         await _db.SaveChangesAsync();
-        return CreatedAtAction(nameof(Register), new { id = user.Id }, new { user.Id, user.Username, user.Email });
+        return CreatedAtAction(nameof(Register), new { id = user.Id }, new { user.Id, user.Email, user.Role });
     }
 
     [HttpPost("login")]
@@ -53,15 +53,15 @@ public class AuthController : ControllerBase
     public async Task<ActionResult<TokenResponse>> Login([FromBody] LoginRequest req)
     {
         var user = await _db.Users.Include(u => u.RefreshTokens)
-                                  .SingleOrDefaultAsync(u => u.Username == req.Username);
+                                  .SingleOrDefaultAsync(u => u.Email == req.Email);
         if (user is null || !PasswordHasher.Verify(req.Password, user.PasswordHash, user.PasswordSalt))
             return Unauthorized();
 
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, "User")
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Role ?? "student")
         };
 
         var (access, exp) = _tokens.GenerateAccessToken(claims);
@@ -91,8 +91,8 @@ public class AuthController : ControllerBase
         var claims = new[]
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Username),
-            new Claim(ClaimTypes.Role, "User")
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Role ?? "student")
         };
 
         var (access, exp) = _tokens.GenerateAccessToken(claims);

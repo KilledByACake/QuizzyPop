@@ -97,61 +97,20 @@ namespace QuizzyPop.DAL.Repositories
 
         public async Task<bool> UpdateAsync(Quiz quiz)
         {
-            try
-            {
-                _context.Quiz.Update(quiz);
-
-                var dbQuestions = await _context.Questions
-                .Where(q => q.QuizId == quiz.Id)
-                .ToListAsync();
-
-                // Oppdater eksisterende spørsmål
-                foreach (var q in quiz.Questions)
-                {
-                    var existing = dbQuestions.FirstOrDefault(d => d.Id == q.Id);
-                    if (existing is null) continue;
-
-                    existing.Text = q.Text;
-                    existing.Choices = q.Choices;
-                    existing.CorrectAnswerIndex = q.CorrectAnswerIndex;
-
-                    _context.Entry(existing).State = EntityState.Modified;
-                }
-
-
-                var changed = await _context.SaveChangesAsync();
-                _logger.LogInformation("Quiz {Id} updated ({Changed} changes)", quiz.Id, changed);
-
-                return changed > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating quiz {Id}", quiz.Id);
-                throw;
-            }
+            _context.Quiz.Update(quiz);
+            var changed = await _context.SaveChangesAsync();
+            return changed > 0;
         }
 
         public async Task<bool> DeleteAsync(int id)
         {
-            try
-            {
-                var quiz = await _context.Quiz.FindAsync(id);
-                if (quiz is null)
-                {
-                    _logger.LogWarning("Tried to delete quiz {Id}, but it does not exist", id);
-                    return false;
-                }
+            var quiz = await _context.Quiz.FindAsync(id);
+            if (quiz is null)
+                return false;
 
-                _context.Quiz.Remove(quiz);
-                var changed = await _context.SaveChangesAsync();
-                _logger.LogInformation("Quiz {Id} deleted ({Changed} changes)", id, changed);
-                return changed > 0;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error deleting quiz {Id}", id);
-                throw;
-            }
+            _context.Quiz.Remove(quiz);
+            var changed = await _context.SaveChangesAsync();
+            return changed > 0;
         }
     }
 }

@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./index.css";
 
 import { AuthProvider } from "./contexts/AuthContext";
-// import { QuizProvider } from "./contexts/QuizContext";
+import { QuizProvider } from "./contexts/QuizContext";  // ✅ Uncomment this
 
 import Layout from "./components/Layout";
 import Index from "./pages/Index";
@@ -13,21 +13,15 @@ import About from "./pages/About";
 import ComponentTest from "./routes/ComponentTest";
 import Login from "./pages/Account/Login";
 import Register from "./pages/Account/Register";
-import CreateQuiz from "./pages/CreateQuiz.tsx"; 
+import CreateQuiz from "./pages/CreateQuiz"; 
 import AddQuestions from "./pages/AddQuestions";
-
-// 
-// Må lages (TODO: Create these files)
-//
-//import MyPage from "./pages/Home/MyPage";     
-// import CreateQuiz from "./pages/Home/CreateQuiz"; 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <AuthProvider>
-      {/* <QuizProvider> */}
+      <QuizProvider>  {/* ✅ Uncommented */}
         <BrowserRouter>
           <Routes>
             <Route element={<Layout />}>
@@ -59,7 +53,7 @@ createRoot(document.getElementById("root")!).render(
             </Route>
           </Routes>
         </BrowserRouter>
-      {/* </QuizProvider> */}
+      </QuizProvider>  {/* ✅ Uncommented */}
     </AuthProvider>
   </StrictMode>
 );

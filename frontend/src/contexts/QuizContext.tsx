@@ -116,8 +116,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     try {
       dispatch({ type: "START_LOADING" });
 
-      // Adjust the endpoint if your backend uses a different route
-      const response = await api.get<Quiz[]>("/quizzes");
+      const response = await api.get<Quiz[]>("/api/quizzes"); // ✅ Added /api
 
       dispatch({ type: "SET_QUIZZES", payload: response.data });
     } catch (error) {
@@ -132,8 +131,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     try {
       dispatch({ type: "START_LOADING" });
 
-      // Adjust the endpoint/body if your backend uses a different Create DTO
-      const response = await api.post<Quiz>("/quizzes", data);
+      const response = await api.post<Quiz>("/api/quizzes", data); // ✅ Added /api
 
       dispatch({ type: "ADD_QUIZ", payload: response.data });
     } catch (error) {
@@ -148,8 +146,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     try {
       dispatch({ type: "START_LOADING" });
 
-      // Adjust endpoint if needed (e.g. `/quizzes/${id}`)
-      await api.delete(`/quizzes/${id}`);
+      await api.delete(`/api/quizzes/${id}`); // ✅ Added /api
 
       dispatch({ type: "REMOVE_QUIZ", payload: id });
     } catch (error) {

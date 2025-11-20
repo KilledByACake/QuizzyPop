@@ -35,7 +35,7 @@ export default function Login() {
       });
 
       // Extract token from response
-      const token = response.data.token;
+      const token = response.data.accessToken;
       
       // Store token in context and localStorage
       login(token);

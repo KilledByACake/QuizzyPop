@@ -16,7 +16,7 @@ import Register from "./pages/Account/Register";
 import CreateQuiz from "./pages/CreateQuiz"; 
 import AddQuestions from "./pages/AddQuestions";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import TakeQuiz from "./pages/TakeQuiz.tsx";
+import TakeQuiz from "./pages/TakeQuiz";
 import TakingQuiz from "./pages/TakingQuiz";
 import QuizCompleted from "./pages/QuizCompleted";
 

@@ -6,7 +6,7 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuizContext } from "../contexts/QuizContext";
-import styles from "./TakeQuiz.module.css";
+import "./TakeQuiz.css";
 
 const TakeQuiz = () => {
   const { quizzes, loading, error, fetchQuizzes } = useQuizContext();
@@ -16,7 +16,6 @@ const TakeQuiz = () => {
 
   const navigate = useNavigate();
 
-  // Hent quizer når siden lastes
   useEffect(() => {
     if (quizzes.length === 0) {
       void fetchQuizzes();
@@ -31,7 +30,6 @@ const TakeQuiz = () => {
     setOpenDropdown((prev) => (prev === name ? null : name));
   };
 
-  // Lukk dropdowns når man klikker utenfor
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
@@ -44,7 +42,6 @@ const TakeQuiz = () => {
     return () => document.removeEventListener("click", handler);
   }, []);
 
-  // Filtrering: søk + ev. difficulty
   const filteredQuizzes = useMemo(
     () =>
       quizzes.filter((quiz) => {
@@ -71,14 +68,12 @@ const TakeQuiz = () => {
   };
 
   return (
-    <section className={styles["taking-quiz-page"]}>
-      {/* ================= PAGE TITLE ================= */}
+    <section className="take-quiz-page">
       <div className="title-row">
         <h1>Explore Quizzes</h1>
       </div>
 
       <div className="tq-grid">
-        {/* LEFT: filters and search */}
         <div className="filter-col">
           <div className="filter-bar">
             <div className="search-wrapper">
@@ -97,9 +92,7 @@ const TakeQuiz = () => {
               />
             </div>
 
-            {/* Custom dropdown filters */}
             <div className="dropdown-row">
-              {/* Category – (ikke koblet til data enda) */}
               <div
                 className={`dropdown ${
                   openDropdown === "category" ? "open" : ""
@@ -122,7 +115,6 @@ const TakeQuiz = () => {
                 </ul>
               </div>
 
-              {/* Grade – dekorativ foreløpig */}
               <div
                 className={`dropdown ${openDropdown === "grade" ? "open" : ""}`}
               >
@@ -143,7 +135,6 @@ const TakeQuiz = () => {
                 </ul>
               </div>
 
-              {/* Sort – dekorativ foreløpig */}
               <div
                 className={`dropdown ${openDropdown === "sort" ? "open" : ""}`}
               >
@@ -164,7 +155,6 @@ const TakeQuiz = () => {
                 </ul>
               </div>
 
-              {/* Difficulty – faktisk filter */}
               <div
                 className={`dropdown ${
                   openDropdown === "difficulty" ? "open" : ""
@@ -192,7 +182,6 @@ const TakeQuiz = () => {
           </div>
         </div>
 
-        {/* RIGHT: quiz grid */}
         <div className="quiz-col">
           <div className="quiz-grid">
             {loading && <p>Loading quizzes...</p>}
@@ -207,7 +196,7 @@ const TakeQuiz = () => {
                       : "/images/default-cover.png";
 
                   const questionsCount =
-                    (quiz as any).questionsCount ?? 0; // fallback hvis ikke i typen
+                    (quiz as any).questionsCount ?? 0;
 
                   return (
                     <article className="quiz-card" key={quiz.id}>

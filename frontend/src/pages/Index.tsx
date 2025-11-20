@@ -27,7 +27,7 @@ export default function Index() {
       {/* Knapper og maskot */}
     
       <div className={styles["cta-row"]}>
-        <Link to="/takequiz">
+        <Link to="/quizzes">
           <Button variant="primary" size="xl">Take Quiz!</Button>
         </Link>
 

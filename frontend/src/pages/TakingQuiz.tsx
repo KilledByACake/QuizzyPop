@@ -19,7 +19,7 @@ interface SubmitAnswer {
   selectedChoiceIndex: number;
 }
 
-const TakeQuiz = () => {
+const TakingQuiz = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -214,4 +214,4 @@ const TakeQuiz = () => {
   );
 };
 
-export default TakeQuiz;
+export default TakingQuiz;

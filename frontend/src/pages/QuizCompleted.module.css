@@ -1,0 +1,123 @@
+.qp-publish-success {
+        min-height: 85vh;
+        padding: 3rem 2rem 5rem;
+        font-family: 'Baloo 2', system-ui, sans-serif;
+        text-align: center;
+    }
+
+    .qp-publish__header h1 {
+        font-size: 2.4rem;
+        color: #004b74;
+        margin-bottom: 0.5rem;
+    }
+
+    .qp-publish__header p {
+        color: #0F766E;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .qp-publish__mascot img {
+        width: 150px;
+        margin: 2rem 0;
+    }
+
+    .qp-quiz-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+        padding: 2rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .qp-quiz__meta {
+        display: flex;
+        flex-direction: column;
+        gap: .5rem;
+        font-size: 1.1rem;
+        color: #1f2937;
+    }
+
+    /* Centered feedback paragraphs */
+    .qp-feedback {
+        margin-top: 1rem;
+    }
+    .qp-feedback-line {
+        margin: .25rem 0;
+        text-align: center;
+        color: #1f2937;
+    }
+
+    /* Button container - side by side, auto-width */
+    .qp-publish__actions {
+        margin-top: 2.5rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    
+    .qp-publish__actions > a,
+    .qp-publish__actions > form {
+        flex: 0 0 auto; /* don't stretch */
+    }
+    
+    .qp-publish__actions > form {
+        display: inline-flex;
+        margin: 0;
+    }
+
+    /* Buttons: proper button styling with good padding */
+    .qp-btn {
+        /* Reset button/link defaults */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1.2rem 2rem; /* Increased padding for better button look */
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 800;
+        white-space: nowrap;
+        margin: 0;
+        font-family: 'Baloo 2', system-ui, sans-serif;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+        line-height: 1.2;
+        transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .qp-btn--primary {
+        background: #0F766E;
+        color: #fff;
+         box-shadow: 0 4px 0 #034943;
+    }
+
+    .qp-btn--primary:hover {
+        transform: translateY(2px);
+        box-shadow: 0 4px 0 #034943;
+    }
+
+    .qp-btn--secondary {
+        background: #fff;
+        color: #0F766E;
+        border: 3px solid #0F766E;
+        padding: calc(1.2rem - 3px) calc(2rem - 3px); /* Adjust for border to keep same size */
+        box-shadow: 0 4px 0 #0F766E;
+    }
+
+    .qp-btn--secondary:hover {
+        transform: translateY(2px);
+        box-shadow: 0 4px 0 #0F766E;
+    }
+
+    @media (max-width: 520px) {
+        .qp-publish__actions {
+            flex-direction: column;
+        }
+    }

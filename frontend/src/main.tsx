@@ -16,6 +16,10 @@ import Register from "./pages/Account/Register";
 import CreateQuiz from "./pages/CreateQuiz"; 
 import AddQuestions from "./pages/AddQuestions";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import TakeQuiz from "./pages/TakeQuiz.tsx";
+import TakingQuiz from "./pages/TakingQuiz";
+import QuizCompleted from "./pages/QuizCompleted";
+
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
@@ -44,6 +48,9 @@ createRoot(document.getElementById("root")!).render(
                   </ProtectedRoute>
                 }
               />
+              <Route path="/quizzes" element={<TakeQuiz />} />
+              <Route path="/quiz/:id/take" element={<TakingQuiz />} />
+              <Route path="/quiz/:id/completed" element={<QuizCompleted />} />  
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />

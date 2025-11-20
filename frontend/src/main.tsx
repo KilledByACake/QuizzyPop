@@ -39,10 +39,6 @@ createRoot(document.getElementById("root")!).render(
               {/* Create is PUBLIC (uses its own login modal when submitting) */}
               <Route path="/create" element={<CreateQuiz />} />
 
-              <Route path="/quizzes" element={<TakeQuiz />} />
-              <Route path="/quiz/:id/take" element={<TakingQuiz />} />
-              <Route path="/quiz/:id/completed" element={<QuizCompleted />} />  
-
               {/* Add Questions is PROTECTED (must be logged in to access) */}
               <Route
                 path="/quiz/:id/questions"
@@ -52,6 +48,9 @@ createRoot(document.getElementById("root")!).render(
                   </ProtectedRoute>
                 }
               />
+              <Route path="/quizzes" element={<TakeQuiz />} />
+              <Route path="/quiz/:id/take" element={<TakingQuiz />} />
+              <Route path="/quiz/:id/completed" element={<QuizCompleted />} />  
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />

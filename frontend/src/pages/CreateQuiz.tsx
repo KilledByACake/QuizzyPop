@@ -112,11 +112,7 @@ export default function CreateQuiz() {
         formData.append('tags', JSON.stringify(data.tags));
       }
 
-      const response = await api.post('/api/quizzes', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
+      const response = await api.post('/api/quizzes', formData);
 
       // Clear any saved draft
       localStorage.removeItem(DRAFT_STORAGE_KEY);

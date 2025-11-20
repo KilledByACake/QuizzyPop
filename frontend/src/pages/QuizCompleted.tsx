@@ -64,7 +64,7 @@ const QuizCompleted = () => {
                     </p>
                  ))}
           </div>
-        )}
+        )} 
       </article>
 
       <div className={styles["qp-publish__actions"]}>

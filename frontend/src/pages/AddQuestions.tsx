@@ -99,7 +99,10 @@ export default function AddQuestions() {
             choices: q.options,
             correctAnswerIndex: q.correctIndex,
           };
-          return api.post(`/api/quizzes/${quizId}/questions`, payload);
+          return api.post(`/api/quiz-questions`, {
+            ...payload,
+            quizId: parseInt(quizId)
+          });
         })
       );
 

@@ -24,4 +24,5 @@ namespace QuizzyPop.Models.Dtos
         // Hvis satt: ny 0-basert indeks
         public int? CorrectAnswerIndex { get; set; }
     }
+    
 }

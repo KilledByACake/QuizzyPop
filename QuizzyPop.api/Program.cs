@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 
 
 using Serilog;
@@ -108,7 +110,9 @@ builder.Services.AddSwaggerGen(c =>
         c.IncludeXmlComments(xml, includeControllerXmlComments: true);
 });
 
-
+//Fluent Validation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 //Repositories & Services
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
@@ -145,6 +149,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 
 app.UseCors("CorsPolicy");
 app.UseAuthentication(); 

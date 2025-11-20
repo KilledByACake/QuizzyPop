@@ -62,6 +62,10 @@ public static class DBInit
                 Description = "Quizzes about movies, music and pop culture" },
                 new Category { Name = "History",
                 Description = "Quizzes about historical events and figures" },
+                new Category { Name = "Science",
+                Description = "Quizzes about biology, chemistry, physics and more" },
+                new Category { Name = "Geography",
+                Description = "Quizzes about countries, cities and landmarks" }, 
             };
             context.AddRange(categories);
             context.SaveChanges();
@@ -76,7 +80,7 @@ public static class DBInit
                     Description = "A simple quiz about basic geometry",
                     Difficulty = "medium",
                     CategoryId = 1,
-                    ImageUrl = "images/geometry.jpeg",
+                    ImageUrl = "images/quizzes/geometry.jpeg",
                     UserId = 1,
                     Questions = new List<Question>
                     {
@@ -106,7 +110,7 @@ public static class DBInit
                         Description = "Test your knowledge about Disney Characters!",
                         Difficulty = "easy",
                         CategoryId = 2,
-                        ImageUrl = "images/disney.webp",
+                        ImageUrl = "images/quizzes/disney.webp",
                         UserId = 1,
                         Questions = new List<Question>
                         {

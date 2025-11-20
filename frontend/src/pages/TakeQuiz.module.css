@@ -1,9 +1,18 @@
-.take-quiz-page {
-        /* main page layout */
-        min-height: 80vh;
-        padding: 2.5rem 3rem;
+    .take-quiz-page {
+    /* main page layout */
+    position: relative;
+    z-index: 0;
+    min-height: 80vh;
+    padding: 2.5rem 3rem;
+
+    /* Viktig: ikke blokker klikk på ting som evt. ligger "over" */
+    pointer-events: none;
     }
 
+    /* Men alt INNI selve siden skal fortsatt være klikkbart */
+    .take-quiz-page * {
+        pointer-events: auto;
+    }
     /* === Title === */
     .title-row h1 {
         font-family: 'Baloo 2', system-ui, sans-serif;

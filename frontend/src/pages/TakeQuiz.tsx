@@ -19,10 +19,12 @@ export default function TakeQuiz() {
 
   const navigate = useNavigate();
 
+  // Sett tittel i fanen
   useEffect(() => {
     document.title = "Explore Quizzes - Quizzy Pop";
   }, []);
 
+  // Hent quizer hvis lista er tom
   useEffect(() => {
     if (quizzes.length === 0) {
       void fetchQuizzes();
@@ -64,16 +66,13 @@ export default function TakeQuiz() {
 
   return (
     <section className={styles["take-quiz-page"]}>
-      {/* Enkel debug-linje så du SER at komponenten rendrer */}
-      <p style={{ color: "red" }}>DEBUG: TakeQuiz rendered</p>
-
-      {/* === TITLE === */}
+      {/* === Title === */}
       <div className={styles["title-row"]}>
         <h1>Explore Quizzes</h1>
         <p>Loaded quizzes: {quizzes.length}</p>
       </div>
 
-      {/* === LAYOUT GRID === */}
+      {/* === Layout grid === */}
       <div className={styles["tq-grid"]}>
         {/* Search + filters */}
         <div className={styles["filter-bar"]}>
@@ -94,7 +93,7 @@ export default function TakeQuiz() {
           </div>
 
           <div className={styles["dropdown-row"]}>
-            {/* Category */}
+            {/* Category – dekorativ */}
             <div
               className={`${styles["dropdown"]} ${
                 openDropdown === "category" ? styles["open"] : ""
@@ -117,7 +116,7 @@ export default function TakeQuiz() {
               </ul>
             </div>
 
-            {/* Grade */}
+            {/* Grade – dekorativ */}
             <div
               className={`${styles["dropdown"]} ${
                 openDropdown === "grade" ? styles["open"] : ""
@@ -140,7 +139,7 @@ export default function TakeQuiz() {
               </ul>
             </div>
 
-            {/* Sort */}
+            {/* Sort – dekorativ */}
             <div
               className={`${styles["dropdown"]} ${
                 openDropdown === "sort" ? styles["open"] : ""
@@ -163,7 +162,7 @@ export default function TakeQuiz() {
               </ul>
             </div>
 
-            {/* Difficulty */}
+            {/* Difficulty – faktisk filter */}
             <div
               className={`${styles["dropdown"]} ${
                 openDropdown === "difficulty" ? styles["open"] : ""

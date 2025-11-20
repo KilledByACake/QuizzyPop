@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using QuizzyPop.Models;
+using QuizzyPop.Services;
 
 namespace QuizzyPop.DAL;
 
@@ -15,40 +16,29 @@ public static class DBInit
 
         if (!context.Users.Any())
         {
-            var users = new List<User>
+            var demoUsers = new[]
             {
-                new User {
-                    Email = "demo@quizzypop.com",
-                    Name = "Demo User",
-                    Role = "student",
-                    Password = "Demo12345",
-                    DisplayName = "Demo User",
-                    QuizzesCreated = 5,
-                    QuizzesTaken = 12
-                },
-
-                new User {
-                    Email = "test@quizzypop.com",
-                    Name = "Test User",
-                    Role = "teacher",
-                    Password = "Test12345",
-                    DisplayName = "Test User",
-                    QuizzesCreated = 3,
-                    QuizzesTaken = 8
-                },
-
-                new User {
-                    Email = "admin@quizzypop.com",
-                    Name = "Admin User",
-                    Role = "admin",
-                    Password = "Admin12345",
-                    DisplayName = "Admin User",
-                    QuizzesCreated = 15,
-                    QuizzesTaken = 25
-                }
+                new { Email = "demo@quizzypop.com", Role = "student", Password = "Demo12345" },
+                new { Email = "test@quizzypop.com", Role = "teacher", Password = "Test12345" },
+                new { Email = "admin@quizzypop.com", Role = "admin",   Password = "Admin12345" }
             };
 
-            context.AddRange(users);
+            foreach (var demo in demoUsers)
+            {
+                PasswordHasher.CreateHash(demo.Password, out var hash, out var salt);
+
+                var user = new User
+                {
+                    Email        = demo.Email,
+                    Role         = demo.Role,
+                    PasswordHash = hash,
+                    PasswordSalt = salt
+                };
+
+                context.Users.Add(user);
+            }
+
+            //context.AddRange(user);
             context.SaveChanges();
         }
 

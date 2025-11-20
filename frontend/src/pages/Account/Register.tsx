@@ -13,7 +13,6 @@ import styles from './Register.module.css';
 export default function Register() {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState('');
-  const [notImplemented] = useState(true); // flip to false when backend adds endpoint
 
   const {
     register,
@@ -32,13 +31,7 @@ export default function Register() {
   const onSubmit = async (data: RegisterFormData) => {
     setServerError('');
 
-    if (notImplemented) {
-      setServerError('Registration API not implemented yet.');
-      return;
-    }
-
     try {
-      // Adjust endpoint when backend adds /api/auth/register
       const response = await api.post('/api/auth/register', {
         email: data.email,
         password: data.password,
@@ -47,14 +40,28 @@ export default function Register() {
         birthdate: data.birthdate || null
       });
 
-      // If backend returns a token immediately you could auto-login:
-      if (response.data?.token) {
-        // Optionally call useAuth().login(response.data.token)
-      }
-
-      navigate('/login');
+      // Registration successful - navigate to login
+      navigate('/login', { 
+        state: { 
+          message: 'Account created! Please log in.',
+          email: data.email 
+        } 
+      });
     } catch (err: any) {
-      setServerError(err.response?.data?.message || 'Failed to register.');
+      console.error('Registration error:', err);
+      
+      // Extract error message
+      if (err.response?.status === 409) {
+        setServerError('Email already exists. Please use a different email.');
+      } else if (err.response?.data?.message) {
+        setServerError(err.response.data.message);
+      } else if (err.response?.data?.errors) {
+        // FluentValidation errors
+        const validationErrors = Object.values(err.response.data.errors).flat();
+        setServerError(validationErrors.join(', '));
+      } else {
+        setServerError('Failed to register. Please try again.');
+      }
     }
   };
 
@@ -71,12 +78,6 @@ export default function Register() {
           <div className={styles.serverError}>{serverError}</div>
         )}
 
-        {notImplemented && (
-          <div className={styles.notImplemented}>
-            The backend registration endpoint isn't live yet. You can still design & validate the form.
-          </div>
-        )}
-
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <Input
             label="Email"
@@ -84,6 +85,7 @@ export default function Register() {
             placeholder="you@example.com"
             error={errors.email?.message}
             {...register('email')}
+            required
           />
 
           <Input
@@ -91,7 +93,9 @@ export default function Register() {
             type="password"
             placeholder="Enter a strong password"
             error={errors.password?.message}
+            hint="Must contain uppercase, lowercase, and number"
             {...register('password')}
+            required
           />
 
           <Input
@@ -100,6 +104,7 @@ export default function Register() {
             placeholder="Repeat your password"
             error={errors.confirmPassword?.message}
             {...register('confirmPassword')}
+            required
           />
 
           <Select
@@ -111,6 +116,7 @@ export default function Register() {
               { value: 'teacher', label: '🍎 Teacher' },
               { value: 'parent', label: '👨‍👩‍👧 Parent' }
             ]}
+            required
           />
           <p className={styles.roleHint}>
             Teachers and parents must be at least 18 years old.
@@ -119,7 +125,7 @@ export default function Register() {
           {showExtra && (
             <div className={styles.extraFields}>
               <Input
-                label="Mobile Number"
+                label="Mobile Number (Optional)"
                 type="tel"
                 placeholder="+47 999 99 999"
                 error={errors.phone?.message}
@@ -131,6 +137,7 @@ export default function Register() {
                 type="date"
                 error={errors.birthdate?.message}
                 {...register('birthdate')}
+                required
               />
             </div>
           )}
@@ -139,7 +146,7 @@ export default function Register() {
             type="submit"
             variant="primary"
             fullWidth
-            disabled={isSubmitting || notImplemented}
+            disabled={isSubmitting}
           >
             {isSubmitting ? 'Creating account...' : 'Sign Up'}
           </Button>

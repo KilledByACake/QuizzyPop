@@ -1,19 +1,36 @@
 import { Link } from "react-router-dom";
-import { useRive } from '@rive-app/react-canvas';
+import { useRive, useStateMachineInput } from '@rive-app/react-canvas';
+import { useState } from 'react';
 import styles from "./Index.module.css";
 import Button from "../components/Button";
 
 export default function Index() {
-  // Initialize Rive animation
-  const { RiveComponent } = useRive({
-    src: '/animations/quizzyblueberry.riv', 
-    stateMachines: 'State Machine 1', // Optional: use your state machine name
+  const [currentState, setCurrentState] = useState("Idle");
+
+  const { RiveComponent, rive } = useRive({
+    src: '/animations/quizzy.riv',
+    stateMachines: 'State Machine 1',
     autoplay: true,
   });
 
+  // Get inputs from state machine
+  const waveLeftInput = useStateMachineInput(rive, 'State Machine 1', 'Wave L');
+  const waveRightInput = useStateMachineInput(rive, 'State Machine 1', 'Wave R');
+
+  const triggerWaveLeft = () => {
+    waveLeftInput?.fire();
+    setCurrentState("Wave Left");
+    setTimeout(() => setCurrentState("Idle"), 2000);
+  };
+
+  const triggerWaveRight = () => {
+    waveRightInput?.fire();
+    setCurrentState("Wave Right");
+    setTimeout(() => setCurrentState("Idle"), 2000);
+  };
+
   return (
     <section className={styles["home-hero"]}>
-      {/* Dekorativ buet tittel */}
       <svg
         className={styles["arc-title"]}
         viewBox="0 0 900 280"
@@ -31,19 +48,17 @@ export default function Index() {
         </text>
       </svg>
 
-      {/* Knapper og Rive animation */}
       <div className={styles["cta-row"]}>
-        <Link to="/quizzes">
+        <Link to="/quizzes" onMouseEnter={triggerWaveLeft}>
           <Button variant="primary" size="xl">Take Quiz!</Button>
         </Link>
 
         <div className={styles["mascot-wrap"]}>
-          {/* Replace img with RiveComponent */}
           <RiveComponent className={styles.mascot} />
           <div className={styles.speech}>Let's play and learn together!</div>
         </div>
 
-        <Link to="/create">
+        <Link to="/create" onMouseEnter={triggerWaveRight}>
           <Button variant="primary" size="xl">Make Quiz!</Button>
         </Link>
       </div>

@@ -67,9 +67,10 @@
 
 .mascot {
     width: min(500px, 80vw);  /* Changed from 450px, 70vw */
-    height: auto;
+    height: 500px; /* Add fixed height if needed */
     filter: drop-shadow(0 10px 0 rgba(0,0,0,.15));
     display: block;
+    background: transparent !important;
 }
 
 .speech {

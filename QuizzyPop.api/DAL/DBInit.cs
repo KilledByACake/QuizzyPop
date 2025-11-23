@@ -69,7 +69,7 @@ public static class DBInit
                     Description = "A simple quiz about basic geometry",
                     Difficulty = "medium",
                     CategoryId = 1,
-                    ImageUrl = "images/quizzes/geometry.jpeg",
+                    ImageUrl = "/images/geometry.jpeg",
                     UserId = 1,
                     Questions = new List<Question>
                     {
@@ -99,7 +99,7 @@ public static class DBInit
                         Description = "Test your knowledge about Disney Characters!",
                         Difficulty = "easy",
                         CategoryId = 2,
-                        ImageUrl = "images/quizzes/disney.webp",
+                        ImageUrl = "/images/disney.webp",
                         UserId = 1,
                         Questions = new List<Question>
                         {

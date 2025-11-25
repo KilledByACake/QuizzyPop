@@ -89,26 +89,28 @@ namespace QuizzyPop.Services
             int total = quiz.Questions.Count;
             var messages = new List<string>();
 
+            int questionNumber = 1;
             foreach (var q in quiz.Questions)
             {
-                var answer = submission.Answers
-                    .FirstOrDefault(a => a.QuestionId == q.Id);
+                var answer = submission.Answers.FirstOrDefault(a => a.QuestionId == q.Id);
 
                 if (answer == null)
                 {
-                    messages.Add($"Question {q.Id}: no answer");
-                    continue;
+                    messages.Add($"Question {questionNumber}: no answer");
                 }
-
-                if (answer.SelectedIndex == q.CorrectAnswerIndex)
+                else if (answer.SelectedIndex == q.CorrectAnswerIndex)
                 {
                     correctCount++;
-                    messages.Add($"Question {q.Id}: correct");
+                    messages.Add($"Question {questionNumber}: correct");
                 }
                 else
                 {
-                    messages.Add($"Question {q.Id}: wrong (correct = {q.CorrectAnswerIndex})");
+                    string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
+                    string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedIndex) ?? "invalid";
+                    messages.Add($"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')");
                 }
+
+                questionNumber++;
             }
 
             return new QuizSubmissionResultDto

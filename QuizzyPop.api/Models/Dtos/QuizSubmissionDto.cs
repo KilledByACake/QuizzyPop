@@ -8,7 +8,7 @@ namespace QuizzyPop.Models.Dtos
     public sealed class QuizSubmissionAnswerDto
     {
         public int QuestionId { get; set; }
-        public int SelectedIndex { get; set; }
+        public int SelectedChoiceIndex { get; set; }
     }
 
     public sealed class QuizSubmissionResultDto

@@ -98,7 +98,7 @@ namespace QuizzyPop.Services
                 {
                     messages.Add($"Question {questionNumber}: no answer");
                 }
-                else if (answer.SelectedIndex == q.CorrectAnswerIndex)
+                else if (answer.SelectedChoiceIndex == q.CorrectAnswerIndex)
                 {
                     correctCount++;
                     messages.Add($"Question {questionNumber}: correct");
@@ -106,7 +106,7 @@ namespace QuizzyPop.Services
                 else
                 {
                     string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
-                    string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedIndex) ?? "invalid";
+                    string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedChoiceIndex) ?? "invalid";
                     messages.Add($"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')");
                 }
 

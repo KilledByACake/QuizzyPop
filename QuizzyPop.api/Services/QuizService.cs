@@ -78,5 +78,46 @@ namespace QuizzyPop.Services
                 _logger.LogInformation("Quiz {Id} deleted", id);
             return deleted;
         }
+
+        public async Task<QuizSubmissionResultDto> SubmitAsync(int quizId, QuizSubmissionDto submission)
+        {
+            var quiz = await _repo.GetQuizWithQuestionsAsync(quizId);
+            if (quiz == null)
+                throw new ArgumentException($"Quiz {quizId} not found");
+
+            int correctCount = 0;
+            int total = quiz.Questions.Count;
+            var messages = new List<string>();
+
+            foreach (var q in quiz.Questions)
+            {
+                var answer = submission.Answers
+                    .FirstOrDefault(a => a.QuestionId == q.Id);
+
+                if (answer == null)
+                {
+                    messages.Add($"Question {q.Id}: no answer");
+                    continue;
+                }
+
+                if (answer.SelectedIndex == q.CorrectAnswerIndex)
+                {
+                    correctCount++;
+                    messages.Add($"Question {q.Id}: correct");
+                }
+                else
+                {
+                    messages.Add($"Question {q.Id}: wrong (correct = {q.CorrectAnswerIndex})");
+                }
+            }
+
+            return new QuizSubmissionResultDto
+            {
+                Score = correctCount,
+                CorrectAnswers = correctCount,
+                TotalQuestions = total,
+                FeedbackMessages = messages
+            };
+        }
     }
 }

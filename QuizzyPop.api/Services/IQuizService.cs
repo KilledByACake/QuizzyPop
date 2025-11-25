@@ -15,5 +15,7 @@ namespace QuizzyPop.Services
         Task<IReadOnlyList<Category>> ListCategoriesAsync();   // bruker GetAllCategoriesAsync
         Task<bool> UpdateAsync(int id, QuizUpdateDto dto);
         Task<bool> DeleteAsync(int id);
+
+        Task<QuizSubmissionResultDto> SubmitAsync(int quizId, QuizSubmissionDto dto);
     }
 }

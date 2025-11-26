@@ -80,60 +80,47 @@ namespace QuizzyPop.Services
         }
 
         public async Task<QuizSubmissionResultDto> SubmitAsync(int quizId, QuizSubmissionDto submission)
+{
+        var quiz = await _repo.GetQuizWithQuestionsAsync(quizId);
+        if (quiz == null)
+            throw new ArgumentException($"Quiz {quizId} not found");
+
+        int correctCount = 0;
+        int total = quiz.Questions.Count;
+        var messages = new List<string>();
+
+        int questionNumber = 1;
+        foreach (var q in quiz.Questions)
         {
-            var quiz = await _repo.GetQuizWithQuestionsAsync(quizId);
-            if (quiz == null)
-                throw new ArgumentException($"Quiz {quizId} not found");
+            var answer = submission.Answers.FirstOrDefault(a => a.QuestionId == q.Id);
 
-            var questions = quiz.Questions.OrderBy(q => q.Id).ToList();
-
-            int correctCount = 0;
-            var messages = new List<string>();
-
-            for (int i = 0; i < questions.Count; i++)
+            if (answer == null)
             {
-                var q = questions[i];
-                int displayNumber = i + 1;
-
-                var answer = submission.Answers
-                    .FirstOrDefault(a => a.QuestionId == q.Id);
-
-                if (answer == null)
-                {
-                    messages.Add($"Question {displayNumber}: no answer");
-                    continue;
-                }
-
-                bool isCorrect = answer.SelectedIndex == q.CorrectAnswerIndex;
-
-                if (isCorrect)
-                {
-                    correctCount++;
-                    messages.Add($"Question {displayNumber}: correct");
-                }
-                else
-                {
-                    string correctChoice = q.Choices[q.CorrectAnswerIndex];
-                    string selected = q.Choices.ElementAtOrDefault(answer.SelectedIndex) ?? "?";
-
-                    messages.Add(
-                        $"Question {displayNumber}: wrong (your answer: '{selected}', correct: '{correctChoice}')");
-                }
+                messages.Add($"Question {questionNumber}: no answer");
+            }
+            else if (answer.SelectedChoiceIndex == q.CorrectAnswerIndex)
+            {
+                correctCount++;
+                messages.Add($"Question {questionNumber}: correct");
+            }
+            else
+            {
+                string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
+                string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedChoiceIndex) ?? "invalid";
+                messages.Add($"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')");
             }
 
-            int total = questions.Count;
-            int scorePercent = (int)Math.Round((double)correctCount / total * 100);
-
-            return new QuizSubmissionResultDto
-            {
-                QuizId = quiz.Id,
-                QuizTitle = quiz.Title,
-                Difficulty = quiz.Difficulty,
-                TotalQuestions = total,
-                CorrectAnswers = correctCount,
-                Score = scorePercent,
-                FeedbackMessages = messages
-            };
+            questionNumber++;
         }
+
+        // Return result using only properties present in QuizSubmissionResultDto
+        return new QuizSubmissionResultDto
+        {
+            Score = correctCount,
+            CorrectAnswers = correctCount,
+            TotalQuestions = total,
+            FeedbackMessages = messages
+        };
+    }
     }
 }

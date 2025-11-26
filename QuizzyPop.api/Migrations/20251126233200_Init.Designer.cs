@@ -11,7 +11,7 @@ using QuizzyPop.DAL;
 namespace QuizzyPop.api.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20251123123144_Init")]
+    [Migration("20251126233200_Init")]
     partial class Init
     {
         /// <inheritdoc />

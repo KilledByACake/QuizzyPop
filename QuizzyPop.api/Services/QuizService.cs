@@ -85,39 +85,53 @@ namespace QuizzyPop.Services
             if (quiz == null)
                 throw new ArgumentException($"Quiz {quizId} not found");
 
+            var questions = quiz.Questions.OrderBy(q => q.Id).ToList();
+
             int correctCount = 0;
-            int total = quiz.Questions.Count;
             var messages = new List<string>();
 
-            int questionNumber = 1;
-            foreach (var q in quiz.Questions)
+            for (int i = 0; i < questions.Count; i++)
             {
-                var answer = submission.Answers.FirstOrDefault(a => a.QuestionId == q.Id);
+                var q = questions[i];
+                int displayNumber = i + 1;
+
+                var answer = submission.Answers
+                    .FirstOrDefault(a => a.QuestionId == q.Id);
 
                 if (answer == null)
                 {
-                    messages.Add($"Question {questionNumber}: no answer");
+                    messages.Add($"Question {displayNumber}: no answer");
+                    continue;
                 }
-                else if (answer.SelectedChoiceIndex == q.CorrectAnswerIndex)
+
+                bool isCorrect = answer.SelectedIndex == q.CorrectAnswerIndex;
+
+                if (isCorrect)
                 {
                     correctCount++;
-                    messages.Add($"Question {questionNumber}: correct");
+                    messages.Add($"Question {displayNumber}: correct");
                 }
                 else
                 {
-                    string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
-                    string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedChoiceIndex) ?? "invalid";
-                    messages.Add($"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')");
-                }
+                    string correctChoice = q.Choices[q.CorrectAnswerIndex];
+                    string selected = q.Choices.ElementAtOrDefault(answer.SelectedIndex) ?? "?";
 
-                questionNumber++;
+                    messages.Add(
+                        $"Question {displayNumber}: wrong (your answer: '{selected}', correct: '{correctChoice}')");
+                }
             }
+
+            int total = questions.Count;
+            int scorePercent = (int)Math.Round((double)correctCount / total * 100);
 
             return new QuizSubmissionResultDto
             {
-                Score = correctCount,
-                CorrectAnswers = correctCount,
+                QuizId = quiz.Id,
+                QuizTitle = quiz.Title,
+                Difficulty = quiz.Difficulty,
                 TotalQuestions = total,
+                CorrectAnswers = correctCount,
+                Score = scorePercent,
                 FeedbackMessages = messages
             };
         }

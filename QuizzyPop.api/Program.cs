@@ -6,8 +6,6 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-
-
 using Serilog;
 using Serilog.Events;
 
@@ -18,71 +16,81 @@ using QuizzyPop.Api.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//Logging (Serilog)
-var loggerConfiguration = new LoggerConfiguration()
+// --------------------
+// Serilog Configuration
+// --------------------
+Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
-    .WriteTo.File($"APILogs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log");
+    .WriteTo.File($"APILogs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log")
+    .Filter.ByExcluding(e =>
+        e.Properties.TryGetValue("SourceContext", out var _) &&
+        e.Level == LogEventLevel.Information &&
+        e.MessageTemplate.Text.Contains("Executed DbCommand"))
+    .CreateLogger();
 
-loggerConfiguration.Filter.ByExcluding(e => e.Properties.TryGetValue("SourceContext", out var _)
-    && e.Level == LogEventLevel.Information
-    && e.MessageTemplate.Text.Contains("Executed DbCommand"));
+builder.Host.UseSerilog();
 
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(loggerConfiguration.CreateLogger());
-
-//EF Core
+// --------------------
+// Database (EF Core)
+// --------------------
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("UserDbContextConnection")));
 
+// --------------------
 // CORS
-var allowed = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
-builder.Services.AddCors(opt =>
+// --------------------
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+builder.Services.AddCors(options =>
 {
-    opt.AddPolicy("CorsPolicy", p =>
-        p.WithOrigins(allowed).AllowAnyHeader().AllowAnyMethod().AllowCredentials());
+    options.AddPolicy("CorsPolicy", policy =>
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials());
 });
 
-//JWT Auth
+// --------------------
+// JWT Authentication
+// --------------------
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
-var jwt = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
-var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key));
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>()!;
+var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddJwtBearer(o =>
+    .AddJwtBearer(options =>
     {
-        o.TokenValidationParameters = new TokenValidationParameters
+        options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateIssuerSigningKey = true,
             ValidateLifetime = true,
-            ValidIssuer = jwt.Issuer,
-            ValidAudience = jwt.Audience,
+            ValidIssuer = jwtSettings.Issuer,
+            ValidAudience = jwtSettings.Audience,
             IssuerSigningKey = key,
             ClockSkew = TimeSpan.Zero
         };
     });
-builder.Services.AddAuthorization();
 
-// JWT token generator
+builder.Services.AddAuthorization();
 builder.Services.AddSingleton<IJwtTokenService, JwtTokenService>();
 
-//Controllers & Swagger
+// --------------------
+// Controllers & Swagger
+// --------------------
 builder.Services.AddControllers()
-    .AddJsonOptions(o =>
-    {
-        o.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    });
+    .AddJsonOptions(options =>
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizzyPop.Api", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "QuizzyPop API", Version = "v1" });
 
-   
+    // JWT Auth in Swagger
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        Description = "Put your access token here",
+        Description = "Enter your JWT Bearer token",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
@@ -90,7 +98,6 @@ builder.Services.AddSwaggerGen(c =>
         BearerFormat = "JWT"
     });
 
-   
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -105,16 +112,21 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
-    var xml = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
-    if (File.Exists(xml))
-        c.IncludeXmlComments(xml, includeControllerXmlComments: true);
+
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, $"{typeof(Program).Assembly.GetName().Name}.xml");
+    if (File.Exists(xmlPath))
+        c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
 
-//Fluent Validation
+// --------------------
+// FluentValidation
+// --------------------
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
-//Repositories & Services
+// --------------------
+// Repositories & Services
+// --------------------
 builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuizService, QuizService>();
@@ -122,25 +134,35 @@ builder.Services.AddScoped<IQuizQuestionService, QuizQuestionService>();
 
 var app = builder.Build();
 
-//Global Error Handler
-app.Use(async (ctx, next) =>
+// --------------------
+// Global Error Handler
+// --------------------
+app.Use(async (context, next) =>
 {
-    try { await next(); }
+    try
+    {
+        await next();
+    }
     catch (Exception ex)
     {
-        app.Logger.LogError(ex, "Unhandled exception");
-        ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
-        await ctx.Response.WriteAsJsonAsync(new
+        app.Logger.LogError(ex, "Unhandled exception occurred");
+
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        context.Response.ContentType = "application/json";
+
+        await context.Response.WriteAsJsonAsync(new
         {
             type = "https://httpstatuses.com/500",
             title = "An unexpected error occurred.",
             status = 500,
-            traceId = ctx.TraceIdentifier
+            traceId = context.TraceIdentifier
         });
     }
 });
 
-//Middleware Pipeline
+// --------------------
+// Middleware Pipeline
+// --------------------
 if (app.Environment.IsDevelopment())
 {
     DBInit.Seed(app);
@@ -149,9 +171,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseStaticFiles();
-
 app.UseCors("CorsPolicy");
-app.UseAuthentication(); 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

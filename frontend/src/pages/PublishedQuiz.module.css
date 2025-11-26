@@ -62,3 +62,8 @@
   color: #667eea;
   word-break: break-all;
 }
+
+.centerRow {
+  display: flex;
+  justify-content: center;
+}

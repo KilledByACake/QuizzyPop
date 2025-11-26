@@ -63,7 +63,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    transform: translateY(-40px); 
 }
+
 
 .mascot {
     width: min(500px, 80vw);  /* Changed from 450px, 70vw */

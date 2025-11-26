@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import api from "../api"; // samme som i QuizContext
+import api from "../api"; // same as in QuizContext
+import styles from "./TakingQuiz.module.css";
 
 interface Question {
   id: number;
@@ -139,27 +140,27 @@ const TakingQuiz = () => {
   // ====== RENDER ======
 
   if (loading) return <p>Laster quiz...</p>;
-  if (error) return <p className="error-text">{error}</p>;
+  if (error) return <p className={styles["error-text"]}>{error}</p>;
   if (!quiz || !currentQuestion) return <p>Fant ikke quiz.</p>;
 
   const currentSelected = selectedAnswers[currentQuestion.id];
 
   return (
-    <section className="qp-page taking-quiz-page">
-      <div className="taking-container">
-        <header className="taking-header">
+    <section className={`qp-page ${styles["taking-quiz-page"]}`}>
+      <div className={styles["taking-container"]}>
+      <header className={styles["taking-header"]}>
           <h1>{quiz.title}</h1>
           <p>
             Question {currentIndex + 1} of {totalQuestions}
           </p>
         </header>
 
-        <div className="quiz-card">
+        <div className={styles["quiz-card"]}>
           <h2>{currentQuestion.text}</h2>
 
-          <div className="answers">
+          <div className={styles.answers}>
             {currentQuestion.choices.map((choice, index) => (
-              <label className="answer-option" key={index}>
+              <label className={styles["answer-option"]} key={index}>
                 <input
                   type="radio"
                   name={`question-${currentQuestion.id}`}
@@ -176,11 +177,12 @@ const TakingQuiz = () => {
           </div>
         </div>
 
-        <div className="nav-buttons">
+        <div className={styles["nav-buttons"]}>
           {currentIndex > 0 ? (
             <button
               type="button"
-              className="btn-nav btn-prev"
+              className={`${styles["btn-nav"]} ${styles["btn-prev"]}`}
+
               onClick={handlePrevious}
             >
               ← Previous
@@ -192,7 +194,7 @@ const TakingQuiz = () => {
           {isLastQuestion ? (
             <button
               type="button"
-              className="btn-finish"
+              className={`${styles["btn-nav"]} ${styles["btn-finish"]}`}
               onClick={handleSubmit}
               disabled={!allAnswered || submitting}
             >
@@ -201,7 +203,7 @@ const TakingQuiz = () => {
           ) : (
             <button
               type="button"
-              className="btn-nav btn-next"
+              className={`${styles["btn-nav"]} ${styles["btn-next"]}`}
               onClick={handleNext}
               disabled={currentSelected === null || currentSelected === undefined}
             >

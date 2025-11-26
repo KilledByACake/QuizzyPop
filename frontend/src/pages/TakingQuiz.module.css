@@ -1,148 +1,157 @@
- .taking-quiz-page {
-        /* background: #d9f1ff; */
-        min-height: 85vh;
-        padding: 3rem 2rem 5rem;
-        font-family: 'Baloo 2', system-ui, sans-serif;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .taking-container {
-        position: relative;
-        z-index: 1;
-        max-width: 800px;
-        margin: 0 auto;
-    }
-
-    /* === Header === */
-    .taking-header {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 2.5rem;
-        text-align: center;
-    }
-
-    .taking-header .mascot {
-        width: 100px;
-        height: auto;
-    }
-
-    .taking-header h1 {
-        font-size: 2.2rem;
-        color: #004b74;
-        margin-top: 0.5rem;
-    }
-
-    .subtitle {
-        font-size: 1.1rem;
-        color: #0F766E;
-        font-weight: 700;
-    }
-
-    /* === Question Card === */
-    .quiz-card {
-        background: #fff;
-        border-radius: 20px;
-        box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
-        padding: 2rem;
-        margin-bottom: 2rem;
-    }
-
-    .question-title {
-        color: #004b74;
-        font-size: 1.4rem;
-        margin-bottom: 1rem;
-    }
-
-    .question-text {
-        font-size: 1.2rem;
-        color: #111827;
-        margin-bottom: 1.5rem;
-    }
-
-    /* === Answer Options === */
-    .answers {
-        display: flex;
-        flex-direction: column;
-        gap: 1rem;
-    }
-
-    .answer-option {
-        display: flex;
-        align-items: center;
-        background: #f9fafb;
-        padding: 0.8rem 1.2rem;
-        border-radius: 12px;
-        border: 2px solid transparent;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 1rem;
-        font-weight: 600;
-    }
-
-    .answer-option:hover {
-        background: #ccf0ed;
-        border-color: #0F766E;
-    }
-
-    .answer-option input {
-        margin-right: 10px;
-        transform: scale(1.3);
-    }
-
-    /* === Navigation Buttons === */
-    .nav-buttons {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 2rem;
-    }
-
-    .btn-nav,
-    .btn-finish {
-        font-family: 'Baloo 2', system-ui, sans-serif;
-        font-weight: 700;
-        font-size: 1rem;
-        border: none;
-        border-radius: 999px;
-        padding: 0.9rem 2rem;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
-    }
-
-    /* Previous (left side, gray) */
-    .btn-prev {
-        background: #9ca3af;
-        color: #fff;
-    }
-
-    .btn-prev:hover {
-        background: #b0b6bd;
-        transform: translateY(-2px);
-    }
-
-    /* Next (right side, orange) */
-    .btn-next {
-        background: #0F766E;
-        color: #fff;
-        box-shadow: 0 4px 0 #034943;
-    }
-
-    .btn-next:hover {
-        background: #0F766E;
-        transform: translateY(-2px);
-    }
-
-    /* Finish (green) */
-    .btn-finish {
-        background: #10b981;
-        color: #fff;
-        box-shadow: 0 4px 0 #0e8f65;
-    }
-
-    .btn-finish:hover {
-        background: #13d198;
-        transform: translateY(-2px);
-    }
+.taking-quiz-page {
+    /* background: var(--qp-blue-soft); */
+    min-height: 85vh;
+    padding: 3rem 2rem 5rem;
+    font-family: var(--qp-font-main);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .taking-container {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* === Header === */
+  .taking-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 2.5rem;
+    text-align: center;
+  }
+  
+  .taking-header .mascot {
+    width: 100px;
+    height: auto;
+  }
+  
+  .taking-header h1 {
+    font-size: 2.2rem;
+    color: var(--qp-blue);
+    margin-top: 0.5rem;
+  }
+  
+  .subtitle {
+    font-size: 1.1rem;
+    color: var(--qp-primary);
+    font-weight: 700;
+  }
+  
+  /* === Question Card === */
+  .quiz-card {
+    background: var(--qp-white);
+    border-radius: 20px;
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .question-title {
+    color: var(--qp-blue);
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+  }
+  
+  .question-text {
+    font-size: 1.2rem;
+    color: var(--qp-gray-900);
+    margin-bottom: 1.5rem;
+  }
+  
+  /* === Answer Options === */
+  .answers {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .answer-option {
+    display: flex;
+    align-items: center;
+    background: var(--qp-gray-50);
+    padding: 0.8rem 1.2rem;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  
+  .answer-option:hover {
+    background: var(--qp-primary-soft);
+    border-color: var(--qp-primary);
+  }
+  
+  .answer-option input {
+    margin-right: 10px;
+    transform: scale(1.3);
+  }
+  
+  /* === Navigation Buttons === */
+  .nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+  }
+  
+  .btn-nav,
+  .btn-finish {
+    font-family: var(--qp-font-main);
+    font-weight: 700;
+    font-size: 1rem;
+    border: none;
+    border-radius: 999px;
+    padding: 0.9rem 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Previous (left side, gray) */
+  .btn-prev {
+    background: var(--qp-gray-400);
+    color: var(--qp-white);
+  }
+  
+  .btn-prev:hover {
+    background: var(--qp-border-subtle);
+    transform: translateY(-2px);
+  }
+  
+  /* Next (right side, primary) */
+  .btn-next {
+    background: var(--qp-primary);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-primary-dark);
+  }
+  
+  .btn-next:hover {
+    background: var(--qp-primary);
+    transform: translateY(-2px);
+  }
+  
+  /* Finish (green) */
+  .btn-finish {
+    background: var(--qp-success);
+    color: var(--qp-white);
+    box-shadow: 0 4px 0 var(--qp-success-dark);
+  }
+  
+  .btn-finish:hover {
+    background: var(--qp-success-bright);
+    transform: translateY(-2px);
+  }
+  
+  /* Error text */
+  .error-text {
+    color: var(--qp-danger);
+    font-weight: 600;
+    text-align: center;
+    margin-top: 1rem;
+  }
+  

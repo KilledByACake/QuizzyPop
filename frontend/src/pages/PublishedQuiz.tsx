@@ -10,7 +10,7 @@ export default function PublishedQuiz() {
   return (
     <div className={styles.publishedPage}>
       <div className={styles.container}>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className={styles.centerRow}>
           <Mascot variant="celebrate" size="large" />
         </div>
         <h1 className={styles.title}>🎉 Quiz Published!</h1>

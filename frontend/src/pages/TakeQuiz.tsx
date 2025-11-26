@@ -140,16 +140,11 @@ export default function TakeQuiz() {
                 return (
                   <article className={styles["quiz-card"]} key={quiz.id}>
                     <div className={styles["quiz-thumb"]}>
-                      <img
-                        src={imgSrc}
-                        alt={quiz.title}
-                        style={{
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
-                          borderRadius: "12px",
-                        }}
-                      />
+                    <img
+                      src={imgSrc}
+                      alt={quiz.title}
+                      className={styles["quiz-thumb-image"]}
+                    />
                     </div>
 
                     <h3 className={styles["quiz-title"]}>{quiz.title}</h3>

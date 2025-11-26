@@ -56,6 +56,9 @@ namespace QuizzyPop.Services
                 return false;
             }
 
+            if (string.IsNullOrWhiteSpace(dto.Title))
+                throw new ArgumentException("Title is required", nameof(dto.Title));
+
             quiz.Title = dto.Title.Trim();
             quiz.Description = dto.Description ?? string.Empty;
             quiz.ImageUrl = dto.ImageUrl ?? string.Empty;

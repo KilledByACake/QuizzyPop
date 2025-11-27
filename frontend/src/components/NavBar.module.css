@@ -50,7 +50,7 @@
   color: var(--qp-blue);
 }
 
-.navbarBrand img {
+.navbarBrandImg {
   width: 57px;
   height: 57px;
 }
@@ -62,7 +62,7 @@
   font-family: var(--qp-font-special);
 }
 
-/* Main nav links */
+/* Main nav links (desktop default) */
 .navbarNav {
   display: flex;
   gap: var(--qp-space-md);
@@ -123,28 +123,78 @@
   transform: scale(1.05);
 }
 
-/* Focus style for buttons/links */
 .btnOutlineGreen:focus-visible {
   outline: 3px solid var(--qp-primary-dark);
   outline-offset: 2px;
 }
 
-/* Responsive layout */
+/* Hamburger toggle (hidden on desktop by default) */
+.menuToggle {
+  display: none; /* kun mobil viser den */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0.35rem;
+  border: none;
+  background: var(--qp-white);
+  cursor: pointer;
+  border-radius: 999px;
+}
+
+.menuToggle:focus-visible {
+  outline: 2px solid var(--qp-primary);
+  outline-offset: 2px;
+}
+
+.menuBar {
+  width: 20px;
+  height: 2px;
+  border-radius: 999px;
+  background: var(--qp-primary);
+  flex: 0 0 auto;
+}
+
+/* ===== Mobile layout ===== */
 @media (max-width: 850px) {
   .navbarInner {
-    flex-wrap: wrap;
+    padding: var(--qp-space-sm) var(--qp-space-lg);
   }
 
+  .brandText {
+    font-size: 1rem;
+  }
+
+  /* Show hamburger only on phone */
+  .menuToggle {
+    display: inline-flex;
+  }
+
+  /* Turn main nav into dropdown under bar */
   .navbarNav {
-    order: 3;
-    width: 100%;
-    flex-wrap: wrap;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
     margin-left: 0;
+    padding: var(--qp-space-md) var(--qp-space-xl);
+    background: var(--qp-white);
+    box-shadow: 0 4px 12px rgba(15, 118, 110, 0.18);
+    flex-direction: column;
+    gap: var(--qp-space-sm);
+    display: none; /* hidden by default */
+    z-index: 900;
+  }
+
+  .navbarNavOpen {
+    display: flex;
+  }
+
+  .navbarNav a {
+    width: 100%;
   }
 
   .navbarActions {
-    order: 2;
-    width: 100%;
-    justify-content: flex-end;
+    margin-left: auto;
   }
 }

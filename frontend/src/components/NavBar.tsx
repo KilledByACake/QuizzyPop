@@ -1,11 +1,14 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./NavBar.module.css";
 
 export default function NavBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
-  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token"),
+  );
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
 
@@ -14,6 +17,11 @@ export default function NavBar() {
     setToken(null);
     navigate("/login");
   }
+
+  // Lukk meny når route endres
+  useEffect(() => {
+    setIsMenuOpen(false);
+  }, [pathname]);
 
   return (
     <header className={styles.navbar} role="banner">
@@ -36,7 +44,27 @@ export default function NavBar() {
           <span className={styles.brandText}>QuizzyPop</span>
         </Link>
 
-        <nav className={styles.navbarNav} aria-label="Main navigation">
+        {/* Hamburger toggle, vises bare på mobil */}
+        <button
+          type="button"
+          className={styles.menuToggle}
+          aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isMenuOpen}
+          aria-controls="main-nav"
+          onClick={() => setIsMenuOpen((open) => !open)}
+        >
+          <span className={styles.menuBar} />
+          <span className={styles.menuBar} />
+          <span className={styles.menuBar} />
+        </button>
+
+        <nav
+          id="main-nav"
+          className={`${styles.navbarNav} ${
+            isMenuOpen ? styles.navbarNavOpen : ""
+          }`}
+          aria-label="Main navigation"
+        >
           <Link
             to="/"
             className={isActive("/") ? styles.active : undefined}

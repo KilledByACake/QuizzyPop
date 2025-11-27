@@ -1,8 +1,6 @@
 // frontend/src/pages/TakingQuiz.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Loader from "../components/Loader";
-import Mascot from "../components/Mascot";
 import api from "../api";
 
 import Button from "../components/Button";
@@ -43,12 +41,12 @@ const TakingQuiz = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Sett tittel i fanen
+  // Set document title
   useEffect(() => {
     document.title = "Take Quiz - Quizzy Pop";
   }, []);
 
-  // Hent quiz + spørsmål
+  // Fetch quiz + questions
   useEffect(() => {
     if (!id) return;
 
@@ -63,7 +61,7 @@ const TakingQuiz = () => {
 
         setQuiz(res.data);
 
-        // init state for valgte svar (null = ikke besvart ennå)
+        // init state for selected answers (null = not answered yet)
         const initial: Record<number, number | null> = {};
         res.data.questions.forEach((q) => {
           initial[q.id] = null;
@@ -84,6 +82,9 @@ const TakingQuiz = () => {
 
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion = quiz?.questions[currentIndex];
+
+  const progressPercent =
+    totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
 
   const answeredCount =
     quiz?.questions.filter(
@@ -146,7 +147,7 @@ const TakingQuiz = () => {
         answers: payload,
       });
 
-      // Send score/resultat videre til completed-siden
+      // Send score/result to completed page
       navigate(`/quiz/${quiz.id}/completed`, { state: res.data });
     } catch (err) {
       console.error(err);
@@ -163,13 +164,15 @@ const TakingQuiz = () => {
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
         <div className={styles["taking-container"]}>
           <Error message="Mangler quiz-ID i URL." />
-          <Button
-            type="button"
-            variant="gray"
-            onClick={() => navigate(-1)}
-          >
-            ← Tilbake
-          </Button>
+          <div className={styles["error-actions"]}>
+            <Button
+              type="button"
+              variant="gray"
+              onClick={() => navigate(-1)}
+            >
+              ← Tilbake
+            </Button>
+          </div>
         </div>
       </section>
     );
@@ -190,7 +193,7 @@ const TakingQuiz = () => {
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
         <div className={styles["taking-container"]}>
           <Error message={error} />
-          <div style={{ marginTop: "1.5rem" }}>
+          <div className={styles["error-actions"]}>
             <Button
               type="button"
               variant="gray"
@@ -204,6 +207,24 @@ const TakingQuiz = () => {
     );
   }
 
+  // Quiz exists but has no questions
+  if (!loading && quiz && totalQuestions === 0) {
+    return (
+      <section className={`qp-page ${styles["taking-quiz-page"]}`}>
+        <div className={styles["taking-container"]}>
+          <Card variant="elevated" className={styles["quiz-card"]}>
+            <h1 className={styles["question-title"]}>{quiz.title}</h1>
+            <p className={styles["no-questions"]}>
+              This quiz doesn&apos;t have any questions yet. Please check back
+              later.
+            </p>
+          </Card>
+        </div>
+      </section>
+    );
+  }
+
+  // Could not resolve quiz / question
   if (!quiz || !currentQuestion) {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
@@ -221,7 +242,7 @@ const TakingQuiz = () => {
         </div>
       </section>
     );
-  }  
+  }
 
   const currentSelected = selectedAnswers[currentQuestion.id];
 
@@ -231,7 +252,7 @@ const TakingQuiz = () => {
     <section className={`qp-page ${styles["taking-quiz-page"]}`}>
       <div className={styles["taking-container"]}>
         <header className={styles["taking-header"]}>
-          <h1>{quiz.title}</h1>
+          <h1 className={styles["question-title"]}>{quiz.title}</h1>
 
           <div className={styles["stats-row"]}>
             <StatCard
@@ -245,13 +266,24 @@ const TakingQuiz = () => {
               variant="secondary"
             />
           </div>
+
+          <div
+            className={styles["progress-wrapper"]}
+            role="progressbar"
+            aria-label="Quiz progress"
+            aria-valuemin={1}
+            aria-valuemax={totalQuestions}
+            aria-valuenow={currentIndex + 1}
+          >
+            <div
+              className={styles["progress-bar"]}
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
         </header>
 
-        <Card
-          variant="elevated"
-          className={styles["quiz-card"]}
-        >
-          <h2>{currentQuestion.text}</h2>
+        <Card variant="elevated" className={styles["quiz-card"]}>
+          <h2 className={styles["question-text"]}>{currentQuestion.text}</h2>
 
           <div className={styles.answers}>
             {currentQuestion.choices.map((choice, index) => (
@@ -264,7 +296,7 @@ const TakingQuiz = () => {
                   onChange={() =>
                     handleOptionChange(currentQuestion.id, index)
                   }
-                  required={false} // validering håndteres i vår logikk
+                  required={false}
                 />
                 <span>{choice}</span>
               </label>

@@ -22,8 +22,10 @@ export default function Layout({ title }: LayoutProps) {
       {showNav && <NavBar />}
 
       <div className="container-body" style={{ position: "relative", zIndex: 1 }}>
-        <main role="main" className="page-body" >
-          <Outlet />
+        <main role="main" className="page-body">
+          <div key={pathname} className="page-transition">
+            <Outlet />
+          </div>
         </main>
       </div>
 

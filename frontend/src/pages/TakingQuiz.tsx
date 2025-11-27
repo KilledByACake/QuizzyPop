@@ -1,4 +1,3 @@
-// frontend/src/pages/TakingQuiz.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
@@ -180,9 +179,15 @@ const TakingQuiz = () => {
 
   if (loading) {
     return (
-      <section className={`qp-page ${styles["taking-quiz-page"]}`}>
+      <section
+        className={`qp-page ${styles["taking-quiz-page"]}`}
+        aria-busy="true"
+        aria-describedby="quiz-loading"
+      >
         <div className={styles["taking-container"]}>
-          <Loader text="Loading quiz..." />
+          <div id="quiz-loading">
+            <Loader text="Loading quiz..." />
+          </div>
         </div>
       </section>
     );
@@ -270,6 +275,7 @@ const TakingQuiz = () => {
           <div
             className={styles["progress-wrapper"]}
             role="progressbar"
+            tabIndex={0}
             aria-label="Quiz progress"
             aria-valuemin={1}
             aria-valuemax={totalQuestions}
@@ -283,9 +289,17 @@ const TakingQuiz = () => {
         </header>
 
         <Card variant="elevated" className={styles["quiz-card"]}>
-          <h2 className={styles["question-text"]}>{currentQuestion.text}</h2>
+          <h2
+            id={`question-${currentQuestion.id}`}
+            className={styles["question-text"]}
+          >
+            {currentQuestion.text}
+          </h2>
 
-          <div className={styles.answers}>
+          <fieldset
+            className={styles.answers}
+            aria-labelledby={`question-${currentQuestion.id}`}
+          >
             {currentQuestion.choices.map((choice, index) => (
               <label className={styles["answer-option"]} key={index}>
                 <input
@@ -296,12 +310,11 @@ const TakingQuiz = () => {
                   onChange={() =>
                     handleOptionChange(currentQuestion.id, index)
                   }
-                  required={false}
                 />
                 <span>{choice}</span>
               </label>
             ))}
-          </div>
+          </fieldset>
         </Card>
 
         <div className={styles["nav-buttons"]}>

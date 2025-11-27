@@ -1,12 +1,35 @@
 .navbar {
   background-color: var(--qp-white);
-  border-bottom: 1px solid rgba(0,0,0,.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: var(--qp-shadow-sm);
   position: sticky;
   top: 0;
   z-index: 1000;
 }
 
+/* Skip link for keyboard users */
+.skipLink {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: -40px;
+  background: var(--qp-primary);
+  color: var(--qp-white);
+  padding: 0.5rem 1rem;
+  border-radius: var(--qp-radius-full);
+  z-index: 1100;
+  text-decoration: none;
+  font-weight: 600;
+  font-family: var(--qp-font-main);
+}
+
+.skipLink:focus-visible {
+  top: 0.75rem;
+  outline: 2px solid var(--qp-white);
+  outline-offset: 2px;
+}
+
+/* Inner layout */
 .navbarInner {
   max-width: 1200px;
   margin: 0 auto;
@@ -16,6 +39,7 @@
   gap: var(--qp-space-md);
 }
 
+/* Brand */
 .navbarBrand {
   display: flex;
   align-items: center;
@@ -38,6 +62,7 @@
   font-family: var(--qp-font-special);
 }
 
+/* Main nav links */
 .navbarNav {
   display: flex;
   gap: var(--qp-space-md);
@@ -50,17 +75,24 @@
   padding: var(--qp-space-sm) var(--qp-space-md);
   border-radius: var(--qp-radius-sm);
   color: var(--qp-blue);
-  transition: background .15s ease;
+  transition: background 0.15s ease, color 0.15s ease;
 }
 
 .navbarNav a:hover {
   background: var(--qp-gray-100, #f2f6f9);
 }
 
+.navbarNav a:focus-visible {
+  outline: 2px solid var(--qp-primary);
+  outline-offset: 2px;
+}
+
+/* Active route */
 .active {
   background: var(--qp-gray-100, #f2f6f9);
 }
 
+/* Right side actions */
 .navbarActions {
   margin-left: auto;
   display: flex;
@@ -68,10 +100,11 @@
   gap: var(--qp-space-sm);
 }
 
+/* Outline green button (Log in / Account etc.) */
 .btnOutlineGreen {
-  background-color: #fff;
-  color: #1ea672;
-  border: 2px solid #1ea672;
+  background-color: var(--qp-white);
+  color: var(--qp-primary);
+  border: 2px solid var(--qp-primary);
   border-radius: 50px;
   padding: 0.5rem 1.2rem;
   font-weight: 800;
@@ -85,21 +118,30 @@
 }
 
 .btnOutlineGreen:hover {
-  background-color: #1ea672;
-  color: #fff;
+  background-color: var(--qp-primary);
+  color: var(--qp-white);
   transform: scale(1.05);
 }
 
+/* Focus style for buttons/links */
+.btnOutlineGreen:focus-visible {
+  outline: 3px solid var(--qp-primary-dark);
+  outline-offset: 2px;
+}
+
+/* Responsive layout */
 @media (max-width: 850px) {
   .navbarInner {
     flex-wrap: wrap;
   }
+
   .navbarNav {
     order: 3;
     width: 100%;
     flex-wrap: wrap;
     margin-left: 0;
   }
+
   .navbarActions {
     order: 2;
     width: 100%;

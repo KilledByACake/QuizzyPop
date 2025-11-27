@@ -124,3 +124,10 @@
     flex-direction: column;
   }
 }
+
+.formLoader {
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+}
+

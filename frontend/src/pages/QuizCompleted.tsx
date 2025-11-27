@@ -1,4 +1,4 @@
-// frontend/src/pages/QuizCompleted.tsx
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
@@ -22,10 +22,22 @@ const QuizCompleted = () => {
   const location = useLocation();
   const result = location.state as QuizResult | undefined;
 
+  useEffect(() => {
+    if (result) {
+      document.title = `Quiz result - ${result.quizTitle} | Quizzy Pop`;
+    } else {
+      document.title = "Quiz result - Quizzy Pop";
+    }
+  }, [result]);
+
   // Ingen resultater – typisk hvis man hard-refresh'er siden
   if (!result) {
     return (
-      <section className={styles["qp-publish-success"]}>
+      <section
+        className={styles["qp-publish-success"]}
+        aria-live="polite"
+        aria-label="Quiz result not available"
+      >
         <div className={styles["qp-publish__header"]}>
           <Error message="No result data found." />
         </div>
@@ -47,15 +59,25 @@ const QuizCompleted = () => {
   const correctLabel = `${result.correctAnswers}/${result.totalQuestions}`;
 
   return (
-    <section className={styles["qp-publish-success"]}>
+    <section
+      className={styles["qp-publish-success"]}
+      aria-labelledby="quiz-completed-heading"
+      aria-live="polite"
+    >
       <div className={styles["qp-publish__header"]}>
-        <h1>🎉 Great Job!</h1>
+        <h1 id="quiz-completed-heading">🎉 Great Job!</h1>
         <p>
-          You've completed the quiz: <strong>{result.quizTitle}</strong>
+          You&apos;ve completed the quiz: <strong>{result.quizTitle}</strong>
+        </p>
+        {/* Skjult oppsummering for skjermlesere */}
+        <p id="quiz-score-summary" className="sr-only">
+          You scored {result.score} percent, with {result.correctAnswers} correct
+          answers out of {result.totalQuestions} questions. Difficulty level was{" "}
+          {result.difficulty}.
         </p>
       </div>
 
-      <div className={styles["qp-publish__mascot"]}>
+      <div className={styles["qp-publish__mascot"]} aria-hidden="true">
         <Mascot
           variant="celebrate"
           size="large"
@@ -63,7 +85,11 @@ const QuizCompleted = () => {
         />
       </div>
 
-      <Card variant="elevated" className={styles["qp-quiz-card"]}>
+      <Card
+        variant="elevated"
+        className={styles["qp-quiz-card"]}
+        aria-describedby="quiz-score-summary"
+      >
         <header>
           <h2>Your Results</h2>
         </header>

@@ -128,9 +128,9 @@ export default function TakeQuiz() {
   const showError = error && !USE_DEV_MOCK_WHEN_BACKEND_DOWN;
 
   return (
-    <section className={styles["take-quiz-page"]}>
+    <section className={styles["take-quiz-page"]} aria-labelledby="take-quiz-heading">
       <div className={styles["title-row"]}>
-        <h1>Explore Quizzes</h1>
+        <h1 id="take-quiz-heading">Explore Quizzes</h1>
         <p>Loaded quizzes: {sourceQuizzes.length}</p>
       </div>
 
@@ -176,9 +176,19 @@ export default function TakeQuiz() {
         </div>
 
         {/* === Quiz Cards === */}
-        <div className={styles["quiz-grid"]}>
-          {loading && ( <Loader text="Loading quizzes..." />)}
-          {showError && <p className={styles["no-quizzes"]}>{error}</p>}
+        <div
+          className={styles["quiz-grid"]}
+          role="list"
+          aria-live="polite"
+          aria-busy={loading}
+        >
+          {loading && <Loader text="Loading quizzes..." />}
+
+          {showError && (
+            <p className={styles["no-quizzes"]} role="alert">
+              {error}
+            </p>
+          )}
 
           {!loading && !showError && filteredQuizzes.length > 0 && (
             <>
@@ -192,7 +202,11 @@ export default function TakeQuiz() {
                   (quiz as any).questionsCount ?? 0;
 
                 return (
-                  <article className={styles["quiz-card"]} key={quiz.id}>
+                  <article
+                    className={styles["quiz-card"]}
+                    key={quiz.id}
+                    role="listitem"
+                  >
                     <div className={styles["quiz-thumb"]}>
                       <img
                         src={imgSrc}
@@ -216,6 +230,7 @@ export default function TakeQuiz() {
                       type="button"
                       variant="primary"
                       onClick={() => handleTakeQuiz(quiz.id)}
+                      aria-label={`Take quiz: ${quiz.title}`}
                     >
                       Take quiz
                     </Button>
@@ -226,15 +241,18 @@ export default function TakeQuiz() {
           )}
 
           {!loading && !showError && filteredQuizzes.length === 0 && (
-            <div className={styles["no-quizzes"]}>
-              <Mascot />
+            <div className={styles["no-quizzes"]} role="status">
+              <Mascot
+                variant="no-arms"
+                size="medium"
+                alt="No quizzes found illustration"
+              />
               <p>
                 No quizzes found. Try changing filters, searching for something
                 else, or create a new quiz!
               </p>
             </div>
           )}
-
         </div>
       </div>
     </section>

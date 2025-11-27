@@ -1,4 +1,10 @@
+// frontend/src/pages/QuizCompleted.tsx
 import { useLocation, useNavigate } from "react-router-dom";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import StatCard from "../components/StatCard";
+import Error from "../components/Error";
+import Mascot from "../components/Mascot";
 import styles from "./QuizCompleted.module.css";
 
 interface QuizResult {
@@ -16,16 +22,29 @@ const QuizCompleted = () => {
   const location = useLocation();
   const result = location.state as QuizResult | undefined;
 
+  // Ingen resultater – typisk hvis man hard-refresh'er siden
   if (!result) {
     return (
       <section className={styles["qp-publish-success"]}>
         <div className={styles["qp-publish__header"]}>
-          <h1>Quiz Completed</h1>
-          <p>No result data found.</p>
+          <Error message="No result data found." />
+        </div>
+        <div className={styles["qp-publish__actions"]}>
+          <Button
+            type="button"
+            variant="primary"
+            className={`${styles["qp-btn"]} ${styles["qp-btn--primary"]}`}
+            onClick={() => navigate("/quizzes")}
+          >
+            Back to quizzes
+          </Button>
         </div>
       </section>
     );
   }
+
+  const scoreLabel = `${result.score}%`;
+  const correctLabel = `${result.correctAnswers}/${result.totalQuestions}`;
 
   return (
     <section className={styles["qp-publish-success"]}>
@@ -37,50 +56,65 @@ const QuizCompleted = () => {
       </div>
 
       <div className={styles["qp-publish__mascot"]}>
-        <img src="/images/quizzy-celebrate.png" alt="Mascot" />
+        <Mascot
+          variant="celebrate"
+          size="large"
+          alt="QuizzyPop mascot celebrating your results"
+        />
       </div>
 
-      <article className={styles["qp-quiz-card"]}>
+      <Card variant="elevated" className={styles["qp-quiz-card"]}>
         <header>
           <h2>Your Results</h2>
         </header>
 
         <div className={styles["qp-quiz__meta"]}>
-          <span>
-            <strong>{result.correctAnswers}</strong> / {result.totalQuestions}{" "}
-            correct
-          </span>
-          <span>
-            Score: <strong>{result.score}%</strong>
-          </span>
-          <span>Difficulty: {result.difficulty}</span>
+          <StatCard
+            number={correctLabel}
+            label="Correct answers"
+            variant="primary"
+          />
+          <StatCard
+            number={scoreLabel}
+            label="Score"
+            variant="secondary"
+          />
+          <StatCard
+            number={result.difficulty}
+            label="Difficulty"
+            variant="secondary"
+          />
         </div>
 
         {(result.feedbackMessages?.length ?? 0) > 0 && (
-            <div className={styles["qp-feedback"]}>
-                {result.feedbackMessages!.map((msg, i) => (
-                    <p className={styles["qp-feedback-line"]} key={i}>
-                        {msg}
-                    </p>
-                 ))}
+          <div className={styles["qp-feedback"]}>
+            {result.feedbackMessages!.map((msg, i) => (
+              <p className={styles["qp-feedback-line"]} key={i}>
+                {msg}
+              </p>
+            ))}
           </div>
-        )} 
-      </article>
+        )}
+      </Card>
 
       <div className={styles["qp-publish__actions"]}>
-        <button
+        <Button
+          type="button"
+          variant="primary"
           className={`${styles["qp-btn"]} ${styles["qp-btn--primary"]}`}
           onClick={() => navigate("/quizzes")}
         >
           Take another quiz
-        </button>
+        </Button>
 
-        <button
+        <Button
+          type="button"
+          variant="gray"
           className={`${styles["qp-btn"]} ${styles["qp-btn--secondary"]}`}
           onClick={() => navigate(`/quiz/${result.quizId}/take`)}
         >
           Retake quiz 🔁
-        </button>
+        </Button>
       </div>
     </section>
   );

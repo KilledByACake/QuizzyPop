@@ -1,4 +1,4 @@
-.taking-quiz-page {
+  .taking-quiz-page {
     /* background: var(--qp-blue-soft); */
     min-height: 85vh;
     padding: 3rem 2rem 5rem;
@@ -154,4 +154,10 @@
     text-align: center;
     margin-top: 1rem;
   }
-  
+
+  .stats-row {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+  flex-wrap: wrap;
+  }

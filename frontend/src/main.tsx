@@ -19,7 +19,9 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import TakeQuiz from "./pages/TakeQuiz";
 import TakingQuiz from "./pages/TakingQuiz";
 import QuizCompleted from "./pages/QuizCompleted";
-
+import MyPage from "./pages/MyPage";
+import EditQuiz from "./pages/EditQuiz";
+import PublishedQuiz from "./pages/PublishedQuiz";
 
 // Render the application
 createRoot(document.getElementById("root")!).render(
@@ -51,6 +53,12 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/quizzes" element={<TakeQuiz />} />
               <Route path="/quiz/:id/take" element={<TakingQuiz />} />
               <Route path="/quiz/:id/completed" element={<QuizCompleted />} />  
+
+              <Route path="/mypage" element={<MyPage />} />
+              <Route path="/quiz/:id/edit" element={<EditQuiz />} />
+              <Route path="/quiz/:id/published" element={<PublishedQuiz />} />
+
+
 
               {/* Catch-all */}
               <Route path="*" element={<Navigate to="/" replace />} />

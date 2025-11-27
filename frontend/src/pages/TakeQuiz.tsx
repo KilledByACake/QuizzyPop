@@ -8,8 +8,44 @@ import { useNavigate } from "react-router-dom";
 import { useQuizContext } from "../contexts/QuizContext";
 import Button from "../components/Button";
 import FilterDropdown from "../components/FilterDropdown";
-import SearchBar from "../components/SearchBar";   // <---- NY
+import SearchBar from "../components/SearchBar";
 import styles from "./TakeQuiz.module.css";
+
+// for testing,
+const USE_DEV_MOCK_WHEN_BACKEND_DOWN = true;
+
+type QuizSummary = {
+  id: number;
+  title: string;
+  difficulty: string;
+  imageUrl?: string | null;
+  questionsCount?: number;
+};
+
+// En enkel mock-liste til frontend-utvikling
+const MOCK_QUIZZES: QuizSummary[] = [
+  {
+    id: 101,
+    title: "Math Basics",
+    difficulty: "easy",
+    imageUrl: "/images/default-cover.png",
+    questionsCount: 8,
+  },
+  {
+    id: 102,
+    title: "World Capitals",
+    difficulty: "medium",
+    imageUrl: "/images/default-cover.png",
+    questionsCount: 12,
+  },
+  {
+    id: 103,
+    title: "Science Trivia",
+    difficulty: "hard",
+    imageUrl: "/images/default-cover.png",
+    questionsCount: 15,
+  },
+];
 
 export default function TakeQuiz() {
   const { quizzes, loading, error, fetchQuizzes } = useQuizContext();
@@ -42,20 +78,34 @@ export default function TakeQuiz() {
     setDifficultyFilter((prev) => (prev === normalized ? "" : normalized));
   };
 
+  // Velg om vi skal bruke ekte quizer eller mock
+  const sourceQuizzes = useMemo(() => {
+    if (
+      USE_DEV_MOCK_WHEN_BACKEND_DOWN &&
+      (!quizzes.length || error)
+    ) {
+      return MOCK_QUIZZES;
+    }
+    return quizzes;
+  }, [quizzes, error]);
+
   // Filter logikk
   const filteredQuizzes = useMemo(() => {
-    return quizzes.filter((quiz) => {
+    return sourceQuizzes.filter((quiz) => {
+      const title = quiz.title ?? "";
+      const difficulty = quiz.difficulty ?? "";
+
       const matchesSearch =
         search.trim().length === 0 ||
-        quiz.title.toLowerCase().includes(search.toLowerCase());
+        title.toLowerCase().includes(search.toLowerCase());
 
       const matchesDifficulty =
         difficultyFilter === "" ||
-        quiz.difficulty.toLowerCase() === difficultyFilter;
+        difficulty.toLowerCase() === difficultyFilter;
 
       return matchesSearch && matchesDifficulty;
     });
-  }, [quizzes, search, difficultyFilter]);
+  }, [sourceQuizzes, search, difficultyFilter]);
 
   const handleTakeQuiz = (id: number) => {
     navigate(`/quiz/${id}/take`);
@@ -73,17 +123,18 @@ export default function TakeQuiz() {
   const sortOptions = ["Newest", "Oldest", "Most Played"];
   const difficultyOptions = ["Easy", "Medium", "Hard"];
 
+  const showError = error && !USE_DEV_MOCK_WHEN_BACKEND_DOWN;
+
   return (
     <section className={styles["take-quiz-page"]}>
       <div className={styles["title-row"]}>
         <h1>Explore Quizzes</h1>
-        <p>Loaded quizzes: {quizzes.length}</p>
+        <p>Loaded quizzes: {sourceQuizzes.length}</p>
       </div>
 
       <div className={styles["tq-grid"]}>
         {/* === Search + filters === */}
         <div className={styles["filter-bar"]}>
-          {/* 🔍 Bruk SearchBar */}
           <SearchBar
             value={search}
             onChange={setSearch}
@@ -125,9 +176,9 @@ export default function TakeQuiz() {
         {/* === Quiz Cards === */}
         <div className={styles["quiz-grid"]}>
           {loading && <p>Loading quizzes...</p>}
-          {error && <p className={styles["no-quizzes"]}>{error}</p>}
+          {showError && <p className={styles["no-quizzes"]}>{error}</p>}
 
-          {!loading && !error && filteredQuizzes.length > 0 && (
+          {!loading && !showError && filteredQuizzes.length > 0 && (
             <>
               {filteredQuizzes.map((quiz) => {
                 const imgSrc =
@@ -135,16 +186,17 @@ export default function TakeQuiz() {
                     ? quiz.imageUrl
                     : "/images/default-cover.png";
 
-                const questionsCount = (quiz as any).questionsCount ?? 0;
+                const questionsCount =
+                  (quiz as any).questionsCount ?? 0;
 
                 return (
                   <article className={styles["quiz-card"]} key={quiz.id}>
                     <div className={styles["quiz-thumb"]}>
-                    <img
-                      src={imgSrc}
-                      alt={quiz.title}
-                      className={styles["quiz-thumb-image"]}
-                    />
+                      <img
+                        src={imgSrc}
+                        alt={quiz.title}
+                        className={styles["quiz-thumb-image"]}
+                      />
                     </div>
 
                     <h3 className={styles["quiz-title"]}>{quiz.title}</h3>
@@ -171,7 +223,7 @@ export default function TakeQuiz() {
             </>
           )}
 
-          {!loading && !error && filteredQuizzes.length === 0 && (
+          {!loading && !showError && filteredQuizzes.length === 0 && (
             <p className={styles["no-quizzes"]}>
               No quizzes available right now.
             </p>

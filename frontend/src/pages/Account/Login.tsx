@@ -9,6 +9,7 @@ import Input from '../../components/Input';
 import Button from '../../components/Button';
 import styles from './Login.module.css';
 import Mascot from '../../components/Mascot';
+import Loader from '../../components/Loader';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -83,13 +84,12 @@ export default function Login() {
             {...register('password')}
           />
 
-          <Button
-            type="submit"
-            variant="primary"
-            fullWidth
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? 'Logging in...' : 'Log In'}
+          <Button type="submit" variant="primary" fullWidth disabled={isSubmitting}>
+            {isSubmitting && (
+              <div className={styles.formLoader}>
+                <Loader size="small" text="Logging in..." />
+              </div>
+            )}
           </Button>
 
           <p className={styles.footer}>

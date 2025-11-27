@@ -1,6 +1,8 @@
 // frontend/src/pages/TakingQuiz.tsx
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Loader from "../components/Loader";
+import Mascot from "../components/Mascot";
 import api from "../api";
 
 import Button from "../components/Button";
@@ -177,7 +179,7 @@ const TakingQuiz = () => {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
         <div className={styles["taking-container"]}>
-          <Loader text="Laster quiz..." />
+          <Loader text="Loading quiz..." />
         </div>
       </section>
     );
@@ -206,20 +208,20 @@ const TakingQuiz = () => {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
         <div className={styles["taking-container"]}>
-          <Error message="Fant ikke quiz." />
-          <div style={{ marginTop: "1.5rem" }}>
+          <Error message="Quiz not found." />
+          <div className={styles["not-found-actions"]}>
             <Button
               type="button"
               variant="gray"
               onClick={() => navigate(-1)}
             >
-              ← Tilbake
+              ← Back
             </Button>
           </div>
         </div>
       </section>
     );
-  }
+  }  
 
   const currentSelected = selectedAnswers[currentQuestion.id];
 

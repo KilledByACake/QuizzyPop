@@ -224,16 +224,22 @@
     filter: brightness(1.05);
   }
   
-  /* Message when no quizzes found */
-  .no-quizzes {
-    color: var(--qp-gray-700);
-    font-weight: 600;
-    font-family: var(--qp-font-main);
-  }
-  
-  .open {
-    /* intentionally left blank for state hook if needed */
-  }
+  /* Message + illustration when no quizzes found */
+.no-quizzes {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--qp-space-md);
+  color: var(--qp-gray-700);
+  font-weight: 600;
+  font-family: var(--qp-font-main);
+  text-align: center;
+}
+
+.no-quizzes img {
+  max-width: 220px;
+}
 
   @media (max-width: 768px) {
     .take-quiz-page {

@@ -9,6 +9,8 @@ import { useQuizContext } from "../contexts/QuizContext";
 import Button from "../components/Button";
 import FilterDropdown from "../components/FilterDropdown";
 import SearchBar from "../components/SearchBar";
+import Loader from "../components/Loader";
+import Mascot from "../components/Mascot";
 import styles from "./TakeQuiz.module.css";
 
 // for testing,
@@ -175,7 +177,7 @@ export default function TakeQuiz() {
 
         {/* === Quiz Cards === */}
         <div className={styles["quiz-grid"]}>
-          {loading && <p>Loading quizzes...</p>}
+          {loading && ( <Loader text="Loading quizzes..." />)}
           {showError && <p className={styles["no-quizzes"]}>{error}</p>}
 
           {!loading && !showError && filteredQuizzes.length > 0 && (
@@ -224,10 +226,15 @@ export default function TakeQuiz() {
           )}
 
           {!loading && !showError && filteredQuizzes.length === 0 && (
-            <p className={styles["no-quizzes"]}>
-              No quizzes available right now.
-            </p>
+            <div className={styles["no-quizzes"]}>
+              <Mascot />
+              <p>
+                No quizzes found. Try changing filters, searching for something
+                else, or create a new quiz!
+              </p>
+            </div>
           )}
+
         </div>
       </div>
     </section>

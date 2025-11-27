@@ -9,6 +9,7 @@ import Button from '../../components/Button';
 import Mascot from '../../components/Mascot';
 import { api } from '../../api';
 import styles from './Register.module.css';
+import Loader from '../../components/Loader';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -148,9 +149,11 @@ export default function Register() {
             fullWidth
             disabled={isSubmitting}
           >
-            {isSubmitting ? 'Creating account...' : 'Sign Up'}
-          </Button>
-
+            {isSubmitting && (
+              <div className={styles.formLoader}>
+                <Loader size="small" text="Creating account..." />
+              </div>
+            )}
           <p className={styles.footer}>
             Already have an account? <Link to="/login">Log in!</Link>
           </p>

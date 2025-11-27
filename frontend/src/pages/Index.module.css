@@ -32,26 +32,14 @@
     position: relative;
     z-index: 2;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: var(--qp-space-xl);
+    justify-content: space-between;   
+    align-items: flex-start;          
+    margin-top: var(--qp-space-lg);
     padding: 0 var(--qp-space-lg);
     width: 100%;
     max-width: 1400px;
 }
 
-.cta-row > a:first-child {
-    position: absolute;
-    left: 5%;
-    transform: translateY(-30px);
-}
-
-.cta-row > a:last-child {
-    position: absolute;
-    right: 5%;
-    transform: translateY(-30px);
-    
-}
 
 .cta-row > a {
     align-self: center;
@@ -77,8 +65,8 @@
 
 .speech {
   position: absolute;
-  right: -150px;
-  top: -5px;
+  right: -110px;
+  top: -30px;
   font-family: var(--qp-font-main);
   max-width: 220px;
   background: var(--qp-white);

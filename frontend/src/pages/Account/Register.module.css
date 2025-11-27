@@ -44,19 +44,6 @@
   text-align: left;
 }
 
-.roleGroup {
-  margin-bottom: 0.5rem;
-}
-
-.inlineGroup {
-  display: flex;
-  gap: 0.75rem;
-}
-
-.inlineGroup > div {
-  flex: 1;
-}
-
 .serverError {
   background: var(--qp-warning-soft);
   color: var(--qp-warning);
@@ -100,16 +87,6 @@
   text-decoration: underline;
 }
 
-.notImplemented {
-  margin-top: 1rem;
-  background: var(--qp-danger-soft);
-  color: var(--qp-danger);
-  border: 1px solid var(--qp-danger-soft-accent);
-  padding: 0.6rem 0.9rem;
-  border-radius: 8px;
-  font-size: 0.85rem;
-}
-
 @media (max-width: 640px) {
   .registerPage {
     padding: 1.5rem;
@@ -119,15 +96,10 @@
     padding: 2rem 1.75rem 2rem;
     border-radius: 1.5rem;
   }
-
-  .inlineGroup {
-    flex-direction: column;
-  }
 }
 
-.formLoader {
-  margin-bottom: 1rem;
-  display: flex;
-  justify-content: center;
+.formLoaderIcon {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 0.5rem;
 }
-

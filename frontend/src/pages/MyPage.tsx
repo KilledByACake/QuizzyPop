@@ -20,7 +20,11 @@ interface MeResponse {
 interface QuizSummary {
   id: number;
   title: string;
-  category: string;
+  category:{
+    id: number;
+    name: string;
+    description?: string;
+  }
   createdAt: string;
   difficulty: string;
 }
@@ -50,14 +54,14 @@ const MyPage = () => {
         {
           id: 10,
           title: "My First Quiz",
-          category: "Math",
+          category: {id:1, name:"Math",description:""},
           createdAt: "2024-05-01T00:00:00Z",
           difficulty: "easy",
         },
         {
           id: 11,
           title: "History Challenge",
-          category: "History",
+          category: {id:2,name:"History",description:""},
           createdAt: "2024-05-12T00:00:00Z",
           difficulty: "medium",
         },
@@ -160,7 +164,7 @@ const MyPage = () => {
                   className={styles.quizCard}
                 >
                   <h3>{quiz.title}</h3>
-                  <p>{quiz.category}</p>
+                  <p>{quiz.category.name}</p>
                   <p>
                     Created:{" "}
                     {new Date(quiz.createdAt).toLocaleDateString()}

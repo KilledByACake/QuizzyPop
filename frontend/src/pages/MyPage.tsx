@@ -293,38 +293,41 @@ const MyPage = () => {
           )}
         </section>
 
-        {/* My Taken Quizzes */}
+                {/* My Taken Quizzes */}
         <section>
           <h2>My Taken Quizzes</h2>
 
           {takenQuizzes.length === 0 ? (
             <p>You haven't taken any quizzes yet.</p>
           ) : (
-            <div className={styles.quizList}>
-              {takenQuizzes.map((attempt) => (
-                <Card
-                  key={`${attempt.quizId}-${attempt.completedAt}`}
-                  variant="outlined"
-                  className={styles.quizCard}
-                >
-                  <h3>{attempt.quizTitle}</h3>
-                  <p>
-                    Score: <strong>{attempt.score}%</strong> · Date:{" "}
-                    {formatDate(attempt.completedAt)}
-                  </p>
-                  <div className={styles.quizActions}>
-                    <Button
-                      variant="primary"
-                      onClick={() => handleViewQuiz(attempt.quizId)}
-                    >
-                      View
-                    </Button>
-                  </div>
-                </Card>
-              ))}
+            <div className={styles.takenListWrapper}>
+              {/* Scrollable area with max 3 cards visible */}
+              <div className={styles.takenList}>
+                {takenQuizzes.map((attempt) => (
+                  <Card
+                    key={`${attempt.quizId}-${attempt.completedAt}`}
+                    variant="default"
+                    className={styles.takenCard}
+                  >
+                    <div className={styles.takenHeader}>
+                      <h3 className={styles.takenTitle}>{attempt.quizTitle}</h3>
+                      <span className={styles.takenScore}>
+                        {attempt.score}%
+                      </span>
+                    </div>
+
+                    <p className={styles.takenMeta}>
+                      Completed:{" "}
+                      {new Date(attempt.completedAt).toLocaleString()}
+                    </p>
+                  </Card>
+                ))}
+              </div>
             </div>
           )}
         </section>
+
+
       </div>
     </section>
   );

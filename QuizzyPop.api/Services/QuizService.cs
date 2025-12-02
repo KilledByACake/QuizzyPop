@@ -122,6 +122,7 @@ namespace QuizzyPop.Services
             Score = correctCount,
             CorrectAnswers = correctCount,
             TotalQuestions = total,
+            Difficulty = quiz.Difficulty,
             FeedbackMessages = messages
         };
     }

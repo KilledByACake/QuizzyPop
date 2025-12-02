@@ -16,6 +16,7 @@ namespace QuizzyPop.Models.Dtos
         public int Score { get; set; }
         public int CorrectAnswers { get; set; }
         public int TotalQuestions { get; set; }
+        public string Difficulty { get; set; } = "unknown";
         public List<string> FeedbackMessages { get; set; } = new();
     }
 }

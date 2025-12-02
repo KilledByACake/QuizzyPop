@@ -4,45 +4,30 @@
     align-items: center;
     width: 100%;
     min-height: 100vh;
-    justify-content: center;
+    padding: var(--qp-space-xl) var(--qp-space-md);
 }
 
+/* Title SVG - much wider to fit complete text */
 .arc-title {
-    width: min(900px, 95vw);
-    margin: var(--qp-space-lg) auto 0;
+    width: min(2000px, 98vw);
+    height: 350px;
+    margin: 0 auto var(--qp-space-lg);  /* Less margin below - title moves up */
     display: block;
     position: relative;
     z-index: 2;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50px);  
 }
-
 .arc-text {
     font-weight: 800;
     font-family: var(--qp-font-special);
-    font-size: clamp(28px, 6vw, 56px);
+    font-size: 72px;  /* Fixed large size */
     letter-spacing: 8px;
     fill: var(--qp-primary);
     paint-order: stroke;
-    stroke:  var(--qp-white);
+    stroke: var(--qp-white);
     stroke-opacity: 0.35;
     stroke-width: 5px;
-}
-
-/* Layout for buttons and mascot */
-.cta-row {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    justify-content: space-between;   
-    align-items: flex-start;          
-    margin-top: var(--qp-space-lg);
-    padding: 0 var(--qp-space-lg);
-    width: 100%;
-    max-width: 1400px;
-}
-
-
-.cta-row > a {
-    align-self: center;
 }
 
 /* Mascot & Speech Bubble */
@@ -51,13 +36,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    transform: translateY(-40px); 
+    margin: 0;
+    width: 500px;
+    height: 500px;
 }
 
-
 .mascot {
-    width: min(500px, 80vw);  /* Changed from 450px, 70vw */
-    height: 500px; /* Add fixed height if needed */
+    width: 100%;
+    height: 100%;
     filter: drop-shadow(0 10px 0 rgba(0,0,0,.15));
     display: block;
     background: transparent !important;
@@ -65,8 +51,8 @@
 
 .speech {
   position: absolute;
-  right: -110px;
-  top: -30px;
+  right: -120px;
+  top: 20px;
   font-family: var(--qp-font-main);
   max-width: 220px;
   background: var(--qp-white);
@@ -90,52 +76,109 @@
   border-right-color: var(--qp-white);
 }
 
-
-/* Call-to-Action Buttons */
-.btn-cta {
+/* Buttons on sides of mascot */
+.cta-row {
     position: relative;
     z-index: 2;
-    display: inline-block;
-    font-size: clamp(18px, 2.2vw, 24px);
-    font-weight: 800;
-    text-decoration: none;
-    padding: var(--qp-space-lg) var(--qp-space-xl);
-    color: var(--qp-white);
-    background: var(--qp-primary);
-    border-radius: var(--qp-radius-full);
-    box-shadow: 0 9px 0 var(--qp-primary-dark), 0 0 0 4px var(--qp-white) inset;
-    transition: transform .05s ease-in-out;
-    text-align: center;
-    font-family: var(--qp-font-main);
+    display: flex;
+    gap: 0;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: -280px;  /* Much higher - overlaps with mascot */
 }
 
-.btn-cta:hover {
-    transform: translateY(4px);
-    box-shadow: 0 5px 0 var(--qp-primary-dark), 0 0 0 4px var(--qp-white) inset;
+.cta-row > a {
+    text-decoration: none;
+    flex: 0 0 auto;
+}
+
+/* Position first button on left */
+.cta-row > a:first-child {
+    margin-right: auto;
+}
+
+/* Position second button on right */
+.cta-row > a:last-child {
+    margin-left: auto;
 }
 
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
+    .arc-text {
+        font-size: 56px;
+    }
+    
     .cta-row {
-        grid-template-columns: 1fr;
-        grid-template-rows: auto auto auto;
-        gap: var(--qp-space-md);
+        max-width: 900px;
+        margin-top: -220px;
     }
-    
-    .cta-row > a:first-child {
-        order: 1;
+}
+
+@media (max-width: 768px) {
+    .home-hero {
+        padding: var(--qp-space-lg) var(--qp-space-sm);
     }
-    
-    .cta-row > a:last-child {
-        order: 2;
+
+    .arc-title {
+        width: 98vw;
+        height: 250px;
+        left: 0;
+        transform: none;
+        margin-bottom: var(--qp-space-lg);
     }
-    
+
+    .arc-text {
+        font-size: 36px;
+        letter-spacing: 4px;
+    }
+
     .mascot-wrap {
-        order: 3;
-        margin-top: var(--qp-space-lg);
+        width: 350px;
+        height: 350px;
+        margin-bottom: var(--qp-space-lg);
     }
 
     .speech {
-        display: none;
+        right: 50%;
+        transform: translateX(50%);
+        top: -60px;
+        max-width: 200px;
+    }
+
+    .speech::after {
+        left: 50%;
+        transform: translateX(-50%) rotate(90deg);
+        top: auto;
+        bottom: -15px;
+        border-right-color: transparent;
+        border-top-color: var(--qp-white);
+    }
+
+    /* Stack buttons below mascot on mobile */
+    .cta-row {
+        flex-direction: column;
+        gap: var(--qp-space-md);
+        width: 100%;
+        max-width: 300px;
+        margin-top: 0;
+    }
+
+    .cta-row > a {
+        width: 100%;
+        margin: 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .arc-text {
+        font-size: 28px;
+        letter-spacing: 2px;
+    }
+
+    .mascot-wrap {
+        width: 280px;
+        height: 280px;
     }
 }

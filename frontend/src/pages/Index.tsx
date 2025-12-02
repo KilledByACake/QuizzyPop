@@ -40,16 +40,15 @@ export default function Index() {
 
   return (
     <section className={styles["home-hero"]}>
-      {/* Curved SVG title text */}
+      {/* Curved SVG title text - wider path for full text */}
       <svg
         className={styles["arc-title"]}
-        viewBox="0 0 900 280"
+        viewBox="0 0 2000 350"
+        preserveAspectRatio="xMidYMid meet"
         aria-hidden="true"
-        width="900"
-        height="280"
       >
         <defs>
-          <path id="titlePath" d="M50,220 C270,40 630,40 850,220" />
+          <path id="titlePath" d="M150,280 C600,70 1400,70 1850,280" />
         </defs>
         <text className={styles["arc-text"]}>
           <textPath href="#titlePath" startOffset="50%" textAnchor="middle">

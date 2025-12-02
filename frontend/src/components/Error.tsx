@@ -1,22 +1,28 @@
 import styles from "./Error.module.css";
 
 interface ErrorProps {
+  /** Error message to display - defaults to generic error text */
   message?: string;
+  /** Optional request/trace ID for debugging */
   requestId?: string;
 }
 
+/**
+ * Error display component for showing user-friendly error messages
+ * Displays custom or default error text with optional request ID for support
+ */
 export default function Error({ message, requestId }: ErrorProps) {
   return (
     <div className={styles.error}>
-      <h1>Feil</h1>
-      <h2>{message ?? "Det har oppstått en feil under behandling av din forespørsel."}</h2>
+      <h1>Error</h1>
+      <h2>{message ?? "An error occurred while processing your request."}</h2>
       {requestId && (
         <p>
-          <strong>Referanse-ID:</strong> <code>{requestId}</code>
+          <strong>Reference ID:</strong> <code>{requestId}</code>
         </p>
       )}
-      <h3>Utviklerinformasjon (kun i produksjon)</h3>
-      <p>Kontakt systemadministrator. Denne informasjonen er logget.</p>
+      <h3>Developer Information (production only)</h3>
+      <p>Contact system administrator. This information has been logged.</p>
     </div>
   );
 }

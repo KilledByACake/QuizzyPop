@@ -3,15 +3,27 @@ import type { KeyboardEvent, ChangeEvent } from 'react';
 import styles from './TagInput.module.css';
 
 interface TagInputProps {
+  /** Label text displayed above the input */
   label?: string;
+  /** Array of current tags */
   value: string[];
+  /** Callback fired when tags array changes */
   onChange: (tags: string[]) => void;
+  /** Error message to display */
   error?: string;
+  /** Maximum number of tags allowed */
   maxTags?: number;
+  /** Placeholder text for the input field */
   placeholder?: string;
+  /** Helper text displayed below label */
   hint?: string;
 }
 
+/**
+ * Tag input component for adding/removing multiple text tags
+ * Supports Enter and comma key to add tags, Backspace to remove last tag
+ * Note: Tag system not yet implemented in backend - prepared for future feature
+ */
 export default function TagInput({
   label = 'Tags',
   value,
@@ -24,6 +36,7 @@ export default function TagInput({
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  /** Add a new tag if valid (not empty, not duplicate, under max limit) */
   const addTag = useCallback((raw: string) => {
     const tag = raw.trim();
     if (!tag) return;
@@ -33,16 +46,18 @@ export default function TagInput({
     setInput('');
   }, [value, onChange, maxTags]);
 
+  /** Remove a specific tag from the array */
   const removeTag = (tag: string) => {
     onChange(value.filter(t => t !== tag));
   };
 
+  /** Handle keyboard shortcuts: Enter/comma to add, Backspace to remove last */
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
       addTag(input);
     } else if (e.key === 'Backspace' && !input && value.length) {
-      // Quick remove last tag
+      // Quick remove last tag when input is empty
       removeTag(value[value.length - 1]);
     } else if (e.key === ',' ) {
       e.preventDefault();
@@ -50,6 +65,7 @@ export default function TagInput({
     }
   };
 
+  /** Add tag on blur if input has content */
   const handleBlur = () => {
     if (input) addTag(input);
   };
@@ -62,11 +78,14 @@ export default function TagInput({
     <div className={styles.wrapper}>
       {label && <label className={styles.label}>{label}</label>}
       {hint && <p className={styles.hint}>{hint}</p>}
+      
+      {/* Tags container with inline input */}
       <div
         className={`${styles.container} ${error ? styles.containerError : ''}`}
         role="list"
         aria-label="Quiz tags"
       >
+        {/* Render existing tags with remove buttons */}
         {value.map(tag => (
           <span key={tag} className={styles.tag} role="listitem">
             <span className={styles.tagText}>{tag}</span>
@@ -80,6 +99,8 @@ export default function TagInput({
             </button>
           </span>
         ))}
+        
+        {/* Input field - only shown if under max limit */}
         {value.length < maxTags && (
           <input
             ref={inputRef}
@@ -93,6 +114,8 @@ export default function TagInput({
           />
         )}
       </div>
+      
+      {/* Tag count and error message row */}
       <div className={styles.metaRow}>
         <span className={styles.count}>{value.length}/{maxTags} tags</span>
         {error && <span className={styles.error}>{error}</span>}

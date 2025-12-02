@@ -2,6 +2,7 @@ import { type ButtonHTMLAttributes } from "react";
 import styles from "./Button.module.css";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  /** Button color/style variant */
   variant?:
     | "primary" // Green solid
     | "secondary" // White with green border
@@ -10,11 +11,17 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | "success" // Bright green (finish/publish)
     | "gray" // Gray (cancel/previous)
     | "link"; // Text-only button
+  /** Button size preset */
   size?: "small" | "medium" | "large" | "xl" | "icon";
+  /** Whether button should stretch to fill container width */
   fullWidth?: boolean;
   children: React.ReactNode;
 }
 
+/**
+ * Reusable button component with multiple variants and sizes
+ * Used throughout the app for actions, navigation, and form submission
+ */
 export default function Button({
   variant = "primary",
   size = "medium",
@@ -25,6 +32,7 @@ export default function Button({
 }: ButtonProps) {
   const { disabled, type, ...rest } = props;
 
+  // Combine style classes based on props
   const classes = [
     styles.btn,
     styles[variant],

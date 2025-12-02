@@ -1,15 +1,10 @@
-import { ChangeEvent } from "react";
+import { type ChangeEvent } from "react";
 
-export type QuizMetaDataProps = {
-  title: string;
-  description: string;
-  category: string;
-  difficulty: string;
-  timeLimit: number;
-  isPublic: boolean;
-  onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-};
-
+/**
+ * Quiz metadata form component for editing quiz details
+ * Contains fields for title, description, category, difficulty, time limit, and visibility
+ * Note: This component appears to be legacy/unused - CreateQuiz.tsx uses a different form structure
+ */
 export default function QuizMetaData({
   title,
   description,
@@ -23,6 +18,7 @@ export default function QuizMetaData({
     <div className="card">
       <div className="card-title">Quiz Details</div>
 
+      {/* Title input */}
       <div className="form-row">
         <label htmlFor="Title">Quiz Title:</label>
         <input
@@ -35,6 +31,7 @@ export default function QuizMetaData({
         />
       </div>
 
+      {/* Description textarea */}
       <div className="form-row">
         <label htmlFor="Description">Description</label>
         <textarea
@@ -47,7 +44,9 @@ export default function QuizMetaData({
         />
       </div>
 
+      {/* Category, Difficulty, Time Limit, and Public toggle row */}
       <div className="form-row-2">
+        {/* Category input */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label htmlFor="Category">Category</label>
           <input
@@ -60,6 +59,7 @@ export default function QuizMetaData({
           />
         </div>
 
+        {/* Difficulty dropdown */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label htmlFor="Difficulty">Difficulty</label>
           <select
@@ -76,6 +76,7 @@ export default function QuizMetaData({
           </select>
         </div>
 
+        {/* Time limit and public visibility toggle */}
         <div style={{ display: "flex", flexDirection: "row", alignItems: "flex-end", gap: "1rem" }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
             <label htmlFor="TimeLimit">Time Limit</label>
@@ -89,6 +90,7 @@ export default function QuizMetaData({
             />
           </div>
 
+          {/* Public/private toggle switch */}
           <label className="switch" style={{ marginBottom: "0.3rem" }}>
             <input
               type="checkbox"
@@ -104,3 +106,20 @@ export default function QuizMetaData({
     </div>
   );
 }
+
+export type QuizMetaDataProps = {
+  /** Quiz title value */
+  title: string;
+  /** Quiz description value */
+  description: string;
+  /** Quiz category value */
+  category: string;
+  /** Difficulty level (Easy/Medium/Hard) */
+  difficulty: string;
+  /** Time limit in minutes */
+  timeLimit: number;
+  /** Whether quiz is publicly visible */
+  isPublic: boolean;
+  /** Handler for all form input changes */
+  onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
+};

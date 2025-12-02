@@ -50,6 +50,10 @@
   color: var(--qp-blue);
 }
 
+.navbarBrand:hover {
+  text-decoration: none;
+}
+
 .navbarBrandImg {
   width: 57px;
   height: 57px;
@@ -60,6 +64,7 @@
   font-size: 1.2rem;
   color: var(--qp-blue);
   font-family: var(--qp-font-special);
+  text-decoration: none;
 }
 
 /* Main nav links (desktop default) */

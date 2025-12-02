@@ -1,28 +1,48 @@
 import type { ChangeEvent } from "react";
 
 export type QuizQuestionProps = {
+  /** Question index in the list */
   index: number;
+  /** Question text/prompt */
   text: string;
+  /** Optional image file attached to question */
   image?: File | null;
+  /** Array of answer options */
   options: string[];
+  /** Point value for this question */
   points: number;
+  /** Time limit for answering (string format) */
   timeLimit: string;
+  /** Explanation shown after answering */
   explanation: string;
+  /** Whether to randomize answer order */
   shuffleAnswers: boolean;
+  /** Whether question must be answered */
   required: boolean;
+  /** Handler for text/number/checkbox input changes */
   onChange: (
     e: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     index: number
   ) => void;
+  /** Handler for updating a specific answer option */
   onOptionChange: (index: number, optIndex: number, value: string) => void;
+  /** Handler for adding a new answer option */
   onAddOption: (index: number) => void;
+  /** Handler for removing this question */
   onRemove: (index: number) => void;
+  /** Handler for moving question up in the list */
   onMoveUp: (index: number) => void;
+  /** Handler for moving question down in the list */
   onMoveDown: (index: number) => void;
 };
 
+/**
+ * Individual question editor component for quiz creation
+ * Provides controls for question text, image, multiple options, points, time limit, and settings
+ * Note: This appears to be legacy/unused - AddQuestions.tsx uses a different structure
+ */
 export default function QuizQuestion({
   index,
   text,
@@ -42,6 +62,7 @@ export default function QuizQuestion({
 }: QuizQuestionProps) {
   return (
     <div className="card question-card" data-question-index={index}>
+      {/* Question header with reorder/delete controls */}
       <div className="question-header">
         <h3>Question {index + 1}</h3>
         <div className="question-controls">
@@ -72,6 +93,7 @@ export default function QuizQuestion({
         </div>
       </div>
 
+      {/* Question text input */}
       <div className="form-row">
         <label htmlFor={`text-${index}`}>Question Text</label>
         <input
@@ -83,6 +105,7 @@ export default function QuizQuestion({
         />
       </div>
 
+      {/* Image upload with preview */}
       <div className="form-row upload-row">
         <div className="upload-box" role="group" aria-label="Upload image">
           <input
@@ -93,11 +116,21 @@ export default function QuizQuestion({
             onChange={(e) => onChange(e, index)}
           />
           <label htmlFor={`image-${index}`} className="upload-label">
-            Upload image
+            {image ? image.name : "Upload image"}
           </label>
         </div>
+        {image && (
+          <div className="image-preview">
+            <img 
+              src={URL.createObjectURL(image)} 
+              alt="Question preview" 
+              style={{ maxWidth: "200px", maxHeight: "150px", marginTop: "10px" }}
+            />
+          </div>
+        )}
       </div>
 
+      {/* Answer options list */}
       {options.map((opt, i) => (
         <div className="form-row" key={i}>
           <label className="sr-only" htmlFor={`option-${index}-${i}`}>
@@ -113,6 +146,7 @@ export default function QuizQuestion({
         </div>
       ))}
 
+      {/* Add option button */}
       <div className="form-row">
         <button
           type="button"
@@ -123,6 +157,7 @@ export default function QuizQuestion({
         </button>
       </div>
 
+      {/* Points and time limit */}
       <div className="form-row form-row-2">
         <div>
           <label htmlFor={`points-${index}`}>Points</label>
@@ -148,6 +183,7 @@ export default function QuizQuestion({
         </div>
       </div>
 
+      {/* Answer explanation textarea */}
       <div className="form-row">
         <label htmlFor={`explanation-${index}`}>Answer explained:</label>
         <textarea
@@ -160,6 +196,7 @@ export default function QuizQuestion({
         />
       </div>
 
+      {/* Toggle switches for shuffle and required */}
       <div className="toggles">
         <label className="switch">
           <input

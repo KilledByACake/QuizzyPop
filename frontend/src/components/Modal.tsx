@@ -2,14 +2,25 @@ import { useEffect, type ReactNode } from 'react';
 import styles from './Modal.module.css';
 
 interface ModalProps {
+  /** Controls modal visibility */
   isOpen: boolean;
+  /** Callback fired when modal should close */
   onClose: () => void;
+  /** Optional modal title displayed in header */
   title?: string;
+  /** Modal content */
   children: ReactNode;
+  /** Optional footer content (typically action buttons) */
   footer?: ReactNode;
 }
 
+/**
+ * Reusable modal dialog component with backdrop overlay
+ * Handles body scroll lock, Escape key closing, and click-outside-to-close
+ * Used by LoginPromptModal and other dialog interactions
+ */
 export default function Modal({ isOpen, onClose, title, children, footer }: ModalProps) {
+  // Lock body scroll when modal is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -22,6 +33,7 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
     };
   }, [isOpen]);
 
+  // Close modal on Escape key press
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
@@ -37,6 +49,7 @@ export default function Modal({ isOpen, onClose, title, children, footer }: Moda
 
   return (
     <div className={styles.overlay} onClick={onClose}>
+      {/* Stop propagation prevents closing when clicking inside modal */}
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
         {title && (
           <div className={styles.header}>

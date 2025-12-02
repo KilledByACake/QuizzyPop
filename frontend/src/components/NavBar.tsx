@@ -2,6 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import styles from "./NavBar.module.css";
 
+/**
+ * Site-wide navigation bar with responsive hamburger menu
+ * Shows different actions based on authentication state (Login/SignUp vs Account/Logout)
+ * Hides on landing page (controlled by Layout component)
+ */
 export default function NavBar() {
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -10,27 +15,30 @@ export default function NavBar() {
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  /** Check if given path matches current route for active link styling */
   const isActive = (path: string) => pathname === path;
 
+  /** Clear token and redirect to login page */
   function logout() {
     localStorage.removeItem("token");
     setToken(null);
     navigate("/login");
   }
 
-  // Lukk meny når route endres
+  // Close mobile menu when route changes
   useEffect(() => {
     setIsMenuOpen(false);
   }, [pathname]);
 
   return (
     <header className={styles.navbar} role="banner">
-      {/* Skip link for keyboard users */}
+      {/* Accessibility: skip to main content link for keyboard navigation */}
       <a href="#main-content" className={styles.skipLink}>
         Skip to main content
       </a>
 
       <div className={styles.navbarInner}>
+        {/* Brand logo and name */}
         <Link
           to="/"
           className={styles.navbarBrand}
@@ -44,7 +52,7 @@ export default function NavBar() {
           <span className={styles.brandText}>QuizzyPop</span>
         </Link>
 
-        {/* Hamburger toggle, vises bare på mobil */}
+        {/* Hamburger menu button - visible only on mobile */}
         <button
           type="button"
           className={styles.menuToggle}
@@ -58,6 +66,7 @@ export default function NavBar() {
           <span className={styles.menuBar} />
         </button>
 
+        {/* Main navigation links - collapses into hamburger menu on mobile */}
         <nav
           id="main-nav"
           className={`${styles.navbarNav} ${
@@ -88,6 +97,7 @@ export default function NavBar() {
           </Link>
         </nav>
 
+        {/* Authentication actions - shows different buttons based on login state */}
         <div className={styles.navbarActions}>
           {token ? (
             <>

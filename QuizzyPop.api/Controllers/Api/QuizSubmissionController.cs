@@ -7,13 +7,13 @@ namespace QuizzyPop.Controllers.Api;
 
 [Authorize]
 [ApiController]
-[Route("api/quizzes/{quizId:int}/submit")]
+[Route("api/quizzes")]  
 public class QuizSubmissionController : ControllerBase
 {
     private readonly IQuizService _service;
     public QuizSubmissionController(IQuizService service) => _service = service;
 
-    [HttpPost]
+    [HttpPost("{quizId:int}/submit")]  //Full route in method
     public async Task<ActionResult<QuizSubmissionResultDto>> Submit(
         int quizId,
         [FromBody] QuizSubmissionDto dto)

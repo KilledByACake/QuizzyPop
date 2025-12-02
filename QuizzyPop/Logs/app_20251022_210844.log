@@ -1,2 +1,0 @@
-2025-10-22 21:08:45.133 +02:00 [WRN] The property 'Question.Choices' is a collection or enumeration type with a value converter but with no value comparer. Set a value comparer to ensure the collection/enumeration elements are compared correctly.
-2025-10-22 21:08:45.490 +02:00 [INF] Applying migration '20251022190814_DALCompatibility'.

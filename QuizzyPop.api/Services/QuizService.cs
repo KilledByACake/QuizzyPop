@@ -119,7 +119,7 @@ namespace QuizzyPop.Services
         // Return result using only properties present in QuizSubmissionResultDto
         return new QuizSubmissionResultDto
         {
-            Score = correctCount,
+            Score = total > 0 ? (int)((double)correctCount / total * 100) : 0,
             CorrectAnswers = correctCount,
             TotalQuestions = total,
             FeedbackMessages = messages

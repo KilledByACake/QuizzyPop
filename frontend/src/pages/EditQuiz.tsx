@@ -13,6 +13,7 @@ import Card from "../components/Card";
 import TagInput from "../components/TagInput";
 import styles from "./EditQuiz.module.css";
 
+/** Question structure for editing */
 interface EditQuestion {
   id: number;
   text: string;
@@ -20,6 +21,7 @@ interface EditQuestion {
   correctChoiceIndex: number;
 }
 
+/** Quiz data structure with questions for editing */
 interface EditQuizDto {
   id: number;
   title: string;
@@ -31,9 +33,14 @@ interface EditQuizDto {
   questions: EditQuestion[];
 }
 
-// for uten backend kalr
+/** Development flag - enables mock data when backend endpoints not implemented */
 const USE_DEV_MOCK_WHEN_BACKEND_DOWN = true;
 
+/**
+ * Edit quiz page - allows modifying quiz metadata and questions
+ * Note: Backend endpoints for editing not fully implemented yet
+ * Uses mock data in development mode (USE_DEV_MOCK_WHEN_BACKEND_DOWN)
+ */
 const EditQuiz = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -46,7 +53,7 @@ const EditQuiz = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // === FETCH QUIZ ===
+  // Fetch quiz data on mount
   useEffect(() => {
     if (!id) {
       setError("Missing quiz id.");
@@ -59,6 +66,7 @@ const EditQuiz = () => {
         setLoading(true);
         setError(null);
 
+        // Use mock data in development when backend not ready
         if (USE_DEV_MOCK_WHEN_BACKEND_DOWN) {
           const mock: EditQuizDto = {
             id: Number(id),
@@ -88,6 +96,7 @@ const EditQuiz = () => {
           return;
         }
 
+        // Fetch from backend (when implemented)
         const res = await api.get<EditQuizDto>(
           `/api/quizzes/${id}/with-questions`,
         );
@@ -105,8 +114,9 @@ const EditQuiz = () => {
     void fetchQuiz();
   }, [id]);
 
-  // === HANDLERS ===
+  // === EVENT HANDLERS ===
 
+  /** Handle changes to quiz metadata fields (title, description, etc.) */
   const handleMetaChange = (
     e:
       | ChangeEvent<HTMLInputElement>
@@ -124,10 +134,12 @@ const EditQuiz = () => {
     );
   };
 
+  /** Handle changes to tags array */
   const handleTagsChange = (tags: string[]) => {
     setQuiz((prev) => (prev ? { ...prev, tags } : prev));
   };
 
+  /** Handle image file selection and preview generation */
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -140,6 +152,7 @@ const EditQuiz = () => {
     reader.readAsDataURL(file);
   };
 
+  /** Update question text */
   const handleQuestionTextChange = (qIndex: number, value: string) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -147,6 +160,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
+  /** Update a specific answer choice */
   const handleChoiceChange = (
     qIndex: number,
     cIndex: number,
@@ -160,6 +174,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
+  /** Mark an answer choice as correct */
   const handleCorrectChoiceChange = (qIndex: number, cIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -167,6 +182,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
+  /** Add a new answer choice to a question */
   const handleAddChoice = (qIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -175,10 +191,11 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
+  /** Add a new empty question */
   const handleAddQuestion = () => {
     if (!quiz) return;
     const newQuestion: EditQuestion = {
-      id: Date.now(), // midlertidig klient-id; backend kan ignorere/overskrive
+      id: Date.now(), // Temporary client-side ID; backend will assign real ID
       text: "",
       choices: ["", ""],
       correctChoiceIndex: 0,
@@ -186,6 +203,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions: [...quiz.questions, newQuestion] });
   };
 
+  /** Remove a question from the quiz */
   const handleRemoveQuestion = (qIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -193,10 +211,12 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
+  /** Cancel editing and return to My Page */
   const handleCancel = () => {
     navigate("/mypage");
   };
 
+  /** Save all changes to backend */
   const handleSave = async () => {
     if (!quiz) return;
 
@@ -204,7 +224,7 @@ const EditQuiz = () => {
       setSaving(true);
       setError(null);
 
-      // 1) Oppdater metadata (+ bilde)
+      // 1) Update quiz metadata (including image)
       const formData = new FormData();
       formData.append("title", quiz.title);
       formData.append("description", quiz.description);
@@ -221,8 +241,7 @@ const EditQuiz = () => {
 
       await api.put(`/api/quizzes/${quiz.id}`, formData);
 
-      // 2) Oppdater spørsmål (en veldig enkel bulk-oppdatering)
-      //    Juster til dine faktiske endpoints hvis de er annerledes.
+      // 2) Update questions (bulk update - adjust to actual endpoints)
       await api.put(`/api/quizzes/${quiz.id}/questions`, {
         questions: quiz.questions.map((q) => ({
           id: q.id,
@@ -232,6 +251,7 @@ const EditQuiz = () => {
         })),
       });
 
+      // Navigate back to My Page after successful save
       navigate("/mypage");
     } catch (err) {
       console.error(err);
@@ -268,6 +288,7 @@ const EditQuiz = () => {
     );
   }
 
+  /** Category options - should match backend seeded categories */
   const categories = [
     { value: "", label: "Select a category" },
     { value: "1", label: "Math" },
@@ -277,6 +298,7 @@ const EditQuiz = () => {
     { value: "5", label: "Entertainment" },
   ];
 
+  /** Difficulty level options */
   const difficulties = [
     { value: "easy", label: "Easy" },
     { value: "medium", label: "Medium" },
@@ -290,7 +312,7 @@ const EditQuiz = () => {
         <p>Edit quiz details and questions, then save your changes.</p>
       </header>
 
-      {/* METADATA CARD */}
+      {/* Quiz metadata editor card */}
       <Card variant="elevated" className={styles.metaCard}>
         <div className={styles.metaGrid}>
           <Input
@@ -337,6 +359,7 @@ const EditQuiz = () => {
             onChange={handleTagsChange}
           />
 
+          {/* Image upload section */}
           <div className={styles.imageUpload}>
             <label className={styles.imageLabel}>
               Quiz Cover Image
@@ -379,7 +402,7 @@ const EditQuiz = () => {
         </div>
       </Card>
 
-      {/* QUESTIONS */}
+      {/* Questions editor section */}
       <section className={styles.questionsSection}>
         <div className={styles.questionsHeader}>
           <h2>Questions</h2>
@@ -413,6 +436,7 @@ const EditQuiz = () => {
                   </button>
                 </div>
 
+                {/* Question text editor */}
                 <Textarea
                   label="Question text"
                   value={q.text}
@@ -422,6 +446,7 @@ const EditQuiz = () => {
                   rows={2}
                 />
 
+                {/* Answer choices with radio buttons for correct answer */}
                 <div className={styles.choices}>
                   <label className={styles.choicesLabel}>Answer options</label>
                   {q.choices.map((choice, cIndex) => (
@@ -464,7 +489,7 @@ const EditQuiz = () => {
         )}
       </section>
 
-      {/* ACTIONS */}
+      {/* Save/Cancel actions */}
       <div className={styles.actions}>
         <Button
           type="button"

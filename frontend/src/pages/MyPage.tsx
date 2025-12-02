@@ -9,6 +9,7 @@ import Button from "../components/Button";
 import Mascot from "../components/Mascot";
 import styles from "./MyPage.module.css";
 
+/** User profile data from /api/auth/me endpoint */
 interface MeResponse {
   id: number;
   displayName: string;
@@ -17,21 +18,27 @@ interface MeResponse {
   avatarUrl?: string | null;
 }
 
+/** Quiz summary for user's created quizzes list */
 interface QuizSummary {
   id: number;
   title: string;
-  category:{
+  category: {
     id: number;
     name: string;
     description?: string;
-  }
+  };
   createdAt: string;
   difficulty: string;
 }
 
-// dev-flagg: bruk mock data hvis ikke innlogget
+/** Development flag - enables mock data when not logged in for testing UI */
 const USE_DEV_MOCK_WHEN_LOGGED_OUT = true;
 
+/**
+ * User dashboard page (MyPage)
+ * Displays user profile, statistics, created quizzes, and quiz history
+ * Note: Quiz history/attempts feature not yet implemented on backend
+ */
 const MyPage = () => {
   const { isAuthenticated } = useAuth();
   const [me, setMe] = useState<MeResponse | null>(null);
@@ -39,8 +46,9 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch user data and quizzes on mount
   useEffect(() => {
-    // Hvis vi ikke er innlogget og har dev-modus på → bruk fake data
+    // Use mock data in development when not logged in
     if (!isAuthenticated && USE_DEV_MOCK_WHEN_LOGGED_OUT) {
       const mockUser: MeResponse = {
         id: 1,
@@ -54,14 +62,14 @@ const MyPage = () => {
         {
           id: 10,
           title: "My First Quiz",
-          category: {id:1, name:"Math",description:""},
+          category: { id: 1, name: "Math", description: "" },
           createdAt: "2024-05-01T00:00:00Z",
           difficulty: "easy",
         },
         {
           id: 11,
           title: "History Challenge",
-          category: {id:2,name:"History",description:""},
+          category: { id: 2, name: "History", description: "" },
           createdAt: "2024-05-12T00:00:00Z",
           difficulty: "medium",
         },
@@ -74,21 +82,24 @@ const MyPage = () => {
       return;
     }
 
-    // Vanlig “ordentlig” flyt når auth + backend funker
+    // Require authentication for real data
     if (!isAuthenticated) {
       setLoading(false);
       setError("You need to be logged in to view this page.");
       return;
     }
 
+    /** Fetch user profile and created quizzes from backend */
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
+        // Fetch user profile
         const meRes = await api.get<MeResponse>("/api/auth/me");
         setMe(meRes.data);
 
+        // Fetch user's created quizzes
         const quizzesRes = await api.get<QuizSummary[]>(
           `/api/quizzes?userId=${meRes.data.id}`,
         );
@@ -120,12 +131,14 @@ const MyPage = () => {
     );
   }
 
+  // Calculate statistics
   const quizzesCreated = quizzes.length;
-  const quizzesTaken = 0; // placeholder til du får attempts
-  const successRate = "-";
+  const quizzesTaken = 0; // Placeholder - QuizAttempt entity not yet implemented
+  const successRate = "-"; // Placeholder - scoring/history not yet implemented
 
   return (
     <section className={styles.page}>
+      {/* Profile header with stats */}
       <header className={styles.header}>
         <div className={styles.profile}>
           <Mascot variant="blueberry" size="medium" />
@@ -135,6 +148,7 @@ const MyPage = () => {
           </div>
         </div>
 
+        {/* Statistics cards */}
         <div className={styles.statsRow}>
           <StatCard number={quizzesCreated} label="Quizzes created" />
           <StatCard
@@ -151,6 +165,7 @@ const MyPage = () => {
       </header>
 
       <div className={styles.grid}>
+        {/* Created quizzes section */}
         <section>
           <h2>My Created Quizzes</h2>
           {quizzes.length === 0 ? (
@@ -169,6 +184,7 @@ const MyPage = () => {
                     Created:{" "}
                     {new Date(quiz.createdAt).toLocaleDateString()}
                   </p>
+                  {/* Quiz action buttons */}
                   <div className={styles.quizActions}>
                     <Button
                       type="button"
@@ -195,6 +211,7 @@ const MyPage = () => {
           )}
         </section>
 
+        {/* Quiz history section - not yet implemented */}
         <section>
           <h2>My Taken Quizzes</h2>
           <p>Coming soon – quiz history / attempts.</p>

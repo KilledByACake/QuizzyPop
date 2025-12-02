@@ -1,3 +1,19 @@
+/**
+ * TakingQuiz Page
+ * 
+ * Interactive quiz player where users answer questions one at a time. Features question
+ * navigation (previous/next), progress tracking, and answer validation. On completion,
+ * submits answers to backend for scoring and redirects to results page.
+ * 
+ * Key Features:
+ * - Single question view with multiple-choice answers
+ * - Progress bar and answered count tracking
+ * - Previous/Next navigation between questions
+ * - Prevents advancing without selecting an answer
+ * - Submit button appears on last question (requires all questions answered)
+ * - Passes quiz results to QuizCompleted page via navigation state
+ */
+
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api";
@@ -10,42 +26,70 @@ import StatCard from "../components/StatCard";
 
 import styles from "./TakingQuiz.module.css";
 
+/**
+ * Structure of a quiz question with multiple-choice options
+ */
 interface Question {
+  /** Unique question identifier */
   id: number;
+  /** Question text displayed to user */
   text: string;
+  /** Array of possible answer choices */
   choices: string[];
 }
 
+/**
+ * Quiz object with full question data
+ */
 interface QuizWithQuestions {
+  /** Unique quiz identifier */
   id: number;
+  /** Quiz display title */
   title: string;
+  /** Array of all questions in the quiz */
   questions: Question[];
 }
 
+/**
+ * Answer submission payload structure for backend
+ */
 interface SubmitAnswer {
+  /** ID of the question being answered */
   questionId: number;
+  /** Index of the selected choice (0-based) */
   selectedChoiceIndex: number;
 }
 
+/**
+ * TakingQuiz Component
+ * 
+ * Main quiz-taking interface with question navigation and answer selection.
+ * Fetches quiz questions from backend, manages answer state, and submits completed
+ * quiz for scoring.
+ * 
+ * @returns Interactive quiz player with navigation and progress tracking
+ */
 const TakingQuiz = () => {
+  // Extract quiz ID from URL parameters
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
+  // State management
   const [quiz, setQuiz] = useState<QuizWithQuestions | null>(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0); // Current question index (0-based)
   const [selectedAnswers, setSelectedAnswers] = useState<
     Record<number, number | null>
-  >({});
+  >({}); // Map of questionId -> selected choice index
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Set document title
+  // Update document title for browser tab
   useEffect(() => {
     document.title = "Take Quiz - Quizzy Pop";
   }, []);
 
-  // Fetch quiz + questions
+  // Fetch quiz data and questions from backend
   useEffect(() => {
     if (!id) return;
 
@@ -54,13 +98,14 @@ const TakingQuiz = () => {
         setLoading(true);
         setError(null);
 
+        // GET /api/quizzes/{id}/with-questions endpoint
         const res = await api.get<QuizWithQuestions>(
           `/api/quizzes/${id}/with-questions`,
         );
 
         setQuiz(res.data);
 
-        // init state for selected answers (null = not answered yet)
+        // Initialize answer state: all questions start with null (unanswered)
         const initial: Record<number, number | null> = {};
         res.data.questions.forEach((q) => {
           initial[q.id] = null;
@@ -68,7 +113,7 @@ const TakingQuiz = () => {
         setSelectedAnswers(initial);
       } catch (err) {
         console.error(err);
-        setError("Kunne ikke laste quizen.");
+        setError("Could not load the quiz.");
       } finally {
         setLoading(false);
       }
@@ -82,9 +127,11 @@ const TakingQuiz = () => {
   const totalQuestions = quiz?.questions.length ?? 0;
   const currentQuestion = quiz?.questions[currentIndex];
 
+  // Calculate progress percentage for progress bar
   const progressPercent =
     totalQuestions > 0 ? ((currentIndex + 1) / totalQuestions) * 100 : 0;
 
+  // Count how many questions have been answered
   const answeredCount =
     quiz?.questions.filter(
       (q) =>
@@ -92,9 +139,11 @@ const TakingQuiz = () => {
         selectedAnswers[q.id] !== undefined,
     ).length ?? 0;
 
+  // Check if user is on the last question
   const isLastQuestion =
     !!quiz && currentIndex === quiz.questions.length - 1;
 
+  // Check if all questions have been answered (required for submission)
   const allAnswered =
     !!quiz &&
     quiz.questions.every(
@@ -103,8 +152,14 @@ const TakingQuiz = () => {
         selectedAnswers[q.id] !== undefined,
     );
 
-  // ====== HANDLERS ======
+  // ====== EVENT HANDLERS ======
 
+  /**
+   * Handle answer selection for current question
+   * 
+   * @param questionId - ID of the question being answered
+   * @param choiceIndex - Index of the selected choice (0-based)
+   */
   const handleOptionChange = (questionId: number, choiceIndex: number) => {
     setSelectedAnswers((prev) => ({
       ...prev,
@@ -112,18 +167,30 @@ const TakingQuiz = () => {
     }));
   };
 
+  /**
+   * Navigate to previous question (disabled on first question)
+   */
   const handlePrevious = () => {
     setCurrentIndex((prev) => Math.max(prev - 1, 0));
   };
 
+  /**
+   * Navigate to next question (disabled on last question)
+   */
   const handleNext = () => {
     if (!quiz) return;
     setCurrentIndex((prev) => Math.min(prev + 1, quiz.questions.length - 1));
   };
 
+  /**
+   * Submit all answers to backend for scoring.
+   * POST /api/quizzes/{id}/submit endpoint (currently returns 404 - not implemented).
+   * On success, navigates to QuizCompleted page with result data.
+   */
   const handleSubmit = async () => {
     if (!quiz) return;
 
+    // Build payload: filter out unanswered questions
     const payload: SubmitAnswer[] = quiz.questions
       .map((q) => {
         const selectedIndex = selectedAnswers[q.id];
@@ -142,34 +209,36 @@ const TakingQuiz = () => {
       setSubmitting(true);
       setError(null);
 
+      // Submit answers for scoring
       const res = await api.post(`/api/quizzes/${quiz.id}/submit`, {
         answers: payload,
       });
 
-      // Send score/result to completed page
+      // Navigate to results page with score data
       navigate(`/quiz/${quiz.id}/completed`, { state: res.data });
     } catch (err) {
       console.error(err);
-      setError("Kunne ikke sende inn quizen.");
+      setError("Could not submit the quiz.");
     } finally {
       setSubmitting(false);
     }
   };
 
-  // ====== RENDER STATES ======
+  // ====== RENDER: ERROR STATES ======
 
+  // Missing quiz ID in URL
   if (!id) {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
         <div className={styles["taking-container"]}>
-          <Error message="Mangler quiz-ID i URL." />
+          <Error message="Missing quiz ID in URL." />
           <div className={styles["error-actions"]}>
             <Button
               type="button"
               variant="gray"
               onClick={() => navigate(-1)}
             >
-              ← Tilbake
+              ← Back
             </Button>
           </div>
         </div>
@@ -177,6 +246,7 @@ const TakingQuiz = () => {
     );
   }
 
+  // Loading state while fetching quiz data
   if (loading) {
     return (
       <section
@@ -193,6 +263,7 @@ const TakingQuiz = () => {
     );
   }
 
+  // Error state if quiz failed to load
   if (error) {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
@@ -204,7 +275,7 @@ const TakingQuiz = () => {
               variant="gray"
               onClick={() => navigate(-1)}
             >
-              ← Tilbake
+              ← Back
             </Button>
           </div>
         </div>
@@ -212,7 +283,7 @@ const TakingQuiz = () => {
     );
   }
 
-  // Quiz exists but has no questions
+  // Quiz loaded but has no questions
   if (!loading && quiz && totalQuestions === 0) {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
@@ -229,7 +300,7 @@ const TakingQuiz = () => {
     );
   }
 
-  // Could not resolve quiz / question
+  // Quiz or current question not found
   if (!quiz || !currentQuestion) {
     return (
       <section className={`qp-page ${styles["taking-quiz-page"]}`}>
@@ -249,16 +320,19 @@ const TakingQuiz = () => {
     );
   }
 
+  // Get selected answer for current question
   const currentSelected = selectedAnswers[currentQuestion.id];
 
-  // ====== MAIN RENDER ======
+  // ====== RENDER: MAIN QUIZ INTERFACE ======
 
   return (
     <section className={`qp-page ${styles["taking-quiz-page"]}`}>
       <div className={styles["taking-container"]}>
+        {/* Header with title, stats, and progress bar */}
         <header className={styles["taking-header"]}>
           <h1 className={styles["question-title"]}>{quiz.title}</h1>
 
+          {/* Stats: current question number and answered count */}
           <div className={styles["stats-row"]}>
             <StatCard
               number={`${currentIndex + 1}/${totalQuestions}`}
@@ -272,6 +346,7 @@ const TakingQuiz = () => {
             />
           </div>
 
+          {/* Progress bar showing quiz completion */}
           <div
             className={styles["progress-wrapper"]}
             role="progressbar"
@@ -288,6 +363,7 @@ const TakingQuiz = () => {
           </div>
         </header>
 
+        {/* Question card with multiple-choice answers */}
         <Card variant="elevated" className={styles["quiz-card"]}>
           <h2
             id={`question-${currentQuestion.id}`}
@@ -296,6 +372,7 @@ const TakingQuiz = () => {
             {currentQuestion.text}
           </h2>
 
+          {/* Answer choices as radio buttons */}
           <fieldset
             className={styles.answers}
             aria-labelledby={`question-${currentQuestion.id}`}
@@ -317,7 +394,9 @@ const TakingQuiz = () => {
           </fieldset>
         </Card>
 
+        {/* Navigation buttons: Previous, Next, or Finish */}
         <div className={styles["nav-buttons"]}>
+          {/* Previous button (hidden on first question) */}
           {currentIndex > 0 ? (
             <Button
               type="button"
@@ -331,6 +410,7 @@ const TakingQuiz = () => {
             <span />
           )}
 
+          {/* Last question: show Finish button (requires all questions answered) */}
           {isLastQuestion ? (
             <Button
               type="button"
@@ -342,6 +422,7 @@ const TakingQuiz = () => {
               {submitting ? "Submitting..." : "Finish Quiz 🎉"}
             </Button>
           ) : (
+            // Not last question: show Next button (requires current question answered)
             <Button
               type="button"
               variant="primary"

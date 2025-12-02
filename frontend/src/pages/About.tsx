@@ -1,7 +1,13 @@
 import { useEffect } from "react";
 import styles from "./About.module.css";
 
+/**
+ * About page component
+ * Explains QuizzyPop's mission, target audience, values, and educational benefits
+ * Designed as a marketing/informational page for new users and parents/teachers
+ */
 export default function About() {
+  // Set page title on mount
   useEffect(() => {
     document.title = "About QuizzyPop";
   }, []);
@@ -9,7 +15,7 @@ export default function About() {
   return (
     <section className={`${styles["qp-page"]} ${styles["about-page"]}`}>
       <div className={styles["about-container"]}>
-        {/* Header section */}
+        {/* Header with mascot and tagline */}
         <header className={styles["about-header"]}>
           <img
             src="/images/quizzy-blueberry.png"
@@ -22,7 +28,7 @@ export default function About() {
           </p>
         </header>
 
-        {/* First Section */}
+        {/* Mission statement - educational benefits */}
         <section className={styles.mission}>
           <h2>Making Learning Fun and Playful</h2>
           <p>
@@ -33,10 +39,11 @@ export default function About() {
           </p>
         </section>
 
-        {/* Second Section */}
+        {/* Target audience explanation */}
         <section className={styles.audience}>
           <h2>Who is Quizzy Pop for?</h2>
           <div className={styles["audience-list"]}>
+            {/* Primary audience: children */}
             <div className={styles["audience-item"]}>
               <div className={styles["audience-content"]}>
                 <h3>Mainly for Children 👶</h3>
@@ -49,6 +56,7 @@ export default function About() {
                 </p>
               </div>
             </div>
+            {/* Secondary audience: parents and teachers */}
             <div className={styles["audience-item"]}>
               <div className={styles["audience-content"]}>
                 <h3>Parents & Teachers as Secondary Audiences 🌸</h3>
@@ -63,7 +71,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* Third Section - Be present */}
+        {/* Device accessibility section */}
         <section className={styles.devices}>
           <h2>Be present where the children are 🚀</h2>
           <div className={styles["value-cards"]}>
@@ -78,7 +86,7 @@ export default function About() {
           </div>
         </section>
 
-        {/* Fourth Section - Values */}
+        {/* Core values section */}
         <section className={styles.values}>
           <h2>Our Values</h2>
           <div className={styles["value-cards"]}>

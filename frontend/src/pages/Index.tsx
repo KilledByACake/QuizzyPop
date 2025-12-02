@@ -1,18 +1,22 @@
 import { Link } from "react-router-dom";
 import { useRive, useStateMachineInput } from "@rive-app/react-canvas";
-import { useState } from "react";
 import styles from "./Index.module.css";
 import Button from "../components/Button";
 
+/**
+ * Landing page with interactive Rive mascot animation
+ * Features animated blueberry mascot that waves when hovering over action buttons
+ * Uses Rive state machine with trigger inputs for interactive animations
+ */
 export default function Index() {
-  const [currentState, setCurrentState] = useState("Idle");
-
+  // Initialize Rive animation with State Machine 1
   const { RiveComponent, rive } = useRive({
     src: "/animations/quizzy.riv",
     stateMachines: "State Machine 1",
-    autoplay: true,
+    autoplay: true, // Starts Idle Bounce animation automatically
   });
 
+  // Get wave input triggers from state machine
   const waveLeftInput = useStateMachineInput(
     rive,
     "State Machine 1",
@@ -24,21 +28,19 @@ export default function Index() {
     "Wave R"
   );
 
+  /** Trigger left wave animation (Wave Blueberry_L) */
   const triggerWaveLeft = () => {
     waveLeftInput?.fire();
-    setCurrentState("Wave Left");
-    setTimeout(() => setCurrentState("Idle"), 2000);
   };
 
+  /** Trigger right wave animation (Wave Blueberry_R) */
   const triggerWaveRight = () => {
     waveRightInput?.fire();
-    setCurrentState("Wave Right");
-    setTimeout(() => setCurrentState("Idle"), 2000);
   };
 
   return (
     <section className={styles["home-hero"]}>
-      {/* Arc title */}
+      {/* Curved SVG title text */}
       <svg
         className={styles["arc-title"]}
         viewBox="0 0 900 280"
@@ -56,13 +58,13 @@ export default function Index() {
         </text>
       </svg>
 
-      {/* Mascot + speech bubble, centered under the title */}
+      {/* Animated mascot with speech bubble */}
       <div className={styles["mascot-wrap"]}>
         <RiveComponent className={styles.mascot} />
         <div className={styles.speech}>Let's play and learn together!</div>
       </div>
 
-      {/* Buttons in their own row so they don't overlap the mascot */}
+      {/* Call-to-action buttons that trigger wave animations on hover */}
       <div className={styles["cta-row"]}>
         <Link to="/quizzes" onMouseEnter={triggerWaveLeft}>
           <Button variant="primary" size="xl">

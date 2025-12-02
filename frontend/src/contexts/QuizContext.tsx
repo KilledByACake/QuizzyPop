@@ -2,19 +2,22 @@ import { createContext, useContext, useReducer, type ReactNode } from "react";
 import api from "../api";
 import type { AxiosError } from "axios";
 
-// Shape of a Quiz returned from the API
+/** Quiz object shape returned from the API */
 export interface Quiz {
   id: number;
   title: string;
   description: string;
-  createdAt: string; // Dates are usually strings in JSON
+  /** ISO date string when quiz was created */
+  createdAt: string;
+  /** URL path to quiz cover image */
   imageUrl: string;
-  difficulty: string; // "easy" | "medium" | "hard" (kept as string for flexibility)
+  /** Difficulty level (easy/medium/hard) */
+  difficulty: string;
+  /** ID of the category this quiz belongs to */
   categoryId: number;
-  // You can add more fields here if you need them (category, user, questions, etc.)
 }
 
-// Payload for creating a new quiz
+/** Payload for creating a new quiz */
 export interface CreateQuizPayload {
   title: string;
   description: string;
@@ -23,14 +26,17 @@ export interface CreateQuizPayload {
   categoryId: number;
 }
 
-// State stored in the QuizContext
+/** State stored in the QuizContext */
 interface QuizState {
+  /** Array of all loaded quizzes */
   quizzes: Quiz[];
+  /** Whether an async operation is in progress */
   loading: boolean;
+  /** Error message if last operation failed */
   error: string | null;
 }
 
-// All possible actions for the reducer
+/** All possible actions for the reducer */
 type QuizAction =
   | { type: "START_LOADING" }
   | { type: "SET_QUIZZES"; payload: Quiz[] }
@@ -38,14 +44,17 @@ type QuizAction =
   | { type: "REMOVE_QUIZ"; payload: number } // quiz id
   | { type: "SET_ERROR"; payload: string | null };
 
-// Initial state for the reducer
+/** Initial state for the reducer */
 const initialState: QuizState = {
   quizzes: [],
   loading: false,
   error: null,
 };
 
-// Reducer function to manage quiz-related state
+/**
+ * Reducer function to manage quiz-related state
+ * Handles loading states, quiz CRUD operations, and error management
+ */
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
   switch (action.type) {
     case "START_LOADING":
@@ -74,22 +83,27 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
       return { ...state, loading: false, error: action.payload };
 
     default:
-      // Exhaustive check (should never happen)
       return state;
   }
 }
 
-// What the context will expose to components
+/** Context value exposed to components - combines state with actions */
 export interface QuizContextValue extends QuizState {
+  /** Fetch all quizzes from API */
   fetchQuizzes: () => Promise<void>;
+  /** Create a new quiz */
   createQuiz: (data: CreateQuizPayload) => Promise<void>;
+  /** Delete a quiz by ID */
   deleteQuiz: (id: number) => Promise<void>;
 }
 
-// Create the context (undefined until provided by QuizProvider)
+/** Quiz context - provides quiz state and actions globally */
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
-// Helper to extract a readable error message
+/**
+ * Extract readable error message from various error types
+ * Handles Axios errors, Error objects, and strings
+ */
 function getErrorMessage(error: unknown): string {
   if (typeof error === "string") return error;
 
@@ -107,16 +121,20 @@ function getErrorMessage(error: unknown): string {
   return "An unknown error occurred";
 }
 
-// Provider component that wraps parts of the app that need quiz state
+/**
+ * Quiz context provider component
+ * Manages global quiz state with useReducer and provides CRUD operations
+ * Wrap around components that need access to quiz data
+ */
 export function QuizProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(quizReducer, initialState);
 
-  // Fetch all quizzes from the API
+  /** Fetch all quizzes from the API and update state */
   const fetchQuizzes = async () => {
     try {
       dispatch({ type: "START_LOADING" });
 
-      const response = await api.get<Quiz[]>("/api/quizzes"); // ✅ Added /api
+      const response = await api.get<Quiz[]>("/api/quizzes");
 
       dispatch({ type: "SET_QUIZZES", payload: response.data });
     } catch (error) {
@@ -126,12 +144,12 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Create a new quiz via the API
+  /** Create a new quiz via the API and add to state */
   const createQuiz = async (data: CreateQuizPayload) => {
     try {
       dispatch({ type: "START_LOADING" });
 
-      const response = await api.post<Quiz>("/api/quizzes", data); // ✅ Added /api
+      const response = await api.post<Quiz>("/api/quizzes", data);
 
       dispatch({ type: "ADD_QUIZ", payload: response.data });
     } catch (error) {
@@ -141,12 +159,12 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  // Delete a quiz by id
+  /** Delete a quiz by id from API and remove from state */
   const deleteQuiz = async (id: number) => {
     try {
       dispatch({ type: "START_LOADING" });
 
-      await api.delete(`/api/quizzes/${id}`); // ✅ Added /api
+      await api.delete(`/api/quizzes/${id}`);
 
       dispatch({ type: "REMOVE_QUIZ", payload: id });
     } catch (error) {
@@ -166,7 +184,11 @@ export function QuizProvider({ children }: { children: ReactNode }) {
   return <QuizContext.Provider value={value}>{children}</QuizContext.Provider>;
 }
 
-// Custom hook to use the QuizContext in components
+/**
+ * Hook to access quiz context
+ * Must be used within QuizProvider
+ * @throws Error if used outside QuizProvider
+ */
 export function useQuizContext(): QuizContextValue {
   const context = useContext(QuizContext);
 

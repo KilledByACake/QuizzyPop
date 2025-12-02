@@ -11,12 +11,18 @@ import Mascot from "../../components/Mascot";
 import Loader from "../../components/Loader";
 import styles from "./Login.module.css";
 
+/**
+ * Login page component
+ * Authenticates users with email/password and stores JWT token
+ * Redirects back to the page they came from after successful login
+ */
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
   const [serverError, setServerError] = useState("");
 
+  // Set page title on mount
   useEffect(() => {
     document.title = "Log in - QuizzyPop";
   }, []);
@@ -29,26 +35,28 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
+  /** Handle form submission - authenticate user and store token */
   const onSubmit = async (data: LoginFormData) => {
     try {
       setServerError("");
 
-      // Call backend API
+      // Call backend authentication endpoint
       const response = await api.post("/api/auth/login", {
         email: data.email,
         password: data.password,
       });
 
-      // Extract token from response
+      // Extract JWT access token from response
       const token = response.data.accessToken;
 
       // Store token in context and localStorage
       login(token);
 
-      // Redirect back to where they came from, or homepage
+      // Redirect back to originating page (or homepage if direct visit)
       const from = (location.state as any)?.from || "/";
       navigate(from, { state: { fromLogin: true } });
     } catch (error: any) {
+      // Handle authentication errors
       if (error.response?.status === 401) {
         setServerError("Invalid email or password");
       } else {
@@ -61,6 +69,7 @@ export default function Login() {
   return (
     <div className={styles.loginPage}>
       <div className={styles.loginContainer}>
+        {/* Mascot for visual appeal */}
         <Mascot variant="blueberry" size="medium" />
         <h1 className={styles.title}>Welcome Back!</h1>
         <p className={styles.subtitle}>Log in to your QuizzyPop account</p>
@@ -70,6 +79,7 @@ export default function Login() {
           className={styles.form}
           aria-busy={isSubmitting}
         >
+          {/* Server error message display */}
           {serverError && (
             <div
               className={styles.serverError}
@@ -79,6 +89,7 @@ export default function Login() {
             </div>
           )}
 
+          {/* Email input with validation */}
           <Input
             label="Email"
             type="email"
@@ -87,6 +98,7 @@ export default function Login() {
             {...register("email")}
           />
 
+          {/* Password input with validation */}
           <Input
             label="Password"
             type="password"
@@ -95,6 +107,7 @@ export default function Login() {
             {...register("password")}
           />
 
+          {/* Submit button with loading state */}
           <Button
             type="submit"
             variant="primary"
@@ -109,6 +122,7 @@ export default function Login() {
             {isSubmitting ? "Logging in..." : "Log In"}
           </Button>
 
+          {/* Link to registration page */}
           <p className={styles.footer}>
             Don't have an account?{" "}
             <Link to="/register">Sign up</Link>

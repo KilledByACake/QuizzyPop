@@ -1,4 +1,3 @@
-// frontend/src/pages/CreateQuiz.tsx - UPDATED VERSION
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -14,8 +13,16 @@ import LoginPromptModal from '../components/LoginPromptModal';
 import TagInput from '../components/TagInput';
 import styles from './CreateQuiz.module.css';
 
+/** localStorage key for saving quiz draft */
 const DRAFT_STORAGE_KEY = 'quiz_draft';
 
+/**
+ * Quiz creation page - first step in quiz creation flow
+ * Collects quiz metadata: title, description, category, difficulty, image, tags
+ * Saves draft to localStorage if user is not authenticated
+ * Redirects to AddQuestions page after successful creation
+ * Note: Currently sends FormData but backend expects two-step (JSON quiz + separate image upload)
+ */
 export default function CreateQuiz() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -36,11 +43,11 @@ export default function CreateQuiz() {
     resolver: zodResolver(createQuizSchema),
     defaultValues: {
       difficulty: 'easy',
-      tags: [] // <-- added
+      tags: []
     }
   });
 
-  // Restore draft on mount if returning from login
+  // Restore draft from localStorage after returning from login
   useEffect(() => {
     const draft = localStorage.getItem(DRAFT_STORAGE_KEY);
     if (draft && location.state?.fromLogin) {
@@ -61,11 +68,12 @@ export default function CreateQuiz() {
     }
   }, [location.state, reset]);
 
-  // Handle image preview
+  /** Handle image file selection and preview generation */
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       setValue('image', file);
+      // Generate base64 preview for display
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
@@ -74,7 +82,7 @@ export default function CreateQuiz() {
     }
   };
 
-  // Save draft to localStorage
+  /** Save current form state to localStorage as draft */
   const saveDraft = () => {
     const formData = watch();
     const draft = {
@@ -85,9 +93,10 @@ export default function CreateQuiz() {
     localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
   };
 
+  /** Handle form submission - create quiz or prompt login */
   const onSubmit = async (data: CreateQuizFormData) => {
-    // If not logged in, save draft and show modal
-    if (!isAuthenticated) {      // <-- boolean, no parentheses
+    // If not authenticated, save draft and show login modal
+    if (!isAuthenticated) {
       saveDraft();
       setShowLoginModal(true);
       return;
@@ -98,6 +107,7 @@ export default function CreateQuiz() {
 
     try {
       // Create FormData for file upload
+      // TODO: Backend expects two-step: JSON quiz creation then separate image upload
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('description', data.description);

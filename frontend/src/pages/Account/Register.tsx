@@ -14,10 +14,17 @@ import { api } from "../../api";
 import Loader from "../../components/Loader";
 import styles from "./Register.module.css";
 
+/**
+ * Registration page component
+ * Creates new user accounts with role selection (student/teacher/parent)
+ * Shows additional fields (phone, birthdate) for teachers and parents
+ * Validates with Zod schema and handles server-side validation errors
+ */
 export default function Register() {
   const navigate = useNavigate();
   const [serverError, setServerError] = useState("");
 
+  // Set page title on mount
   useEffect(() => {
     document.title = "Sign up - QuizzyPop";
   }, []);
@@ -34,12 +41,15 @@ export default function Register() {
     },
   });
 
+  // Watch role to conditionally show extra fields
   const role = watch("role");
 
+  /** Handle form submission - create account and redirect to login */
   const onSubmit = async (data: RegisterFormData) => {
     setServerError("");
 
     try {
+      // Call registration endpoint
       await api.post("/api/auth/register", {
         email: data.email,
         password: data.password,
@@ -48,7 +58,7 @@ export default function Register() {
         birthdate: data.birthdate || null,
       });
 
-      // Registration successful - navigate to login
+      // Registration successful - navigate to login with success message
       navigate("/login", {
         state: {
           message: "Account created! Please log in.",
@@ -58,12 +68,13 @@ export default function Register() {
     } catch (err: any) {
       console.error("Registration error:", err);
 
+      // Handle various error responses from backend
       if (err.response?.status === 409) {
         setServerError("Email already exists. Please use a different email.");
       } else if (err.response?.data?.message) {
         setServerError(err.response.data.message);
       } else if (err.response?.data?.errors) {
-        // FluentValidation errors
+        // FluentValidation errors from backend
         const validationErrors = Object.values(
           err.response.data.errors,
         ).flat();
@@ -74,15 +85,18 @@ export default function Register() {
     }
   };
 
+  // Show phone and birthdate fields for teachers and parents only
   const showExtra = role === "teacher" || role === "parent";
 
   return (
     <div className={styles.registerPage}>
       <div className={styles.registerContainer}>
+        {/* Celebration mascot for welcoming new users */}
         <Mascot variant="celebrate" size="medium" alt="Quizzy Pop mascot" />
         <h1 className={styles.title}>Create Your Account</h1>
         <p className={styles.subtitle}>Join the fun! 💫</p>
 
+        {/* Server error message display */}
         {serverError && (
           <div className={styles.serverError} role="alert">
             {serverError}
@@ -94,6 +108,7 @@ export default function Register() {
           className={styles.form}
           aria-busy={isSubmitting}
         >
+          {/* Email input */}
           <Input
             label="Email"
             type="email"
@@ -103,6 +118,7 @@ export default function Register() {
             required
           />
 
+          {/* Password input with strength hint */}
           <Input
             label="Password"
             type="password"
@@ -113,6 +129,7 @@ export default function Register() {
             required
           />
 
+          {/* Confirm password input */}
           <Input
             label="Confirm Password"
             type="password"
@@ -122,6 +139,7 @@ export default function Register() {
             required
           />
 
+          {/* Role selection dropdown */}
           <Select
             label="Select Your Role"
             error={errors.role?.message}
@@ -137,6 +155,7 @@ export default function Register() {
             Teachers and parents must be at least 18 years old.
           </p>
 
+          {/* Additional fields for teachers and parents */}
           {showExtra && (
             <div className={styles.extraFields}>
               <Input
@@ -157,6 +176,7 @@ export default function Register() {
             </div>
           )}
 
+          {/* Submit button with loading state */}
           <Button
             type="submit"
             variant="primary"
@@ -171,6 +191,7 @@ export default function Register() {
             {isSubmitting ? "Creating account..." : "Create account"}
           </Button>
 
+          {/* Link to login page */}
           <p className={styles.footer}>
             Already have an account? <Link to="/login">Log in!</Link>
           </p>

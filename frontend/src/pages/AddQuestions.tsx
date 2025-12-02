@@ -11,14 +11,22 @@ import { addQuestionsSchema } from '../schemas/questionSchemas';
 import type { AddQuestionsForm } from '../schemas/questionSchemas';
 import styles from './AddQuestions.module.css';
 
+/** Prefix for localStorage draft keys - unique per quiz */
 const DRAFT_KEY_PREFIX = 'questions_draft_';
 
+/**
+ * Question builder page - second step in quiz creation flow
+ * Allows creating multiple questions with various types (multiple-choice, true/false, etc.)
+ * Only multiple-choice questions are currently supported by backend - others saved as drafts
+ * Supports draft persistence and restoration after login
+ */
 export default function AddQuestions() {
   const { id: quizId } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
   const [notice, setNotice] = useState<string | null>(null);
 
+  // Unique draft key per quiz
   const DRAFT_KEY = useMemo(() => `${DRAFT_KEY_PREFIX}${quizId}`, [quizId]);
 
   const { control, register, handleSubmit, setValue, watch, reset, formState: { errors, isSubmitting } } =
@@ -36,12 +44,13 @@ export default function AddQuestions() {
       },
     });
 
+  // Dynamic question array management
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'questions',
   });
 
-  // Restore draft after login
+  // Restore draft after returning from login
   useEffect(() => {
     const draftRaw = localStorage.getItem(DRAFT_KEY);
     if (draftRaw && location.state?.fromLogin) {
@@ -50,16 +59,18 @@ export default function AddQuestions() {
         reset(draft);
         localStorage.removeItem(DRAFT_KEY);
       } catch {
-        // ignore
+        // Ignore parse errors
       }
     }
   }, [DRAFT_KEY, location.state, reset]);
 
+  /** Save current form state to localStorage as draft */
   const saveDraft = () => {
     const data = watch();
     localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
   };
 
+  /** Add a new empty multiple-choice question to the form */
   const addNewQuestion = () => {
     append({
       type: 'multiple-choice',
@@ -69,6 +80,7 @@ export default function AddQuestions() {
     } as any);
   };
 
+  /** Submit questions - only publishes multiple-choice, saves others as draft */
   const onSubmit = async (data: AddQuestionsForm) => {
     if (!quizId) {
       setNotice('Missing quiz id in the URL.');
@@ -77,23 +89,22 @@ export default function AddQuestions() {
 
     setNotice(null);
 
-    // Warn for unsupported types by the backend (only multiple-choice supported now)
+    // Warn about unsupported question types
     const unsupported = data.questions.filter(q => q.type !== 'multiple-choice');
     if (unsupported.length > 0) {
       setNotice('Note: Only multiple-choice questions are published now. Other types are saved locally for now.');
-      // Keep them in localStorage
       saveDraft();
     }
 
-    // Publish multiple-choice questions
+    // Filter and prepare multiple-choice questions for backend
     const mcQuestions = data.questions
       .map((q, idx) => ({ q, idx }))
       .filter(({ q }) => q.type === 'multiple-choice') as any[];
 
     try {
+      // Post each question to backend
       await Promise.all(
         mcQuestions.map(({ q }) => {
-          // Backend expects: Text, Choices, CorrectAnswerIndex
           const payload = {
             text: q.text,
             choices: q.options,
@@ -106,12 +117,12 @@ export default function AddQuestions() {
         })
       );
 
-      // Optionally clear draft if there are no unsupported questions left
+      // Clear draft if all questions were published
       if (unsupported.length === 0) {
         localStorage.removeItem(DRAFT_KEY);
       }
 
-      // Navigate to published page
+      // Navigate to success page
       navigate(`/quiz/${quizId}/published`);
     } catch (err: any) {
       setNotice(err.response?.data?.message || 'Failed to publish questions. Please try again.');
@@ -119,6 +130,7 @@ export default function AddQuestions() {
     }
   };
 
+  /** Available question type options */
   const typeOptions = [
     { value: 'multiple-choice', label: 'Multiple Choice' },
     { value: 'true-false', label: 'True / False' },
@@ -135,15 +147,18 @@ export default function AddQuestions() {
         <p className={styles.subtitle}>Quiz ID: {quizId}</p>
       </div>
 
+      {/* Notice/warning message display */}
       {notice && <div className={styles.notice}>{notice}</div>}
 
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        {/* Render each question card */}
         {fields.map((field, index) => {
           const qType = watch(`questions.${index}.type`);
           const qErrors = (errors.questions?.[index] as any) || {};
 
           return (
             <div key={field.id} className={styles.questionCard}>
+              {/* Question type selector with hint */}
               <div className={styles.row}>
                 <Select
                   label="Question Type"
@@ -162,6 +177,7 @@ export default function AddQuestions() {
                 </div>
               </div>
 
+              {/* Question text input */}
               <Textarea
                 label={`Question ${index + 1}`}
                 placeholder="Type your question here..."
@@ -171,7 +187,7 @@ export default function AddQuestions() {
                 required
               />
 
-              {/* Type-specific editors */}
+              {/* Multiple choice editor - 4 options with radio buttons */}
               {qType === 'multiple-choice' && (
                 <div className={styles.optionsGrid}>
                   {[0, 1, 2, 3].map((optIdx) => (
@@ -199,6 +215,7 @@ export default function AddQuestions() {
                 </div>
               )}
 
+              {/* True/False editor - toggle buttons */}
               {qType === 'true-false' && (
                 <div className={styles.tfRow}>
                   <label className={styles.tfLabel}>Correct answer:</label>
@@ -224,6 +241,7 @@ export default function AddQuestions() {
                 </div>
               )}
 
+              {/* Text answer editor - for fill-blank, short, long answer types */}
               {(qType === 'fill-blank' || qType === 'short' || qType === 'long') && (
                 <Input
                   label="Correct Answer"
@@ -234,6 +252,7 @@ export default function AddQuestions() {
                 />
               )}
 
+              {/* Multi-select editor - 4 options with checkboxes */}
               {qType === 'multi-select' && (
                 <div className={styles.optionsGrid}>
                   {[0, 1, 2, 3].map((optIdx) => {
@@ -269,6 +288,7 @@ export default function AddQuestions() {
                 </div>
               )}
 
+              {/* Remove question button */}
               <div className={styles.cardActions}>
                 <Button
                   type="button"
@@ -282,6 +302,7 @@ export default function AddQuestions() {
           );
         })}
 
+        {/* Form footer actions - add question, save draft, publish */}
         <div className={styles.footerActions}>
           <Button type="button" variant="secondary" onClick={addNewQuestion}>
             + Add Question

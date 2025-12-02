@@ -17,9 +17,6 @@ interface PublishedQuizState {
   questionsCount: number;
 }
 
-/** Development flag - enables mock data when backend endpoints not available */
-const USE_DEV_MOCK_WHEN_BACKEND_DOWN = true;
-
 /**
  * Quiz published success page
  * Shown after successfully creating and publishing a quiz
@@ -34,9 +31,7 @@ export default function PublishedQuiz() {
   // Try to get quiz data from navigation state (passed from AddQuestions)
   const stateQuiz = location.state as PublishedQuizState | undefined;
 
-  const [quiz, setQuiz] = useState<PublishedQuizState | null>(
-    stateQuiz ?? null,
-  );
+  const [quiz, setQuiz] = useState<PublishedQuizState | null>(stateQuiz ?? null);
   const [loading, setLoading] = useState(!stateQuiz && !!id);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
@@ -49,7 +44,7 @@ export default function PublishedQuiz() {
       return;
     }
 
-    // Skip fetch if we already have quiz data
+    // Skip fetch if we already have quiz data from navigation state
     if (quiz || stateQuiz) return;
 
     const fetchQuiz = async () => {
@@ -57,23 +52,8 @@ export default function PublishedQuiz() {
         setLoading(true);
         setError(null);
 
-        // Use mock data in development
-        if (USE_DEV_MOCK_WHEN_BACKEND_DOWN) {
-          const mock: PublishedQuizState = {
-            id: Number(id),
-            title: "My Published Quiz",
-            difficulty: "medium",
-            category: "Math",
-            questionsCount: 10,
-          };
-          setQuiz(mock);
-          return;
-        }
-
-        // Fetch from backend
         const res = await api.get(`/api/quizzes/${id}`);
 
-        // Map API response to component state
         const mapped: PublishedQuizState = {
           id: res.data.id,
           title: res.data.title,
@@ -95,7 +75,6 @@ export default function PublishedQuiz() {
     void fetchQuiz();
   }, [id, quiz, stateQuiz]);
 
-  // Error state: missing quiz ID
   if (!id) {
     return (
       <div className={styles.publishedPage}>
@@ -111,7 +90,6 @@ export default function PublishedQuiz() {
     );
   }
 
-  // Loading state
   if (loading) {
     return (
       <div className={styles.publishedPage}>
@@ -122,7 +100,6 @@ export default function PublishedQuiz() {
     );
   }
 
-  // Error state: failed to load quiz
   if (error || !quiz) {
     return (
       <div className={styles.publishedPage}>
@@ -138,15 +115,12 @@ export default function PublishedQuiz() {
     );
   }
 
-  // Generate shareable link
   const shareLink = `${window.location.origin}/quiz/${id}/take`;
 
-  /** Copy share link to clipboard */
   const handleCopyLink = async () => {
     try {
       await navigator.clipboard.writeText(shareLink);
       setCopied(true);
-      // Reset copied state after 2 seconds
       setTimeout(() => setCopied(false), 2000);
     } catch (err) {
       console.error(err);
@@ -157,7 +131,6 @@ export default function PublishedQuiz() {
   return (
     <div className={styles.publishedPage}>
       <div className={styles.container}>
-        {/* Celebration mascot */}
         <div className={styles.centerRow}>
           <Mascot variant="celebrate" size="large" />
         </div>
@@ -167,7 +140,6 @@ export default function PublishedQuiz() {
           Your quiz is now live and ready for players!
         </p>
 
-        {/* Quiz summary information */}
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
             <span className={styles.summaryLabel}>Title</span>
@@ -187,7 +159,6 @@ export default function PublishedQuiz() {
           </div>
         </div>
 
-        {/* Action buttons */}
         <div className={styles.actions}>
           <Button
             variant="primary"
@@ -205,18 +176,13 @@ export default function PublishedQuiz() {
           </Button>
         </div>
 
-        {/* Share link section */}
         <div className={styles.shareBox}>
           <p className={styles.shareLabel}>Share with friends:</p>
 
           <code className={styles.shareLink}>{shareLink}</code>
 
           <div className={styles.shareActions}>
-            <Button
-              variant="primary"
-              type="button"
-              onClick={handleCopyLink}
-            >
+            <Button variant="primary" type="button" onClick={handleCopyLink}>
               {copied ? "Link copied! ✅" : "Copy link"}
             </Button>
           </div>

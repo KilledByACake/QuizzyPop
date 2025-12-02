@@ -1,24 +1,20 @@
 /**
  * QuizCompleted Page
- * 
+ *
  * Displays the final results after a user completes a quiz. Shows score, correct answers,
  * difficulty level, and optional feedback messages. Provides options to take another quiz
  * or retake the same quiz.
- * 
+ *
  * Result data is passed via React Router location state from TakingQuiz page after
  * submitting answers. If no state exists (e.g., user hard-refreshes), displays an error
  * message with navigation back to quiz browsing.
- * 
- * Key Features:
- * - Score display with percentage and correct answer count
- * - Celebrating mascot animation for positive reinforcement
- * - StatCards for visual result presentation
- * - Accessibility: ARIA labels, live regions, screen reader summaries
- * - Navigation options: take another quiz or retake current quiz
+ *
+ * Also stores a local "quiz attempt" in localStorage so the MyPage dashboard can show
+ * quizzes taken and average score even before a backend QuizAttempt feature exists.
  */
 
 import { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
 import Card from "../components/Card";
 import StatCard from "../components/StatCard";
@@ -27,50 +23,75 @@ import Mascot from "../components/Mascot";
 import styles from "./QuizCompleted.module.css";
 
 /**
- * Structure of quiz result data passed from TakingQuiz page
+ * Structure of quiz result data passed from TakingQuiz page.
+ * In practice, the backend might not match this exactly, so we normalize it below.
  */
 interface QuizResult {
-  /** Unique identifier for the quiz */
-  quizId: number;
-  /** Display title of the completed quiz */
-  quizTitle: string;
-  /** Number of questions answered correctly */
-  correctAnswers: number;
-  /** Total number of questions in the quiz */
-  totalQuestions: number;
-  /** Percentage score (0-100) */
-  score: number;
-  /** Difficulty level (Easy, Medium, Hard) */
-  difficulty: string;
-  /** Optional array of feedback messages based on performance */
+  quizId?: number;
+  quizTitle?: string;
+  correctAnswers?: number;
+  totalQuestions?: number;
+  score?: number; // may be raw correct count, fraction, or percentage
+  difficulty?: string;
   feedbackMessages?: string[];
 }
 
 /**
- * QuizCompleted Component
- * 
- * Final page in the quiz-taking flow. Receives result data from TakingQuiz via
- * location.state and displays performance metrics with celebration visuals.
- * 
- * @returns Results page with score display and navigation options, or error if no data
+ * Local record of a quiz attempt, stored in localStorage.
+ * This is used by MyPage to show "quizzes taken" and average score.
  */
+interface QuizAttempt {
+  quizId: number;
+  quizTitle: string;
+  score: number; // normalized percentage 0–100
+  completedAt: string;
+}
+
+/** Safely normalizes a score to a 0–100 percentage. */
+function normalizeScore(result: QuizResult): number {
+  const correct = result.correctAnswers;
+  const total = result.totalQuestions;
+  const rawScore = result.score;
+
+  // If we have correct + total, always prefer that
+  if (
+    typeof correct === "number" &&
+    typeof total === "number" &&
+    total > 0
+  ) {
+    return Math.round((correct / total) * 100);
+  }
+
+  // If no rawScore, fallback to 0
+  if (rawScore == null) return 0;
+
+  // If score already looks like a percentage (0–100), keep it
+  if (rawScore >= 0 && rawScore <= 100) return Math.round(rawScore);
+
+  // If score is between 0 and 1, treat as fraction
+  if (rawScore > 0 && rawScore < 1) {
+    return Math.round(rawScore * 100);
+  }
+
+  // Otherwise, guess based on totalQuestions if we have it
+  if (typeof total === "number" && total > 0) {
+    return Math.round((rawScore / total) * 100);
+  }
+
+  // Fallback: clamp to [0, 100]
+  return Math.max(0, Math.min(100, Math.round(rawScore)));
+}
+
 const QuizCompleted = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  // Extract result data from navigation state
-  const result = location.state as QuizResult | undefined;
+  const { id: routeId } = useParams<{ id: string }>();
 
-  // Update document title with quiz name for better browser history
-  useEffect(() => {
-    if (result) {
-      document.title = `Quiz result - ${result.quizTitle} | Quizzy Pop`;
-    } else {
-      document.title = "Quiz result - Quizzy Pop";
-    }
-  }, [result]);
+  // Raw result from navigation state (may not match our interface perfectly)
+  const rawResult = location.state as QuizResult | undefined;
 
   // Handle case where no result data exists (page refresh, direct navigation)
-  if (!result) {
+  if (!rawResult) {
     return (
       <section
         className={styles["qp-publish-success"]}
@@ -94,27 +115,67 @@ const QuizCompleted = () => {
     );
   }
 
-  // Format score and correct answers for display
-  const scoreLabel = `${result.score}%`;
-  const correctLabel = `${result.correctAnswers}/${result.totalQuestions}`;
+  // Fallback quizId: prefer state, otherwise parse it from the route
+  const quizId =
+    rawResult.quizId ??
+    (routeId ? Number(routeId) : NaN);
+
+  // Normalize main fields with safe fallbacks
+  const normalizedScore = normalizeScore(rawResult);
+  const correctAnswers = rawResult.correctAnswers ?? 0;
+  const totalQuestions = rawResult.totalQuestions ?? 0;
+  const quizTitle = rawResult.quizTitle ?? "Quiz";
+  const difficulty = rawResult.difficulty ?? "Unknown";
+
+  const scoreLabel = `${normalizedScore}%`;
+  const correctLabel =
+    totalQuestions > 0
+      ? `${correctAnswers}/${totalQuestions}`
+      : `${correctAnswers}`;
+
+  // Store attempt in localStorage whenever we have a valid quizId
+  useEffect(() => {
+    if (!quizId || Number.isNaN(quizId)) return;
+
+    try {
+      const raw = localStorage.getItem("quiz_attempts");
+      const attempts: QuizAttempt[] = raw ? JSON.parse(raw) : [];
+
+      attempts.push({
+        quizId,
+        quizTitle,
+        score: normalizedScore,
+        completedAt: new Date().toISOString(),
+      });
+
+      localStorage.setItem("quiz_attempts", JSON.stringify(attempts));
+    } catch (err) {
+      console.error("Failed to save quiz attempt:", err);
+    }
+  }, [quizId, quizTitle, normalizedScore]);
+
+  // Update document title with quiz name for better browser history
+  useEffect(() => {
+    document.title = `Quiz result - ${quizTitle} | Quizzy Pop`;
+  }, [quizTitle]);
 
   return (
     <section
       className={styles["qp-publish-success"]}
       aria-labelledby="quiz-completed-heading"
-      aria-live="polite" // Announces content changes to screen readers
+      aria-live="polite"
     >
       {/* Header with celebration message and quiz title */}
       <div className={styles["qp-publish__header"]}>
         <h1 id="quiz-completed-heading">🎉 Great Job!</h1>
         <p>
-          You&apos;ve completed the quiz: <strong>{result.quizTitle}</strong>
+          You&apos;ve completed the quiz: <strong>{quizTitle}</strong>
         </p>
         {/* Hidden summary for screen readers - provides complete context */}
         <p id="quiz-score-summary" className="sr-only">
-          You scored {result.score} percent, with {result.correctAnswers} correct
-          answers out of {result.totalQuestions} questions. Difficulty level was{" "}
-          {result.difficulty}.
+          You scored {normalizedScore} percent, with {correctAnswers} correct
+          answers out of {totalQuestions} questions. Difficulty level was{" "}
+          {difficulty}.
         </p>
       </div>
 
@@ -131,7 +192,7 @@ const QuizCompleted = () => {
       <Card
         variant="elevated"
         className={styles["qp-quiz-card"]}
-        aria-describedby="quiz-score-summary" // Links to hidden summary for accessibility
+        aria-describedby="quiz-score-summary"
       >
         <header>
           <h2>Your Results</h2>
@@ -144,22 +205,14 @@ const QuizCompleted = () => {
             label="Correct answers"
             variant="primary"
           />
-          <StatCard
-            number={scoreLabel}
-            label="Score"
-            variant="secondary"
-          />
-          <StatCard
-            number={result.difficulty}
-            label="Difficulty"
-            variant="secondary"
-          />
+          <StatCard number={scoreLabel} label="Score" variant="secondary" />
+          <StatCard number={difficulty} label="Difficulty" variant="secondary" />
         </div>
 
         {/* Optional feedback messages (e.g., "Perfect score!", "Good job!") */}
-        {(result.feedbackMessages?.length ?? 0) > 0 && (
+        {(rawResult.feedbackMessages?.length ?? 0) > 0 && (
           <div className={styles["qp-feedback"]}>
-            {result.feedbackMessages!.map((msg, i) => (
+            {rawResult.feedbackMessages!.map((msg, i) => (
               <p className={styles["qp-feedback-line"]} key={i}>
                 {msg}
               </p>
@@ -185,7 +238,11 @@ const QuizCompleted = () => {
           type="button"
           variant="gray"
           className={`${styles["qp-btn"]} ${styles["qp-btn--secondary"]}`}
-          onClick={() => navigate(`/quiz/${result.quizId}/take`)}
+          onClick={() =>
+            quizId && !Number.isNaN(quizId)
+              ? navigate(`/quiz/${quizId}/take`)
+              : navigate("/quizzes")
+          }
         >
           Retake quiz 🔁
         </Button>

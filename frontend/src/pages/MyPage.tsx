@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import api from "../api";
 import { useAuth } from "../contexts/AuthContext";
 import Loader from "../components/Loader";
@@ -9,7 +9,7 @@ import Button from "../components/Button";
 import Mascot from "../components/Mascot";
 import styles from "./MyPage.module.css";
 
-/** User profile data from /api/auth/me endpoint */
+/** User profile returned by /api/auth/me */
 interface MeResponse {
   id: number;
   displayName: string;
@@ -18,95 +18,118 @@ interface MeResponse {
   avatarUrl?: string | null;
 }
 
-/** Quiz summary for user's created quizzes list */
+/** Quiz summary for the "My Created Quizzes" list */
 interface QuizSummary {
   id: number;
   title: string;
-  category: {
+  category?: {
     id: number;
     name: string;
     description?: string;
-  };
-  createdAt: string;
-  difficulty: string;
+  } | null;
+  createdAt?: string;
+  createdDate?: string;
+  difficulty?: string;
+
+  // Owner fallback fields (backend may use different names)
+  createdByUserId?: number | null;
+  ownerId?: number | null;
+  userId?: number | null;
+
+  // Statistics (optional if backend sends them)
+  attemptsCount?: number;
+  averageScore?: number;
 }
 
-/** Development flag - enables mock data when not logged in for testing UI */
-const USE_DEV_MOCK_WHEN_LOGGED_OUT = true;
+/** Local quiz attempt stored by QuizCompleted in localStorage */
+interface LocalQuizAttempt {
+  quizId: number;
+  quizTitle: string;
+  score: number; // normalized percentage
+  completedAt: string;
+}
 
 /**
- * User dashboard page (MyPage)
- * Displays user profile, statistics, created quizzes, and quiz history
- * Note: Quiz history/attempts feature not yet implemented on backend
+ * MyPage (User Dashboard)
+ * - Shows profile info and membership date
+ * - Shows quizzes created by the user
+ * - Shows quizzes taken (read from localStorage for now)
+ * - Includes stats: created quizzes, taken quizzes, average score
  */
 const MyPage = () => {
   const { isAuthenticated } = useAuth();
+
   const [me, setMe] = useState<MeResponse | null>(null);
   const [quizzes, setQuizzes] = useState<QuizSummary[]>([]);
+  const [takenQuizzes, setTakenQuizzes] = useState<LocalQuizAttempt[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch user data and quizzes on mount
+  /** Safely formats an ISO date string */
+  const formatDate = (value?: string) => {
+    if (!value) return "Unknown";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return value;
+    return d.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
+
+  /** Load local attempts from localStorage */
+  const loadLocalAttempts = (): LocalQuizAttempt[] => {
+    try {
+      const raw = localStorage.getItem("quiz_attempts");
+      if (!raw) return [];
+      const parsed = JSON.parse(raw) as LocalQuizAttempt[];
+      if (!Array.isArray(parsed)) return [];
+      return parsed;
+    } catch (err) {
+      console.error("Failed to load local quiz attempts:", err);
+      return [];
+    }
+  };
+
+  /** Fetch user, their quizzes, and local attempts */
   useEffect(() => {
-    // Use mock data in development when not logged in
-    if (!isAuthenticated && USE_DEV_MOCK_WHEN_LOGGED_OUT) {
-      const mockUser: MeResponse = {
-        id: 1,
-        displayName: "Dev User",
-        email: "dev@example.com",
-        createdAt: "2024-01-01T00:00:00Z",
-        avatarUrl: null,
-      };
-
-      const mockQuizzes: QuizSummary[] = [
-        {
-          id: 10,
-          title: "My First Quiz",
-          category: { id: 1, name: "Math", description: "" },
-          createdAt: "2024-05-01T00:00:00Z",
-          difficulty: "easy",
-        },
-        {
-          id: 11,
-          title: "History Challenge",
-          category: { id: 2, name: "History", description: "" },
-          createdAt: "2024-05-12T00:00:00Z",
-          difficulty: "medium",
-        },
-      ];
-
-      setMe(mockUser);
-      setQuizzes(mockQuizzes);
-      setLoading(false);
-      setError(null);
-      return;
-    }
-
-    // Require authentication for real data
-    if (!isAuthenticated) {
-      setLoading(false);
-      setError("You need to be logged in to view this page.");
-      return;
-    }
-
-    /** Fetch user profile and created quizzes from backend */
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        // Fetch user profile
-        const meRes = await api.get<MeResponse>("/api/auth/me");
-        setMe(meRes.data);
+        // Require authentication
+        if (!isAuthenticated) {
+          setLoading(false);
+          setError("You must be logged in to view this page.");
+          return;
+        }
 
-        // Fetch user's created quizzes
+        // --- Fetch user profile ---
+        const meRes = await api.get<MeResponse>("/api/auth/me");
+        const user = meRes.data;
+        setMe(user);
+
+        // --- Fetch quizzes created by the user ---
         const quizzesRes = await api.get<QuizSummary[]>(
-          `/api/quizzes?userId=${meRes.data.id}`,
+          `/api/quizzes?userId=${user.id}`
         );
-        setQuizzes(quizzesRes.data);
+        const rawQuizzes = quizzesRes.data || [];
+
+        // Extra safety: filter by owner on client as well
+        const filtered = rawQuizzes.filter((q) => {
+          const ownerId =
+            q.createdByUserId ?? q.ownerId ?? q.userId ?? null;
+          return ownerId === null || ownerId === user.id;
+        });
+
+        setQuizzes(filtered);
+
+        // --- Load taken quizzes from localStorage (recorded by QuizCompleted) ---
+        setTakenQuizzes(loadLocalAttempts());
       } catch (err) {
         console.error(err);
-        setError("Could not load your data.");
+        setError("Failed to load your dashboard.");
       } finally {
         setLoading(false);
       }
@@ -115,6 +138,46 @@ const MyPage = () => {
     void fetchData();
   }, [isAuthenticated]);
 
+  /** Statistics */
+  const quizzesCreated = quizzes.length;
+  const quizzesTaken = takenQuizzes.length;
+
+  const successRate = useMemo(() => {
+    if (takenQuizzes.length === 0) return "-";
+    const total = takenQuizzes.reduce(
+      (acc: number, a: LocalQuizAttempt) => acc + (a.score ?? 0),
+      0
+    );
+    return `${Math.round(total / takenQuizzes.length)}%`;
+  }, [takenQuizzes]);
+
+  /** Actions */
+  const handleViewQuiz = (id: number) => {
+    window.location.href = `/quiz/${id}/take`;
+  };
+
+  const handleEditQuiz = (id: number) => {
+    window.location.href = `/quiz/${id}/edit`;
+  };
+
+  const handleDeleteQuiz = async (id: number) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this quiz? This action cannot be undone."
+    );
+    if (!confirmed) return;
+
+    try {
+      // Optimistically remove from UI
+      setQuizzes((prev) => prev.filter((q) => q.id !== id));
+
+      await api.delete(`/api/quizzes/${id}`);
+    } catch (err) {
+      console.error(err);
+      // You can add a toast/snackbar here later
+    }
+  };
+
+  /** Loading state */
   if (loading) {
     return (
       <section className={styles.page}>
@@ -123,6 +186,7 @@ const MyPage = () => {
     );
   }
 
+  /** Error / not logged in state */
   if (error || !me) {
     return (
       <section className={styles.page}>
@@ -131,24 +195,21 @@ const MyPage = () => {
     );
   }
 
-  // Calculate statistics
-  const quizzesCreated = quizzes.length;
-  const quizzesTaken = 0; // Placeholder - QuizAttempt entity not yet implemented
-  const successRate = "-"; // Placeholder - scoring/history not yet implemented
+  const memberSince = formatDate(me.createdAt);
 
   return (
     <section className={styles.page}>
-      {/* Profile header with stats */}
+      {/* Header with profile and stats */}
       <header className={styles.header}>
         <div className={styles.profile}>
           <Mascot variant="blueberry" size="medium" />
           <div>
             <h1>{me.displayName}</h1>
-            <p>Member since {new Date(me.createdAt).toLocaleDateString()}</p>
+            <p>{me.email}</p>
+            <p>Member since {memberSince}</p>
           </div>
         </div>
 
-        {/* Statistics cards */}
         <div className={styles.statsRow}>
           <StatCard number={quizzesCreated} label="Quizzes created" />
           <StatCard
@@ -158,63 +219,111 @@ const MyPage = () => {
           />
           <StatCard
             number={successRate}
-            label="Success rate"
+            label="Avg. score"
             variant="secondary"
           />
         </div>
       </header>
 
       <div className={styles.grid}>
-        {/* Created quizzes section */}
+        {/* My Created Quizzes */}
         <section>
           <h2>My Created Quizzes</h2>
+
           {quizzes.length === 0 ? (
             <p>You haven't created any quizzes yet.</p>
           ) : (
             <div className={styles.quizList}>
-              {quizzes.map((quiz) => (
+              {quizzes.map((quiz) => {
+                const created = quiz.createdAt ?? quiz.createdDate ?? "";
+                return (
+                  <Card
+                    key={quiz.id}
+                    variant="elevated"
+                    className={styles.quizCard}
+                  >
+                    <h3>{quiz.title}</h3>
+
+                    <p>
+                      {quiz.category?.name && (
+                        <span>{quiz.category.name} · </span>
+                      )}
+                      {quiz.difficulty && (
+                        <span>
+                          Difficulty:{" "}
+                          {quiz.difficulty.charAt(0).toUpperCase() +
+                            quiz.difficulty.slice(1)}
+                          {" · "}
+                        </span>
+                      )}
+                      <span>Created: {formatDate(created)}</span>
+                    </p>
+
+                    {typeof quiz.attemptsCount === "number" && (
+                      <p>
+                        Attempts: {quiz.attemptsCount} · Avg score:{" "}
+                        {quiz.averageScore ?? 0}%
+                      </p>
+                    )}
+
+                    <div className={styles.quizActions}>
+                      <Button
+                        variant="primary"
+                        onClick={() => handleViewQuiz(quiz.id)}
+                      >
+                        View
+                      </Button>
+                      <Button
+                        variant="gray"
+                        onClick={() => handleEditQuiz(quiz.id)}
+                      >
+                        Edit
+                      </Button>
+                      <Button
+                        variant="danger"
+                        onClick={() => handleDeleteQuiz(quiz.id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
+          )}
+        </section>
+
+        {/* My Taken Quizzes */}
+        <section>
+          <h2>My Taken Quizzes</h2>
+
+          {takenQuizzes.length === 0 ? (
+            <p>You haven't taken any quizzes yet.</p>
+          ) : (
+            <div className={styles.quizList}>
+              {takenQuizzes.map((attempt) => (
                 <Card
-                  key={quiz.id}
-                  variant="elevated"
+                  key={`${attempt.quizId}-${attempt.completedAt}`}
+                  variant="outlined"
                   className={styles.quizCard}
                 >
-                  <h3>{quiz.title}</h3>
-                  <p>{quiz.category.name}</p>
+                  <h3>{attempt.quizTitle}</h3>
                   <p>
-                    Created:{" "}
-                    {new Date(quiz.createdAt).toLocaleDateString()}
+                    Score: <strong>{attempt.score}%</strong> · Date:{" "}
+                    {formatDate(attempt.completedAt)}
                   </p>
-                  {/* Quiz action buttons */}
                   <div className={styles.quizActions}>
                     <Button
-                      type="button"
                       variant="primary"
-                      onClick={() =>
-                        (window.location.href = `/quiz/${quiz.id}/take`)
-                      }
+                      onClick={() => handleViewQuiz(attempt.quizId)}
                     >
                       View
-                    </Button>
-                    <Button
-                      type="button"
-                      variant="gray"
-                      onClick={() =>
-                        (window.location.href = `/quiz/${quiz.id}/edit`)
-                      }
-                    >
-                      Edit
                     </Button>
                   </div>
                 </Card>
               ))}
             </div>
           )}
-        </section>
-
-        {/* Quiz history section - not yet implemented */}
-        <section>
-          <h2>My Taken Quizzes</h2>
-          <p>Coming soon – quiz history / attempts.</p>
         </section>
       </div>
     </section>

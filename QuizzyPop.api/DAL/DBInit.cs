@@ -62,13 +62,16 @@ public static class DBInit
 
         if (!context.Quiz.Any())
         {
+            var cat1 = context.Categories.First(c => c.Name == "Math");
+            var cat2 = context.Categories.First(c => c.Name == "Entertainment");
+
             var quizzes = new List<Quiz>
             {
                 new Quiz {
                     Title = "Geometry",
                     Description = "A simple quiz about basic geometry",
                     Difficulty = "medium",
-                    CategoryId = 1,
+                    CategoryId = cat1.Id,
                     ImageUrl = "/images/geometry.jpeg",
                     UserId = 1,
                     Questions = new List<Question>
@@ -98,7 +101,7 @@ public static class DBInit
                         Title = "Disney Characters",
                         Description = "Test your knowledge about Disney Characters!",
                         Difficulty = "easy",
-                        CategoryId = 2,
+                        CategoryId = cat2.Id,
                         ImageUrl = "/images/disney.webp",
                         UserId = 1,
                         Questions = new List<Question>

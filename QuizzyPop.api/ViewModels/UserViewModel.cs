@@ -50,7 +50,7 @@ namespace QuizzyPop.ViewModels
 
     public class MyPageViewModel
     {
-        public User User { get; set; }
+        public User? User { get; set; }
         public List<Quiz> CreatedQuizzes { get; set; } = new();
         public List<Quiz> TakenQuizzes { get; set; } = new();
     }

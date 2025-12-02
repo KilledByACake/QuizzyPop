@@ -9,16 +9,16 @@ namespace QuizzyPop.ViewModels
         public int Id { get; set; }
 
         [Required, StringLength(120)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [StringLength(2000)]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [StringLength(80)]
         public string? Category { get; set; }
 
         [Required]
-        public string Difficulty { get; set; }
+        public string Difficulty { get; set; } = string.Empty;
 
         [Range(0, 600)]
         public int? TimeLimit { get; set; }

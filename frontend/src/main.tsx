@@ -102,8 +102,7 @@ createRoot(document.getElementById("root")!).render(
 
               {/* ========== DEVELOPMENT/TESTING ROUTES ========== */}
               
-              {/* Temporary route for local testing without authentication */}
-              <Route path="/dev/quiz/123/questions" element={<AddQuestions />} />
+       
             </Route>
           </Routes>
         </BrowserRouter>

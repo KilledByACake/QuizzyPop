@@ -122,6 +122,7 @@ namespace QuizzyPop.Services
             Score = total > 0 ? (int)((double)correctCount / total * 100) : 0,
             CorrectAnswers = correctCount,
             TotalQuestions = total,
+            Difficulty = quiz.Difficulty,
             FeedbackMessages = messages
         };
     }

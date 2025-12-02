@@ -136,3 +136,67 @@
     padding: 0.9rem 1rem;
   }
 }
+/* Wrapper around the scroll area – gives background and padding */
+.takenListWrapper {
+  margin-top: 0.75rem;
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 0.75rem;
+  box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+}
+
+/* Scrollable column of cards – shows roughly 3 cards before scrolling */
+.takenList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-height: 280px; /* ca. 3 kort av normal høyde */
+  overflow-y: auto;
+  padding-right: 0.25rem; /* litt plass til scrollbar */
+}
+
+/* Optional: nice slim scrollbar */
+.takenList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.takenList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.takenList::-webkit-scrollbar-thumb {
+  background: #cbd5f5;
+  border-radius: 999px;
+}
+
+/* Card styling inside "taken" list */
+.takenCard {
+  padding: 0.75rem 1rem;
+}
+
+/* Header row: title + score on the right */
+.takenHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.25rem;
+}
+
+.takenTitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.takenScore {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0f766e;
+}
+
+/* Meta line under title (date, etc.) */
+.takenMeta {
+  font-size: 0.8rem;
+  color: #6b7280;
+  margin: 0;
+}

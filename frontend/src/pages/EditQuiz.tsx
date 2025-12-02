@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import type { ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api";
@@ -15,7 +15,7 @@ import styles from "./EditQuiz.module.css";
 
 /** Question structure for editing */
 interface EditQuestion {
-  id: number;
+  id: number; // existing DB id (positive) or temporary negative id for newly added questions
   text: string;
   choices: string[];
   correctChoiceIndex: number;
@@ -33,13 +33,18 @@ interface EditQuizDto {
   questions: EditQuestion[];
 }
 
-/** Development flag - enables mock data when backend endpoints not implemented */
-const USE_DEV_MOCK_WHEN_BACKEND_DOWN = true;
-
 /**
- * Edit quiz page - allows modifying quiz metadata and questions
- * Note: Backend endpoints for editing not fully implemented yet
- * Uses mock data in development mode (USE_DEV_MOCK_WHEN_BACKEND_DOWN)
+ * EditQuiz Page
+ *
+ * Allows editing quiz metadata (title, description, category, difficulty, tags, image)
+ * and associated multiple-choice questions.
+ *
+ * Backend expectations (aligned with AddQuestions page):
+ * - GET  /api/quizzes/{id}/with-questions
+ * - PUT  /api/quizzes/{id}            (quiz metadata & image)
+ * - PUT  /api/quiz-questions/{id}     (update existing question)
+ * - POST /api/quiz-questions          (create new question)
+ * - DELETE /api/quiz-questions/{id}   (delete question)
  */
 const EditQuiz = () => {
   const { id } = useParams<{ id: string }>();
@@ -53,7 +58,12 @@ const EditQuiz = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch quiz data on mount
+  // Track which existing questions have been deleted so we can call DELETE on save
+  const [deletedQuestionIds, setDeletedQuestionIds] = useState<number[]>([]);
+
+  // ---------------------------
+  // Load quiz with questions
+  // ---------------------------
   useEffect(() => {
     if (!id) {
       setError("Missing quiz id.");
@@ -66,42 +76,16 @@ const EditQuiz = () => {
         setLoading(true);
         setError(null);
 
-        // Use mock data in development when backend not ready
-        if (USE_DEV_MOCK_WHEN_BACKEND_DOWN) {
-          const mock: EditQuizDto = {
-            id: Number(id),
-            title: "Mock Quiz to Edit",
-            description: "This is a mock quiz used in dev mode.",
-            categoryId: "1",
-            difficulty: "medium",
-            tags: ["math", "algebra"],
-            imageUrl: null,
-            questions: [
-              {
-                id: 1,
-                text: "2 + 2 = ?",
-                choices: ["3", "4", "5"],
-                correctChoiceIndex: 1,
-              },
-              {
-                id: 2,
-                text: "Capital of France?",
-                choices: ["Berlin", "Paris", "Rome"],
-                correctChoiceIndex: 1,
-              },
-            ],
-          };
-          setQuiz(mock);
-          setImagePreview(null);
-          return;
-        }
-
-        // Fetch from backend (when implemented)
         const res = await api.get<EditQuizDto>(
-          `/api/quizzes/${id}/with-questions`,
+          `/api/quizzes/${id}/with-questions`
         );
 
-        setQuiz(res.data);
+        const loadedQuiz: EditQuizDto = {
+          ...res.data,
+          categoryId: String((res.data as any).categoryId ?? ""),
+        };
+
+        setQuiz(loadedQuiz);
         setImagePreview(res.data.imageUrl ?? null);
       } catch (err) {
         console.error(err);
@@ -114,14 +98,16 @@ const EditQuiz = () => {
     void fetchQuiz();
   }, [id]);
 
-  // === EVENT HANDLERS ===
+  // ---------------------------
+  // Handlers - metadata
+  // ---------------------------
 
-  /** Handle changes to quiz metadata fields (title, description, etc.) */
+  /** Handle changes to quiz metadata fields (title, description, category, difficulty) */
   const handleMetaChange = (
     e:
       | ChangeEvent<HTMLInputElement>
       | ChangeEvent<HTMLTextAreaElement>
-      | ChangeEvent<HTMLSelectElement>,
+      | ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setQuiz((prev) =>
@@ -130,7 +116,7 @@ const EditQuiz = () => {
             ...prev,
             [name]: value,
           }
-        : prev,
+        : prev
     );
   };
 
@@ -152,6 +138,10 @@ const EditQuiz = () => {
     reader.readAsDataURL(file);
   };
 
+  // ---------------------------
+  // Handlers - questions
+  // ---------------------------
+
   /** Update question text */
   const handleQuestionTextChange = (qIndex: number, value: string) => {
     if (!quiz) return;
@@ -164,7 +154,7 @@ const EditQuiz = () => {
   const handleChoiceChange = (
     qIndex: number,
     cIndex: number,
-    value: string,
+    value: string
   ) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -191,11 +181,11 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Add a new empty question */
+  /** Add a new question (temporary negative id, backend will create real id on POST) */
   const handleAddQuestion = () => {
     if (!quiz) return;
     const newQuestion: EditQuestion = {
-      id: Date.now(), // Temporary client-side ID; backend will assign real ID
+      id: -Date.now(), // negative id -> indicates "new question" not yet in DB
       text: "",
       choices: ["", ""],
       correctChoiceIndex: 0,
@@ -203,20 +193,32 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions: [...quiz.questions, newQuestion] });
   };
 
-  /** Remove a question from the quiz */
+  /** Remove a question (and track deletions for existing DB questions) */
   const handleRemoveQuestion = (qIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
+    const removed = questions[qIndex];
+
+    // If it's an existing DB question (id > 0), remember to DELETE it on save
+    if (removed && removed.id > 0) {
+      setDeletedQuestionIds((prev) =>
+        prev.includes(removed.id) ? prev : [...prev, removed.id]
+      );
+    }
+
     questions.splice(qIndex, 1);
     setQuiz({ ...quiz, questions });
   };
 
-  /** Cancel editing and return to My Page */
+  /** Cancel editing and return to MyPage */
   const handleCancel = () => {
     navigate("/mypage");
   };
 
-  /** Save all changes to backend */
+  // ---------------------------
+  // Save quiz changes
+  // ---------------------------
+
   const handleSave = async () => {
     if (!quiz) return;
 
@@ -224,7 +226,7 @@ const EditQuiz = () => {
       setSaving(true);
       setError(null);
 
-      // 1) Update quiz metadata (including image)
+      // 1) Update quiz metadata (including optional image, tags)
       const formData = new FormData();
       formData.append("title", quiz.title);
       formData.append("description", quiz.description);
@@ -241,17 +243,48 @@ const EditQuiz = () => {
 
       await api.put(`/api/quizzes/${quiz.id}`, formData);
 
-      // 2) Update questions (bulk update - adjust to actual endpoints)
-      await api.put(`/api/quizzes/${quiz.id}/questions`, {
-        questions: quiz.questions.map((q) => ({
-          id: q.id,
-          text: q.text,
-          choices: q.choices,
-          correctChoiceIndex: q.correctChoiceIndex,
-        })),
-      });
+      // 2) Delete questions that were removed (existing ones only)
+      if (deletedQuestionIds.length > 0) {
+        await Promise.all(
+          deletedQuestionIds.map((qId) =>
+            api.delete(`/api/quiz-questions/${qId}`)
+          )
+        );
+      }
 
-      // Navigate back to My Page after successful save
+      // 3) Split questions into existing (id > 0) and new (id < 0)
+      const existingQuestions = quiz.questions.filter((q) => q.id > 0);
+      const newQuestions = quiz.questions.filter((q) => q.id < 0);
+
+      // 4) Update existing questions
+      if (existingQuestions.length > 0) {
+        await Promise.all(
+          existingQuestions.map((q) =>
+            api.put(`/api/quiz-questions/${q.id}`, {
+              text: q.text,
+              choices: q.choices,
+              // Must match backend naming used in AddQuestions: correctAnswerIndex
+              correctAnswerIndex: q.correctChoiceIndex,
+            })
+          )
+        );
+      }
+
+      // 5) Create new questions
+      if (newQuestions.length > 0) {
+        await Promise.all(
+          newQuestions.map((q) =>
+            api.post(`/api/quiz-questions`, {
+              quizId: quiz.id,
+              text: q.text,
+              choices: q.choices,
+              correctAnswerIndex: q.correctChoiceIndex,
+            })
+          )
+        );
+      }
+
+      // On success: go back to MyPage
       navigate("/mypage");
     } catch (err) {
       console.error(err);
@@ -261,7 +294,9 @@ const EditQuiz = () => {
     }
   };
 
-  // === RENDER ===
+  // ---------------------------
+  // Render
+  // ---------------------------
 
   if (!id) {
     return <Error message="Missing quiz id" />;
@@ -406,11 +441,7 @@ const EditQuiz = () => {
       <section className={styles.questionsSection}>
         <div className={styles.questionsHeader}>
           <h2>Questions</h2>
-          <Button
-            type="button"
-            variant="primary"
-            onClick={handleAddQuestion}
-          >
+          <Button type="button" variant="primary" onClick={handleAddQuestion}>
             + Add Question
           </Button>
         </div>
@@ -468,7 +499,7 @@ const EditQuiz = () => {
                           handleChoiceChange(
                             qIndex,
                             cIndex,
-                            e.target.value,
+                            e.target.value
                           )
                         }
                       />

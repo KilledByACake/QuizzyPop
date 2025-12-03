@@ -1,18 +1,5 @@
-/**
- * QuizCompleted Page
- *
- * Displays the final results after a user completes a quiz. Shows score, correct answers,
- * difficulty level, and optional feedback messages. Provides options to take another quiz
- * or retake the same quiz.
- *
- * Result data is passed via React Router location state from TakingQuiz page after
- * submitting answers. If no state exists (e.g., user hard-refreshes), displays an error
- * message with navigation back to quiz browsing.
- *
- * Also stores a local "quiz attempt" in localStorage so the MyPage dashboard can show
- * quizzes taken and average score even before a backend QuizAttempt feature exists.
- */
-
+// QuizCompleted Page
+// Displays final results for a completed quiz and stores a local attempt record.
 import { useEffect } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import Button from "../components/Button";
@@ -22,10 +9,8 @@ import Error from "../components/Error";
 import Mascot from "../components/Mascot";
 import styles from "./QuizCompleted.module.css";
 
-/**
- * Structure of quiz result data passed from TakingQuiz page.
- * In practice, the backend might not match this exactly, so we normalize it below.
- */
+// Structure of quiz result data passed from TakingQuiz page.
+// The backend payload may vary, so fields are treated as optional.
 interface QuizResult {
   quizId?: number;
   quizTitle?: string;
@@ -36,10 +21,8 @@ interface QuizResult {
   feedbackMessages?: string[];
 }
 
-/**
- * Local record of a quiz attempt, stored in localStorage.
- * This is used by MyPage to show "quizzes taken" and average score.
- */
+// Local record of a quiz attempt stored in localStorage.
+// Used by MyPage to show quizzes taken and average score.
 interface QuizAttempt {
   quizId: number;
   quizTitle: string;
@@ -47,13 +30,13 @@ interface QuizAttempt {
   completedAt: string;
 }
 
-/** Safely normalizes a score to a 0–100 percentage. */
+// Safely normalizes a score to a 0–100 percentage
 function normalizeScore(result: QuizResult): number {
   const correct = result.correctAnswers;
   const total = result.totalQuestions;
   const rawScore = result.score;
 
-  // If we have correct + total, always prefer that
+  // Prefer correct/total if present
   if (
     typeof correct === "number" &&
     typeof total === "number" &&
@@ -87,10 +70,10 @@ const QuizCompleted = () => {
   const location = useLocation();
   const { id: routeId } = useParams<{ id: string }>();
 
-  // Raw result from navigation state (may not match our interface perfectly)
+  // Result from navigation state (set by TakingQuiz after submit)
   const rawResult = location.state as QuizResult | undefined;
 
-  // Handle case where no result data exists (page refresh, direct navigation)
+  // If the user refreshed or hit this route directly, there is no state
   if (!rawResult) {
     return (
       <section
@@ -120,7 +103,7 @@ const QuizCompleted = () => {
     rawResult.quizId ??
     (routeId ? Number(routeId) : NaN);
 
-  // Normalize main fields with safe fallbacks
+  // Normalize core result fields with safe fallbacks
   const normalizedScore = normalizeScore(rawResult);
   const correctAnswers = rawResult.correctAnswers ?? 0;
   const totalQuestions = rawResult.totalQuestions ?? 0;
@@ -133,7 +116,7 @@ const QuizCompleted = () => {
       ? `${correctAnswers}/${totalQuestions}`
       : `${correctAnswers}`;
 
-  // Store attempt in localStorage whenever we have a valid quizId
+  // Persist attempt in localStorage so MyPage can show basic stats
   useEffect(() => {
     if (!quizId || Number.isNaN(quizId)) return;
 
@@ -154,7 +137,7 @@ const QuizCompleted = () => {
     }
   }, [quizId, quizTitle, normalizedScore]);
 
-  // Update document title with quiz name for better browser history
+  // Update browser tab title for clearer history
   useEffect(() => {
     document.title = `Quiz result - ${quizTitle} | Quizzy Pop`;
   }, [quizTitle]);

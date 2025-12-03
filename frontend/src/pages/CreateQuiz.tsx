@@ -226,49 +226,6 @@ export default function CreateQuiz() {
           error={errors.tags?.message}
         />
 
-        <div className={styles.imageUpload}>
-          <label className={styles.imageLabel}>
-            Quiz Cover Image
-            <span className={styles.optional}>(Optional)</span>
-          </label>
-          
-          <div className={styles.imagePreviewContainer}>
-            {imagePreview ? (
-              <div className={styles.imagePreview}>
-                <img src={imagePreview} alt="Quiz cover preview" />
-                <button
-                  type="button"
-                  className={styles.removeImage}
-                  onClick={() => {
-                    setImagePreview(null);
-                    setValue('image', undefined);
-                  }}
-                >
-                  Remove
-                </button>
-              </div>
-            ) : (
-              <label className={styles.uploadBox}>
-                <input
-                  type="file"
-                  accept="image/jpeg,image/jpg,image/png,image/webp"
-                  onChange={handleImageChange}
-                  className={styles.fileInput}
-                />
-                <div className={styles.uploadContent}>
-                  <span className={styles.uploadIcon}>📷</span>
-                  <span className={styles.uploadText}>Click to upload image</span>
-                  <span className={styles.uploadHint}>PNG, JPG, WEBP up to 5MB</span>
-                </div>
-              </label>
-            )}
-          </div>
-          
-          {errors.image && (
-            <span className={styles.errorText}>{errors.image.message}</span>
-          )}
-        </div>
-
         <div className={styles.actions}>
           <Button
             type="button"

@@ -2,6 +2,7 @@ using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 using Microsoft.Extensions.Logging;
+using QuizzyPop.Utils;
 
 namespace QuizzyPop.Services
 {
@@ -13,21 +14,40 @@ namespace QuizzyPop.Services
 
         // Dependency injection of repository and logger
         public QuizService(IQuizRepository repo, ILogger<QuizService> logger)
+
         {
             _repo = repo;
             _logger = logger;
         }
+
+        private static readonly Dictionary<int, string> CategoryImageMap = new()
+        {
+            { 1, "/images/categories/math.png" },
+            { 2, "/images/categories/science.png" },
+            { 3, "/images/categories/history.png" },
+            { 4, "/images/categories/geography.png" },
+            { 5, "/images/categories/entertainment.png" },
+        };
+
 
         public async Task<Quiz> CreateAsync(QuizCreateDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.Title))
                 throw new ArgumentException("Title is required", nameof(dto.Title));
 
+            // Pick default image if nothing provided
+            var imageUrl =
+                !string.IsNullOrWhiteSpace(dto.ImageUrl)
+                    ? dto.ImageUrl
+                    : (CategoryImageMap.TryGetValue(dto.CategoryId, out var img)
+                        ? img
+                        : "/images/categories/default.png");
+
             var entity = new Quiz
             {
                 Title = dto.Title.Trim(),
                 Description = dto.Description ?? string.Empty,
-                ImageUrl = dto.ImageUrl ?? string.Empty,
+                ImageUrl = imageUrl,
                 Difficulty = string.IsNullOrWhiteSpace(dto.Difficulty) ? "easy" : dto.Difficulty.Trim(),
                 CategoryId = dto.CategoryId,
                 UserId = dto.UserId
@@ -40,6 +60,7 @@ namespace QuizzyPop.Services
             _logger.LogInformation("Created quiz with id {Id}", created.Id);
             return created;
         }
+
 
         public Task<Quiz?> GetAsync(int id) => _repo.GetByIdAsync(id);
 

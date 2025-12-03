@@ -1,4 +1,4 @@
-/* Full-page container for the published quiz view */
+/* === PAGE === */
 .publishedPage { 
   min-height: calc(100vh - 80px);
   display: flex;
@@ -9,7 +9,7 @@
   z-index: 1;
 }
 
-/* Card that holds the success content */
+/* === CARD === */
 .container {
   background: white;
   border-radius: 1.5rem;
@@ -22,21 +22,21 @@
   z-index: 2;
 }
 
-/* Main success headline */
+/* === TITLE === */
 .title {
   font-size: 2.5rem;
   color: #333;
   margin: 1.5rem 0 0.5rem;
 }
 
-/* Short description under the main headline */
+/* === SUBTITLE === */
 .subtitle {
   font-size: 1.2rem;
   color: #666;
   margin-bottom: 2rem;
 }
 
-/* Stack of primary action buttons */
+/* === ACTIONS === */
 .actions {
   display: flex;
   flex-direction: column;
@@ -44,7 +44,7 @@
   margin: 2rem 0;
 }
 
-/* Box for share link and related controls */
+/* === SHARE BOX === */
 .shareBox {
   margin-top: 2rem;
   padding: 1.5rem;
@@ -52,14 +52,14 @@
   border-radius: 0.5rem;
 }
 
-/* Caption above the share link */
+/* === SHARE LABEL === */
 .shareLabel {
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 0.5rem;
 }
 
-/* Read-only URL box with the share link */
+/* === SHARE LINK === */
 .shareLink {
   display: block;
   padding: 0.75rem;

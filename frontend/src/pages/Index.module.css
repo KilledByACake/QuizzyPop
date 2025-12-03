@@ -7,7 +7,7 @@
     padding: var(--qp-space-xl) var(--qp-space-md);
 }
 
-/* Title SVG - much wider to fit complete text */
+/* === Title SVG === */
 .arc-title {
     width: min(2000px, 98vw);
     height: 350px;
@@ -30,7 +30,7 @@
     stroke-width: 5px;
 }
 
-/* Mascot & Speech Bubble */
+/* === Mascot & Speech Bubble === */
 .mascot-wrap {
     position: relative;
     display: flex;
@@ -104,7 +104,7 @@
     margin-left: auto;
 }
 
-/* Responsive adjustments */
+/* === Responsive adjustments === */
 @media (max-width: 1024px) {
     .arc-text {
         font-size: 56px;

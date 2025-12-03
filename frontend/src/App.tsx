@@ -2,21 +2,27 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
-import { api } from './api'   // 👈 lagt til
+import { api } from './api'
 import ErrorBoundary from "./components/ErrorBoundary";
+
+/**
+ * Root application component.
+ * Currently uses the default Vite + React starter UI and
+ * includes a simple connectivity check against the backend API.
+ */
 
 function App() {
   const [count, setCount] = useState(0)
 
-  // 👇 tester kobling til backend
+  // On initial render, test the connection to the backend API
   useEffect(() => {
     api.get("/quizzes")
-      .then(res => console.log("✅ API-answer:", res.data))
-      .catch(err => console.error("❌ API-wrong:", err))
+      .then(res => console.log("API Response:", res.data))
+      .catch(err => console.error("API error:", err))
   }, [])
 
    return (
-    <ErrorBoundary fallbackMessage="Noe gikk galt i appen.">
+    <ErrorBoundary fallbackMessage="Something went wrong in the application.">
       <>
         <div>
           <a href="https://vite.dev" target="_blank">
@@ -41,8 +47,8 @@ function App() {
           Click on the Vite and React logos to learn more
         </p>
 
-        {/* 👇 ekstra statusmelding */}
-        <p>React koblet til .NET ✅ (sjekk konsollen for API-svar)</p>
+        {/* Status message indicating the frontend is attempting to talk to the backend API */}
+        <p>React is connected to the .NET backend (check the console for API responses).</p>
       </>
     </ErrorBoundary>
   );

@@ -20,6 +20,7 @@ namespace QuizzyPop.Models.Dtos
 
         // NEW: For text answers
         public string? CorrectAnswer { get; set; }
+        
     }
 
     public sealed class QuizQuestionUpdateDto

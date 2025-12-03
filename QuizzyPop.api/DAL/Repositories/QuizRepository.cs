@@ -24,6 +24,7 @@ namespace QuizzyPop.DAL.Repositories
                     .Include(q => q.Category)
                     .Include(q => q.User)
                     .Include(q => q.Tags)
+                    .Include(q => q.Questions)
                     .FirstOrDefaultAsync(q => q.Id == id);
             }
             catch (Exception ex)

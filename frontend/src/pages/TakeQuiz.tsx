@@ -198,7 +198,8 @@ export default function TakeQuiz() {
                     ? quiz.imageUrl
                     : "/images/default-cover.png";
 
-                const questionsCount = quiz.questionsCount ?? 0;
+                    const questionsCount = (quiz as any)?.questions?.length ?? 0;
+
 
                 return (
                   <article

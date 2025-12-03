@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 using QuizzyPop.Services;
+using QuizzyPop.DAL.Repositories;
 
 namespace QuizzyPop.Controllers.Api;
 
@@ -14,11 +15,13 @@ public class QuizController : ControllerBase
 {
     private readonly IQuizService _service;
     private readonly IWebHostEnvironment _env;
+    private readonly IQuizRepository _repo;
 
-    public QuizController(IQuizService service, IWebHostEnvironment env)
+    public QuizController(IQuizService service, IWebHostEnvironment env, IQuizRepository repo)
     {
         _service = service;
         _env = env;
+        _repo = repo;
     }
 
     // GET: api/quizzes/{id} - returns a single quiz or 404 if not found
@@ -31,8 +34,9 @@ public class QuizController : ControllerBase
     // GET: api/quizzes - returns all quizzes
     [HttpGet]
     [AllowAnonymous]
-    public async Task<ActionResult<IEnumerable<Quiz>>> List()
-        => Ok(await _service.ListAsync());
+    public async Task<ActionResult<IEnumerable<Quiz>>> List(){
+        var quizzes = await _repo.GetAllWithDetailsAsync();
+        return Ok(quizzes);}
 
 
     // GET: api/quizzes/{id}/with-questions - returns quiz including its questions

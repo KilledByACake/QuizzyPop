@@ -2,22 +2,22 @@ import { createContext, useContext, useReducer, type ReactNode } from "react";
 import api from "../api";
 import type { AxiosError } from "axios";
 
-/** Quiz object shape returned from the API */
+// Quiz object shape returned from the API
 export interface Quiz {
   id: number;
   title: string;
   description: string;
-  /** ISO date string when quiz was created */
+  // ISO date string when quiz was created
   createdAt: string;
-  /** URL path to quiz cover image */
+  // URL path to quiz cover image
   imageUrl: string;
-  /** Difficulty level (easy/medium/hard) */
+  // Difficulty level (easy/medium/hard)
   difficulty: string;
-  /** ID of the category this quiz belongs to */
+  // ID of the category this quiz belongs to
   categoryId: number;
 }
 
-/** Payload for creating a new quiz */
+// Payload for creating a new quiz
 export interface CreateQuizPayload {
   title: string;
   description: string;
@@ -26,17 +26,17 @@ export interface CreateQuizPayload {
   categoryId: number;
 }
 
-/** State stored in the QuizContext */
+// State stored in the QuizContext
 interface QuizState {
-  /** Array of all loaded quizzes */
+  // Array of all loaded quizzes
   quizzes: Quiz[];
-  /** Whether an async operation is in progress */
+  // Whether an async operation is in progress
   loading: boolean;
-  /** Error message if last operation failed */
+  // Error message if last operation failed
   error: string | null;
 }
 
-/** All possible actions for the reducer */
+// All possible actions for the reducer
 type QuizAction =
   | { type: "START_LOADING" }
   | { type: "SET_QUIZZES"; payload: Quiz[] }
@@ -44,7 +44,7 @@ type QuizAction =
   | { type: "REMOVE_QUIZ"; payload: number } // quiz id
   | { type: "SET_ERROR"; payload: string | null };
 
-/** Initial state for the reducer */
+// Initial state for the reducer
 const initialState: QuizState = {
   quizzes: [],
   loading: false,
@@ -87,17 +87,17 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
   }
 }
 
-/** Context value exposed to components - combines state with actions */
+// Context value exposed to components - combines state with actions
 export interface QuizContextValue extends QuizState {
-  /** Fetch all quizzes from API */
+  // Fetch all quizzes from API
   fetchQuizzes: () => Promise<void>;
-  /** Create a new quiz */
+  // Create a new quiz
   createQuiz: (data: CreateQuizPayload) => Promise<void>;
-  /** Delete a quiz by ID */
+  // Delete a quiz by ID
   deleteQuiz: (id: number) => Promise<void>;
 }
 
-/** Quiz context - provides quiz state and actions globally */
+// Quiz context - provides quiz state and actions globally
 const QuizContext = createContext<QuizContextValue | undefined>(undefined);
 
 /**
@@ -129,7 +129,7 @@ function getErrorMessage(error: unknown): string {
 export function QuizProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(quizReducer, initialState);
 
-  /** Fetch all quizzes from the API and update state */
+  // Fetch all quizzes from the API and update state
   const fetchQuizzes = async () => {
     try {
       dispatch({ type: "START_LOADING" });
@@ -144,7 +144,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  /** Create a new quiz via the API and add to state */
+  // Create a new quiz via the API and add to state
   const createQuiz = async (data: CreateQuizPayload) => {
     try {
       dispatch({ type: "START_LOADING" });
@@ -159,7 +159,7 @@ export function QuizProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  /** Delete a quiz by id from API and remove from state */
+  // Delete a quiz by id from API and remove from state
   const deleteQuiz = async (id: number) => {
     try {
       dispatch({ type: "START_LOADING" });

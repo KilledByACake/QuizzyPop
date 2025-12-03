@@ -2,13 +2,13 @@ import { createContext, useContext, useState } from 'react';
 import type { ReactNode } from 'react';
 
 interface AuthContextType {
-  /** Current JWT access token (null if not logged in) */
+  // Current JWT access token (null if not logged in)
   token: string | null;
-  /** Store token in state and localStorage */
+  // Store token in state and localStorage
   login: (token: string) => void;
-  /** Clear token from state and localStorage */
+  // Clear token from state and localStorage
   logout: () => void;
-  /** Whether user is currently authenticated */
+  // Whether user is currently authenticated
   isAuthenticated: boolean;
 }
 
@@ -25,13 +25,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return localStorage.getItem('token');
   });
 
-  /** Save token to localStorage and update state */
-  const login = (newToken: string) => {
+   // Save token to localStorage and update state
+   const login = (newToken: string) => {
     localStorage.setItem('token', newToken);
     setToken(newToken);
   };
 
-  /** Remove token from localStorage and clear state */
+  // Remove token from localStorage and clear state
   const logout = () => {
     localStorage.removeItem('token');
     setToken(null);

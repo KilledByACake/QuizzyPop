@@ -1,3 +1,4 @@
+/* === PAGE === */
 .qp-publish-success {
   min-height: 85vh;
   padding: 3rem 2rem 5rem;
@@ -6,6 +7,8 @@
   position: relative;
   overflow: hidden;
 }
+
+/* === HEADER === */
 .qp-publish__header {
   margin-bottom: 1.5rem;
 }
@@ -21,6 +24,7 @@
   font-size: 1.2rem;
 }
 
+/* === MASCOT === */
 .qp-publish__mascot {
   display: flex;
   justify-content: center;
@@ -32,6 +36,7 @@
   width: 150px;
 }
 
+/* === QUIZ CARD === */
 .qp-quiz-card {
   background: var(--qp-white);
   border-radius: 20px;
@@ -49,6 +54,7 @@
   color: var(--qp-gray-800);
 }
 
+/* === FEEDBACK === */
 /* Centered feedback paragraphs */
 .qp-feedback {
   margin-top: 1rem;
@@ -60,6 +66,7 @@
   color: var(--qp-gray-800);
 }
 
+/* === ACTIONS === */
 /* Button container - side by side, auto-width */
 .qp-publish__actions {
   margin-top: 2.5rem;
@@ -80,8 +87,8 @@
   margin: 0;
 }
 
-/* Buttons: proper button styling with good padding */
-.qp-btn {
+/* === BUTTONS === */
+/* Buttons: proper button styling with good padding */.qp-btn {
   /* Reset button/link defaults */
   -webkit-appearance: none;
   -moz-appearance: none;
@@ -127,6 +134,7 @@
   box-shadow: 0 4px 0 var(--qp-primary);
 }
 
+/* === RESPONSIVE === */
 @media (max-width: 640px) {
   .qp-publish-success {
     padding: 2.5rem 1.5rem 4rem;

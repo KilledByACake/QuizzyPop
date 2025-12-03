@@ -1,3 +1,4 @@
+/* === PAGE === */
 .taking-quiz-page {
     /* background: var(--qp-blue-soft); */
     min-height: 85vh;
@@ -7,6 +8,7 @@
     overflow: hidden;
   }
   
+  /* === CONTAINER === */
   .taking-container {
     position: relative;
     z-index: 1;
@@ -61,7 +63,7 @@
     margin-bottom: 1.5rem;
   }
   
-  /* === Answer Options === */
+ /* === ANSWER OPTIONS === */
   .answers {
     display: flex;
     flex-direction: column;
@@ -91,7 +93,7 @@
     transform: scale(1.3);
   }
   
-  /* === Navigation Buttons === */
+  /* === NAVIGATION BUTTONS === */
   .nav-buttons {
     display: flex;
     justify-content: space-between;
@@ -182,6 +184,7 @@
     justify-content: center;
   }
   
+  /* === PROGRESS BAR === */
   .progress-wrapper {
     width: 100%;
     height: 10px;
@@ -197,7 +200,7 @@
     transition: width 0.3s ease-out;
   }
 
-  /* True/False buttons */
+/* === TRUE/FALSE OPTIONS === */
   .tfRow {
     display: flex;
     gap: 1rem;

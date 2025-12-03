@@ -17,19 +17,7 @@ import styles from "./TakeQuiz.module.css";
 /**
  * Main quiz browsing page with search and filter functionality.
  * Fetches available quizzes from QuizContext and displays them in a responsive grid.
- * 
- * IMPLEMENTED FEATURES:
- * - Search by quiz title 
- * - Filter by difficulty (Easy/Medium/Hard) 
- * - Teachers/admins can delete quizzes 
- * 
- * NOT FULLY IMPLEMENTED:
- * - Category filter (UI only, backend filtering not connected)
- * - Grade level filter (UI only, backend filtering not connected)
- * - Sort options (UI only, backend sorting not connected)
- */
-
-/** Shape of quiz summary data displayed in browse view */
+ * Shape of quiz summary data displayed in browse view */
 type QuizSummary = {
   id: number;
   title: string;
@@ -54,7 +42,10 @@ export default function TakeQuiz() {
 
   const navigate = useNavigate();
 
-  // Decode JWT token to get user role
+  /**
+   * Decode the current JWT access token to determine user role.
+   * Returns "teacher", "admin", "student", or null if the token is missing/invalid.
+   */
   const getUserRole = (): string | null => {
     if (!token) return null;
     try {
@@ -68,8 +59,9 @@ export default function TakeQuiz() {
   const userRole = getUserRole();
   const isTeacher = userRole === 'teacher' || userRole === 'admin';
 
+    // Set page title when this view is active
   useEffect(() => {
-    document.title = "Explore Quizzes - Quizzy Pop";
+    document.title = "Explore Quizzes - QuizzyPop";
   }, []);
 
   // Fetch quizzes once on mount
@@ -82,13 +74,13 @@ export default function TakeQuiz() {
     }
   }, [fetchQuizzes]);
 
-  /** Handle difficulty filter selection (toggle behavior) */
+  // Handle difficulty filter selection (toggle behavior)
   const handleDifficultySelect = (option: string) => {
     const normalized = option.toLowerCase();
     setDifficultyFilter((prev) => (prev === normalized ? "" : normalized));
   };
 
-  /** Filter quizzes based on search query and difficulty filter */
+  // Filter quizzes based on search query and difficulty filter
   const filteredQuizzes = useMemo(() => {
     const sourceQuizzes: QuizSummary[] = quizzes as QuizSummary[];
 
@@ -108,13 +100,13 @@ export default function TakeQuiz() {
     });
   }, [quizzes, search, difficultyFilter]);
 
-  /** Handle quiz deletion (teachers/admins only) */
+  // Handle quiz deletion (teachers/admins only)
   const handleDeleteQuiz = async (id: number) => {
     if (!confirm('Are you sure you want to delete this quiz?')) return;
     
     try {
       await api.delete(`/api/quizzes/${id}`);
-      // Refresh quiz list
+      // Refresh quiz list after successful deletion
       await fetchQuizzes();
     } catch (err) {
       console.error('Failed to delete quiz:', err);
@@ -127,6 +119,7 @@ export default function TakeQuiz() {
       ? undefined
       : difficultyFilter.charAt(0).toUpperCase() + difficultyFilter.slice(1);
 
+  // Static UI-only filter options (not yet connected to backend)
   const categoryOptions = ["Science", "History", "Geography"];
   const gradeOptions = ["1–4", "5–7", "8–10"];
   const sortOptions = ["Newest", "Oldest", "Most Played"];

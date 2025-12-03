@@ -28,12 +28,12 @@ export default function Index() {
     "Wave R"
   );
 
-  /** Trigger left wave animation (Wave Blueberry_L) */
+  // Trigger left wave animation (Wave Blueberry_L)
   const triggerWaveLeft = () => {
     waveLeftInput?.fire();
   };
 
-  /** Trigger right wave animation (Wave Blueberry_R) */
+  // Trigger right wave animation (Wave Blueberry_R)
   const triggerWaveRight = () => {
     waveRightInput?.fire();
   };

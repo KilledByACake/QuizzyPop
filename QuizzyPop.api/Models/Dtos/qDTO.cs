@@ -7,6 +7,7 @@ namespace QuizzyPop.Models.Dtos
         public string? ImageUrl { get; set; }
         public string Difficulty { get; set; } = "easy"; // "easy", "medium", "hard"
 
+        public List<int> TagIds { get; set; } = new();
         public int CategoryId { get; set; }
         public int? UserId { get; set; }
     }
@@ -17,6 +18,7 @@ namespace QuizzyPop.Models.Dtos
         public string? Description { get; set; }
         public string? ImageUrl { get; set; }
         public string? Difficulty { get; set; } // "easy", "medium", "hard"
+        public List<string> Tags { get; set; } = new();
 
         public int CategoryId { get; set; }
         public int? UserId { get; set; }

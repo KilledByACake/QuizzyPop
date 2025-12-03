@@ -8,6 +8,8 @@ public class Quiz
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public string ImageUrl { get; set; } = string.Empty;
     public string Difficulty { get; set; } = "easy"; // easy, medium, hard
+    public List<Tag> Tags { get; set; } = new();
+
 
     // Category of the quiz
     public int CategoryId { get; set; }

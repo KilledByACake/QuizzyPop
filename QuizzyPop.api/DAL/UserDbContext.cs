@@ -17,9 +17,11 @@ public class UserDbContext : DbContext
 	public DbSet<Quiz> Quiz { get; set; }
 	public DbSet<Category> Categories { get; set; }
 	public DbSet<Question> Questions { get; set; }
+	public DbSet<Tag> Tags { get; set; }
 
-	 protected override void OnModelCreating(ModelBuilder modelBuilder)
-     {
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
 		base.OnModelCreating(modelBuilder);
 		
          modelBuilder.Entity<Question>()
@@ -29,14 +31,21 @@ public class UserDbContext : DbContext
 			v => JsonSerializer.Deserialize<List<string>>(v, new JsonSerializerOptions()) ?? new List<string>()
 		);
 		
-
 		modelBuilder.Entity<RefreshToken>()
 			.HasOne(rt => rt.User)
 			.WithMany(u => u.RefreshTokens)
 			.HasForeignKey(rt => rt.UserId)
-			.OnDelete(DeleteBehavior.Cascade);
+			.OnDelete(DeleteBehavior.Cascade
+		);
 
-     }
+		modelBuilder.Entity<Quiz>()
+			.HasMany(q => q.Tags)
+			.WithMany(t => t.Quizzes)
+			.UsingEntity<Dictionary<string, object>>(
+			"QuizTags",
+			j => j.HasOne<Tag>().WithMany().HasForeignKey("TagId"),
+			j => j.HasOne<Quiz>().WithMany().HasForeignKey("QuizId")
+		);
+    }
 	public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
-
 }

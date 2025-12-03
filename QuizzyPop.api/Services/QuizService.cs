@@ -34,7 +34,19 @@ namespace QuizzyPop.Services
             };
 
             _logger.LogInformation("Creating quiz with title {Title}", entity.Title);
-            var created = await _repo.AddAsync(entity);
+
+            Quiz created;
+
+            // If there are tags, use AddWithTagsAsync
+            if (dto.TagIds != null && dto.TagIds.Any())
+            {
+                created = await _repo.AddWithTagsAsync(entity, dto.TagIds);
+            }
+            else
+            {
+                created = await _repo.AddAsync(entity);
+            }
+
             _logger.LogInformation("Created quiz with id {Id}", created.Id);
             return created;
         }

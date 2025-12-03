@@ -22,6 +22,7 @@ namespace QuizzyPop.DAL.Repositories
                 return await _context.Quiz
                     .Include(q => q.Category)
                     .Include(q => q.User)
+                    .Include(q => q.Tags)
                     .FirstOrDefaultAsync(q => q.Id == id);
             }
             catch (Exception ex)
@@ -39,6 +40,7 @@ namespace QuizzyPop.DAL.Repositories
                     .Include(q => q.Category)
                     .Include(q => q.User)
                     .Include(q => q.Questions)
+                    .Include(q => q.Tags)
                     .ToListAsync();
             }
             catch (Exception ex)
@@ -69,6 +71,7 @@ namespace QuizzyPop.DAL.Repositories
                     .Include(q => q.Category)
                     .Include(q => q.User)
                     .Include(q => q.Questions)
+                    .Include(q => q.Tags)
                     .AsTracking()
                     .FirstOrDefaultAsync(q => q.Id == id);
             }
@@ -93,6 +96,17 @@ namespace QuizzyPop.DAL.Repositories
                 _logger.LogError(ex, "Error adding quiz '{Title}'", quiz.Title);
                 throw;
             }
+        }
+
+        public async Task<Quiz> AddWithTagsAsync(Quiz quiz, List<int> tagIds)
+        {
+            quiz.Tags = await _context.Tags
+                .Where(t => tagIds.Contains(t.Id))
+                .ToListAsync();
+
+            await _context.Quiz.AddAsync(quiz);
+            await _context.SaveChangesAsync();
+            return quiz;
         }
 
         public async Task<bool> UpdateAsync(Quiz quiz)

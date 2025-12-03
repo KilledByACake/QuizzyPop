@@ -4,6 +4,7 @@ using QuizzyPop.Services;
 
 namespace QuizzyPop.DAL;
 
+// Database seeding helper for development/local environment (demo users, categories, quizzes)
 public static class DBInit
 {
     public static void Seed(IApplicationBuilder app)
@@ -14,6 +15,7 @@ public static class DBInit
         // Ensure the schema exists before any queries
         context.Database.EnsureCreated();
 
+        // Seed demo users if none exist
         if (!context.Users.Any())
         {
             var demoUsers = new[]
@@ -38,10 +40,12 @@ public static class DBInit
                 context.Users.Add(user);
             }
 
-            //context.AddRange(user);
+            // context.AddRange(user); // left commented out on purpose – users are added individually above
+            
             context.SaveChanges();
         }
 
+        // Seed default categories if none exist
         if (!context.Categories.Any())
         {
             var categories = new List<Category>
@@ -61,6 +65,7 @@ public static class DBInit
             context.SaveChanges();
         }
 
+        // Seed sample quizzes with questions if none exist
         if (!context.Quiz.Any())
         {
             var cat1 = context.Categories.First(c => c.Name == "Math");

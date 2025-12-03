@@ -82,32 +82,20 @@ namespace QuizzyPop.DAL.Repositories
             }
         }
 
-        public async Task<Quiz> AddAsync(Quiz quiz)
+        public async Task<Quiz> AddAsync(Quiz quiz, List<int>? tagIds = null)
         {
-            try
+            if (tagIds != null && tagIds.Any())
             {
-                await _context.Quiz.AddAsync(quiz);
-                await _context.SaveChangesAsync();
-                _logger.LogInformation("Quiz '{Title}' added (ID: {Id})", quiz.Title, quiz.Id);
-                return quiz;
+                quiz.Tags = await _context.Tags
+                    .Where(t => tagIds.Contains(t.Id))
+                    .ToListAsync();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error adding quiz '{Title}'", quiz.Title);
-                throw;
-            }
-        }
-
-        public async Task<Quiz> AddWithTagsAsync(Quiz quiz, List<int> tagIds)
-        {
-            quiz.Tags = await _context.Tags
-                .Where(t => tagIds.Contains(t.Id))
-                .ToListAsync();
 
             await _context.Quiz.AddAsync(quiz);
             await _context.SaveChangesAsync();
             return quiz;
         }
+
 
         public async Task<bool> UpdateAsync(Quiz quiz)
         {

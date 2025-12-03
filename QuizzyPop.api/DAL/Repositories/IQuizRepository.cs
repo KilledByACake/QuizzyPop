@@ -10,8 +10,7 @@ namespace QuizzyPop.DAL.Repositories
         Task<IReadOnlyList<Quiz>> GetAllWithDetailsAsync();
         Task<IReadOnlyList<Category>> GetAllCategoriesAsync();
         Task<Quiz?> GetQuizWithQuestionsAsync(int id);
-        Task<Quiz> AddAsync(Quiz quiz);
-        Task<Quiz> AddWithTagsAsync(Quiz quiz, List<int> tagIds);
+        Task<Quiz> AddAsync(Quiz quiz, List<int>? tagIds = null);
         Task<bool> UpdateAsync(Quiz quiz);
         Task<bool> DeleteAsync(int id);
     }

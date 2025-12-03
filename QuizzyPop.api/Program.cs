@@ -22,6 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
 // --------------------
 Log.Logger = new LoggerConfiguration()
     .MinimumLevel.Information()
+    .WriteTo.Console()
     .WriteTo.File($"APILogs/app_{DateTime.Now:yyyyMMdd_HHmmss}.log")
     .Filter.ByExcluding(e =>
         e.Properties.TryGetValue("SourceContext", out var _) &&
@@ -135,6 +136,7 @@ builder.Services.AddScoped<IQuizRepository, QuizRepository>();
 builder.Services.AddScoped<IQuestionRepository, QuestionRepository>();
 builder.Services.AddScoped<IQuizService, QuizService>();
 builder.Services.AddScoped<IQuizQuestionService, QuizQuestionService>();
+
 
 var app = builder.Build();
 

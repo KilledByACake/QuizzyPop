@@ -21,7 +21,20 @@ const DRAFT_STORAGE_KEY = 'quiz_draft';
  * Collects quiz metadata: title, description, category, difficulty, image, tags
  * Saves draft to localStorage if user is not authenticated
  * Redirects to AddQuestions page after successful creation
- * Note: Currently sends FormData but backend expects two-step (JSON quiz + separate image upload)
+ * 
+ * IMPLEMENTATION STATUS:
+ * 
+ * FULLY IMPLEMENTED:
+ * - Quiz metadata form (title, description, category, difficulty)
+ * - Image upload with preview and removal
+ * - Draft saving to localStorage for unauthenticated users
+ * - Draft restoration after login
+ * - Login prompt modal
+ * - Navigation to AddQuestions page after creation
+ * 
+ * PARTIALLY IMPLEMENTED:
+ * - Tags: Frontend UI works, but backend doesn't store/retrieve tags properly
+ * - Image upload: Currently sends FormData, but backend expects two-step (JSON quiz + separate image upload)
  */
 export default function CreateQuiz() {
   const navigate = useNavigate();
@@ -118,6 +131,7 @@ export default function CreateQuiz() {
         formData.append('image', data.image);
       }
 
+      // NOTE: Tags are sent but not properly stored/retrieved by backend
       if (data.tags && data.tags.length) {
         formData.append('tags', JSON.stringify(data.tags));
       }
@@ -203,6 +217,7 @@ export default function CreateQuiz() {
           required
         />
 
+        {/* NOTE: Tags UI works but backend doesn't store/retrieve tags properly */}
         <TagInput
           label="Tags"
           hint="Short keywords (e.g. math, algebra, grade-5). Press Enter or comma to add."

@@ -14,6 +14,20 @@ import SearchBar from "../components/SearchBar";
 import Loader from "../components/Loader";
 import Mascot from "../components/Mascot";
 import styles from "./TakeQuiz.module.css";
+/**
+ * Main quiz browsing page with search and filter functionality.
+ * Fetches available quizzes from QuizContext and displays them in a responsive grid.
+ * 
+ * IMPLEMENTED FEATURES:
+ * - Search by quiz title 
+ * - Filter by difficulty (Easy/Medium/Hard) 
+ * - Teachers/admins can delete quizzes 
+ * 
+ * NOT FULLY IMPLEMENTED:
+ * - Category filter (UI only, backend filtering not connected)
+ * - Grade level filter (UI only, backend filtering not connected)
+ * - Sort options (UI only, backend sorting not connected)
+ */
 
 /** Shape of quiz summary data displayed in browse view */
 type QuizSummary = {

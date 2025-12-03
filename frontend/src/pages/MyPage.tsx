@@ -36,7 +36,7 @@ interface QuizSummary {
   ownerId?: number | null;
   userId?: number | null;
 
-  // Statistics (optional if backend sends them)
+  // NOT FULLY IMPLEMENTED: Statistics fields exist but backend doesn't provide them yet
   attemptsCount?: number;
   averageScore?: number;
 }
@@ -51,10 +51,22 @@ interface LocalQuizAttempt {
 
 /**
  * MyPage (User Dashboard)
- * - Shows profile info and membership date
- * - Shows quizzes created by the user
- * - Shows quizzes taken (read from localStorage for now)
- * - Includes stats: created quizzes, taken quizzes, average score
+ *
+ * FULLY IMPLEMENTED:
+ * - User profile display (email, member since date) 
+ * - List of quizzes created by logged-in user 
+ * - Delete quiz functionality 
+ * - Quiz statistics (created count, taken count, average score) 
+ *
+ * PARTIALLY IMPLEMENTED:
+ * - Taken quizzes tracking (uses localStorage, not database)
+ * - Edit quiz button (redirects to edit page but edit page may not be fully functional)
+ *
+ * NOT IMPLEMENTED:
+ * - Backend /api/auth/me endpoint (returns basic info but may fail due to missing CreatedAt field in User model)
+ * - Backend userId filter for quizzes (may not work correctly)
+ * - Quiz statistics from backend (attemptsCount, averageScore not sent by backend)
+ * - User avatar support
  */
 const MyPage = () => {
   const { isAuthenticated } = useAuth();
@@ -65,7 +77,7 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /** Safely formats an ISO date string */
+  /** Safely formats an ISO date string - FULLY IMPLEMENTED  */
   const formatDate = (value?: string) => {
     if (!value) return "Unknown";
     const d = new Date(value);
@@ -77,7 +89,12 @@ const MyPage = () => {
     });
   };
 
-  /** Load local attempts from localStorage */
+  /**
+   * Load local attempts from localStorage - FULLY IMPLEMENTED 
+   *
+   * NOTE: This uses localStorage instead of database.
+   * Taken quizzes are not persisted to backend, so they're lost if localStorage is cleared.
+   */
   const loadLocalAttempts = (): LocalQuizAttempt[] => {
     try {
       const raw = localStorage.getItem("quiz_attempts");
@@ -91,7 +108,13 @@ const MyPage = () => {
     }
   };
 
-  /** Fetch user, their quizzes, and local attempts */
+  /**
+   * Fetch user, their quizzes, and local attempts
+   *
+   * PARTIALLY IMPLEMENTED:
+   * - /api/auth/me endpoint may fail due to missing User.CreatedAt field in database
+   * - /api/quizzes?userId={id} filtering may not work correctly in backend
+   */
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -106,11 +129,13 @@ const MyPage = () => {
         }
 
         // --- Fetch user profile ---
+        // NOT FULLY IMPLEMENTED: Backend /api/auth/me may fail if User.CreatedAt doesn't exist
         const meRes = await api.get<MeResponse>("/api/auth/me");
         const user = meRes.data;
         setMe(user);
 
         // --- Fetch quizzes created by the user ---
+        // PARTIALLY IMPLEMENTED: Backend userId filtering may not be fully functional
         const quizzesRes = await api.get<QuizSummary[]>(
           `/api/quizzes?userId=${user.id}`
         );
@@ -126,6 +151,7 @@ const MyPage = () => {
         setQuizzes(filtered);
 
         // --- Load taken quizzes from localStorage (recorded by QuizCompleted) ---
+        // NOT FULLY IMPLEMENTED: Uses localStorage instead of database
         setTakenQuizzes(loadLocalAttempts());
       } catch (err) {
         console.error(err);
@@ -138,7 +164,7 @@ const MyPage = () => {
     void fetchData();
   }, [isAuthenticated]);
 
-  /** Statistics */
+  /** Statistics - FULLY IMPLEMENTED  */
   const quizzesCreated = quizzes.length;
   const quizzesTaken = takenQuizzes.length;
 
@@ -151,15 +177,20 @@ const MyPage = () => {
     return `${Math.round(total / takenQuizzes.length)}%`;
   }, [takenQuizzes]);
 
-  /** Actions */
+  /** Navigate to quiz taking page - FULLY IMPLEMENTED  */
   const handleViewQuiz = (id: number) => {
     window.location.href = `/quiz/${id}/take`;
   };
 
+  /**
+   * Navigate to quiz edit page - PARTIALLY IMPLEMENTED
+   * Edit page exists but may not be fully functional (connects to backend but workflow incomplete)
+   */
   const handleEditQuiz = (id: number) => {
     window.location.href = `/quiz/${id}/edit`;
   };
 
+  /** Delete quiz - FULLY IMPLEMENTED  */
   const handleDeleteQuiz = async (id: number) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this quiz? This action cannot be undone."
@@ -173,7 +204,7 @@ const MyPage = () => {
       await api.delete(`/api/quizzes/${id}`);
     } catch (err) {
       console.error(err);
-      // You can add a toast/snackbar here later
+      // NOTE: Could add toast/snackbar notification here
     }
   };
 
@@ -199,7 +230,7 @@ const MyPage = () => {
 
   return (
     <section className={styles.page}>
-      {/* Header with profile and stats */}
+      {/* Header with profile and stats - FULLY IMPLEMENTED  */}
       <header className={styles.header}>
         <div className={styles.profile}>
           <Mascot variant="blueberry" size="medium" />
@@ -226,7 +257,7 @@ const MyPage = () => {
       </header>
 
       <div className={styles.grid}>
-        {/* My Created Quizzes */}
+        {/* My Created Quizzes - FULLY IMPLEMENTED  */}
         <section>
           <h2>My Created Quizzes</h2>
 
@@ -259,6 +290,7 @@ const MyPage = () => {
                       <span>Created: {formatDate(created)}</span>
                     </p>
 
+                    {/* NOT IMPLEMENTED: Backend doesn't provide attemptsCount or averageScore */}
                     {typeof quiz.attemptsCount === "number" && (
                       <p>
                         Attempts: {quiz.attemptsCount} · Avg score:{" "}
@@ -267,18 +299,21 @@ const MyPage = () => {
                     )}
 
                     <div className={styles.quizActions}>
+                      {/* FULLY IMPLEMENTED: View button  */}
                       <Button
                         variant="primary"
                         onClick={() => handleViewQuiz(quiz.id)}
                       >
                         View
                       </Button>
+                      {/* PARTIALLY IMPLEMENTED: Edit functionality exists but may be incomplete */}
                       <Button
                         variant="gray"
                         onClick={() => handleEditQuiz(quiz.id)}
                       >
                         Edit
                       </Button>
+                      {/* FULLY IMPLEMENTED: Delete button  */}
                       <Button
                         variant="danger"
                         onClick={() => handleDeleteQuiz(quiz.id)}
@@ -293,7 +328,7 @@ const MyPage = () => {
           )}
         </section>
 
-                {/* My Taken Quizzes */}
+        {/* My Taken Quizzes - PARTIALLY IMPLEMENTED (localStorage only, not database) */}
         <section>
           <h2>My Taken Quizzes</h2>
 
@@ -326,8 +361,6 @@ const MyPage = () => {
             </div>
           )}
         </section>
-
-
       </div>
     </section>
   );

@@ -39,6 +39,21 @@ interface EditQuizDto {
  * Allows editing quiz metadata (title, description, category, difficulty, tags, image)
  * and associated multiple-choice questions.
  *
+ * IMPLEMENTATION STATUS:
+ * 
+ * FULLY IMPLEMENTED:
+ * - Load quiz with questions (GET /api/quizzes/{id}/with-questions)
+ * - Edit quiz metadata (title, description, category, difficulty, tags)
+ * - Image upload with preview and removal
+ * - Add/edit/remove questions
+ * - Add/edit answer choices with correct answer selection
+ * - Save changes (PUT quiz metadata, POST/PUT/DELETE questions)
+ * - Navigation back to MyPage
+ * 
+ * PARTIALLY IMPLEMENTED:
+ * - Only supports multiple-choice questions (no true/false, fill-in-blank, etc.)
+ * - Question types limited by backend schema
+ * 
  * Backend expectations (aligned with AddQuestions page):
  * - GET  /api/quizzes/{id}/with-questions
  * - PUT  /api/quizzes/{id}            (quiz metadata & image)

@@ -29,7 +29,6 @@ interface EditQuizDto {
   categoryId: string;
   difficulty: string;
   tags?: string[];
-  imageUrl?: string | null;
   questions: EditQuestion[];
 }
 
@@ -38,8 +37,6 @@ const EditQuiz = () => {
   const navigate = useNavigate();
 
   const [quiz, setQuiz] = useState<EditQuizDto | null>(null);
-  const [imageFile, setImageFile] = useState<File | undefined>();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -73,7 +70,6 @@ const EditQuiz = () => {
         };
 
         setQuiz(loadedQuiz);
-        setImagePreview(res.data.imageUrl ?? null);
       } catch (err) {
         console.error(err);
         setError("Could not load quiz.");
@@ -107,22 +103,9 @@ const EditQuiz = () => {
     );
   };
 
-  // Handle changes to tags array 
+  // Handle changes to tags array
   const handleTagsChange = (tags: string[]) => {
     setQuiz((prev) => (prev ? { ...prev, tags } : prev));
-  };
-
-  // Handle image file selection and preview generation
-  const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    setImageFile(file);
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(file);
   };
 
   // ---------------------------
@@ -213,7 +196,7 @@ const EditQuiz = () => {
       setSaving(true);
       setError(null);
 
-      // 1) Update quiz metadata (including optional image, tags)
+      // 1) Update quiz metadata (uten bildeopplasting)
       const formData = new FormData();
       formData.append("title", quiz.title);
       formData.append("description", quiz.description);
@@ -222,10 +205,6 @@ const EditQuiz = () => {
 
       if (quiz.tags && quiz.tags.length > 0) {
         formData.append("tags", JSON.stringify(quiz.tags));
-      }
-
-      if (imageFile) {
-        formData.append("image", imageFile);
       }
 
       await api.put(`/api/quizzes/${quiz.id}`, formData);
@@ -380,47 +359,6 @@ const EditQuiz = () => {
             value={quiz.tags ?? []}
             onChange={handleTagsChange}
           />
-
-          {/* Image upload section */}
-          <div className={styles.imageUpload}>
-            <label className={styles.imageLabel}>
-              Quiz Cover Image
-              <span className={styles.optional}>(Optional)</span>
-            </label>
-            <div className={styles.imagePreviewContainer}>
-              {imagePreview ? (
-                <div className={styles.imagePreview}>
-                  <img src={imagePreview} alt="Quiz cover" />
-                  <button
-                    type="button"
-                    className={styles.removeImage}
-                    onClick={() => {
-                      setImagePreview(null);
-                      setImageFile(undefined);
-                    }}
-                  >
-                    Remove
-                  </button>
-                </div>
-              ) : (
-                <label className={styles.uploadBox}>
-                  <input
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    onChange={handleImageChange}
-                    className={styles.fileInput}
-                  />
-                  <div className={styles.uploadContent}>
-                    <span className={styles.uploadIcon}>📷</span>
-                    <span className={styles.uploadText}>Click to upload image</span>
-                    <span className={styles.uploadHint}>
-                      PNG, JPG, WEBP up to 5MB
-                    </span>
-                  </div>
-                </label>
-              )}
-            </div>
-          </div>
         </div>
       </Card>
 

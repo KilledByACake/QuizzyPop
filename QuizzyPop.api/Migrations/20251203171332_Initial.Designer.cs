@@ -11,13 +11,8 @@ using QuizzyPop.DAL;
 namespace QuizzyPop.api.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-<<<<<<<< HEAD:QuizzyPop.api/Migrations/20251203150900_InitialCreate.Designer.cs
-    [Migration("20251203150900_InitialCreate")]
-    partial class InitialCreate
-========
-    [Migration("20251203150126_ResetSchema")]
-    partial class ResetSchema
->>>>>>>> 96d79e5c8a49a9b409fce09bb337222f1872bb46:QuizzyPop.api/Migrations/20251203150126_ResetSchema.Designer.cs
+    [Migration("20251203171332_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

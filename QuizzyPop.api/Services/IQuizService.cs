@@ -1,18 +1,16 @@
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
-
-//tjenestegrensesnitt for Qiiuz
 namespace QuizzyPop.Services
 {
-    //service layer rdunt quiz
+    // Service abstraction for quiz operations (CRUD, listing, submission)
     public interface IQuizService
     {
         Task<Quiz> CreateAsync(QuizCreateDto dto);
         Task<Quiz?> GetAsync(int id);
         Task<Quiz?> GetWithQuestionsAsync(int id);
-        Task<IReadOnlyList<Quiz>> ListAsync();                 // bruker GetAllWithDetailsAsync
-        Task<IReadOnlyList<Category>> ListCategoriesAsync();   // bruker GetAllCategoriesAsync
+        Task<IReadOnlyList<Quiz>> ListAsync();                 // Uses GetAllWithDetailsAsync in the repository
+        Task<IReadOnlyList<Category>> ListCategoriesAsync();   // Uses GetAllCategoriesAsync in the repository
         Task<bool> UpdateAsync(int id, QuizUpdateDto dto);
         Task<bool> DeleteAsync(int id);
 

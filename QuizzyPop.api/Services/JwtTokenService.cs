@@ -8,6 +8,7 @@ using QuizzyPop.Api.Options;
 
 namespace QuizzyPop.Services;
 
+// Service responsible for generating JWT access and refresh tokens
 public sealed class JwtTokenService(IOptions<JwtSettings> options) : IJwtTokenService
 {
     private readonly JwtSettings _cfg = options.Value;

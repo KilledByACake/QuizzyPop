@@ -5,23 +5,25 @@ namespace QuizzyPop.Models
         public int Id { get; set; }
         public string Text { get; set; } = string.Empty;
 
-        // NEW: Question type field
-        public string Type { get; set; } = "multiple-choice"; // default
+        // Question type, e.g. "multiple-choice", "multi-select", "true-false"
+        public string Type { get; set; } = "multiple-choice";
 
-        // For multiple-choice, multi-select
+        // Options shown for choice-based questions
         public List<string> Choices { get; set; } = new(); 
+
+        // Index for single-answer multiple-choice questions
         public int CorrectAnswerIndex { get; set; }
 
-        // NEW: For multi-select questions
+        // Indexes for multi-select questions
         public List<int> CorrectAnswerIndexes { get; set; } = new();
 
-        // NEW: For true/false questions
+        // Expected value for true/false questions
         public bool? CorrectBool { get; set; }
 
-        // NEW: For fill-blank, short, long answer questions
+        // Expected text answer for fill-in / short / long answer questions
         public string? CorrectAnswer { get; set; }
 
-        // Which Quiz this question belongs to
+        // Owning quiz
         public int QuizId { get; set; }
         public virtual Quiz Quiz { get; set; } = null!;
     }

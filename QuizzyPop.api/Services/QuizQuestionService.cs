@@ -6,10 +6,10 @@ using QuizzyPop.DAL.Repositories;
 using QuizzyPop.Models;
 using QuizzyPop.Models.Dtos;
 
-//imput validering + normalisering
+// Service for quiz question validation, normalization and persistence
 public sealed class QuizQuestionService : IQuizQuestionService
 {
-    //Crud og Verfisering
+    // Repositories and logging for CRUD and diagnostics
     private readonly IQuestionRepository _repo;
     private readonly IQuizRepository _quizRepo;
     private readonly ILogger<QuizQuestionService> _logger;
@@ -23,7 +23,7 @@ public sealed class QuizQuestionService : IQuizQuestionService
         _quizRepo = quizRepo;
         _logger = logger;
     }
-    //nytt sorlsmål for quiz
+    // Create a new question for a quiz based on the requested question type
     public async Task<Question> CreateAsync(QuizQuestionCreateDto dto)
     {
         var question = new Question

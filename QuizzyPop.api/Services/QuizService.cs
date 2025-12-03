@@ -5,13 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace QuizzyPop.Services
 {
-    // Service-lag for Quiz: forretningslogikk + koordinering mot repository
+    // Service layer for quizzes: business logic and coordination with the repository
     public sealed class QuizService : IQuizService
     {
         private readonly IQuizRepository _repo;
         private readonly ILogger<QuizService> _logger;
 
-        // Avhengighetsinjeksjon av repository og logger
+        // Dependency injection of repository and logger
         public QuizService(IQuizRepository repo, ILogger<QuizService> logger)
         {
             _repo = repo;

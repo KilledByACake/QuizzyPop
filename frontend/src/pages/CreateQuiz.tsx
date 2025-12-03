@@ -13,34 +13,14 @@ import LoginPromptModal from '../components/LoginPromptModal';
 import TagInput from '../components/TagInput';
 import styles from './CreateQuiz.module.css';
 
-/** localStorage key for saving quiz draft */
+// localStorage key for saving quiz draft
 const DRAFT_STORAGE_KEY = 'quiz_draft';
 
-/**
- * Quiz creation page - first step in quiz creation flow
- * Collects quiz metadata: title, description, category, difficulty, image, tags
- * Saves draft to localStorage if user is not authenticated
- * Redirects to AddQuestions page after successful creation
- * 
- * IMPLEMENTATION STATUS:
- * 
- * FULLY IMPLEMENTED:
- * - Quiz metadata form (title, description, category, difficulty)
- * - Image upload with preview and removal
- * - Draft saving to localStorage for unauthenticated users
- * - Draft restoration after login
- * - Login prompt modal
- * - Navigation to AddQuestions page after creation
- * 
- * PARTIALLY IMPLEMENTED:
- * - Tags: Frontend UI works, but backend doesn't store/retrieve tags properly
- * - Image upload: Currently sends FormData, but backend expects two-step (JSON quiz + separate image upload)
- */
+// Mock categories - replace with API call when backend is ready
 export default function CreateQuiz() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated } = useAuth();
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
@@ -67,12 +47,7 @@ export default function CreateQuiz() {
       try {
         const parsedDraft = JSON.parse(draft);
         reset(parsedDraft);
-        
-        // Restore image preview if exists
-        if (parsedDraft.imagePreviewData) {
-          setImagePreview(parsedDraft.imagePreviewData);
-        }
-        
+
         // Clear the draft after restoring
         localStorage.removeItem(DRAFT_STORAGE_KEY);
       } catch (err) {
@@ -81,32 +56,13 @@ export default function CreateQuiz() {
     }
   }, [location.state, reset]);
 
-  /** Handle image file selection and preview generation */
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setValue('image', file);
-      // Generate base64 preview for display
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  /** Save current form state to localStorage as draft */
+  // Save current form state to localStorage as draft
   const saveDraft = () => {
     const formData = watch();
-    const draft = {
-      ...formData,
-      imagePreviewData: imagePreview, // Store preview separately
-      image: undefined // Can't serialize File object
-    };
-    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+    localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(formData));
   };
 
-  /** Handle form submission - create quiz or prompt login */
+  // Handle form submission - create quiz or prompt login
   const onSubmit = async (data: CreateQuizFormData) => {
     // If not authenticated, save draft and show login modal
     if (!isAuthenticated) {
@@ -119,19 +75,12 @@ export default function CreateQuiz() {
     setError(null);
 
     try {
-      // Create FormData for file upload
-      // TODO: Backend expects two-step: JSON quiz creation then separate image upload
       const formData = new FormData();
       formData.append('title', data.title);
       formData.append('description', data.description);
       formData.append('categoryId', data.categoryId);
       formData.append('difficulty', data.difficulty);
       
-      if (data.image) {
-        formData.append('image', data.image);
-      }
-
-      // NOTE: Tags are sent but not properly stored/retrieved by backend
       if (data.tags && data.tags.length) {
         formData.append('tags', JSON.stringify(data.tags));
       }
@@ -217,7 +166,6 @@ export default function CreateQuiz() {
           required
         />
 
-        {/* NOTE: Tags UI works but backend doesn't store/retrieve tags properly */}
         <TagInput
           label="Tags"
           hint="Short keywords (e.g. math, algebra, grade-5). Press Enter or comma to add."

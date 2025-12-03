@@ -6,6 +6,7 @@ using QuizzyPop.Models;
 
 namespace QuizzyPop.Api.Controllers;
 
+// API controller for exposing quiz categories (currently read-only list)
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -18,9 +19,9 @@ public class CategoriesController : ControllerBase
         _db = db;
     }
 
-    // GET: api/categories
+    // GET: api/categories - returns all categories
     [HttpGet]
-    [AllowAnonymous] // Optional: allow public access
+    [AllowAnonymous] // Allow unauthenticated clients to retrieve categories (public metadata)
     public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
     {
         var categories = await _db.Categories.ToListAsync();

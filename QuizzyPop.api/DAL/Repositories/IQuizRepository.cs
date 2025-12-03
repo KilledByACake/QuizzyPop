@@ -1,7 +1,6 @@
 using QuizzyPop.Models;
 
-
-//struktur for quiz-objekter
+// Repository abstraction for quizzes and related data (including categories and questions)
 namespace QuizzyPop.DAL.Repositories
 {
     public interface IQuizRepository

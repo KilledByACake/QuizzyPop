@@ -4,10 +4,9 @@ using Microsoft.Extensions.Logging;
 using QuizzyPop.Models;
 
 
-//håndterer databaseoperasjoner for Question
+// Repository implementation for quizzes and related data (categories, users, questions)
 namespace QuizzyPop.DAL.Repositories
 {
-    //repository for CRUD - operasjoner
     public class QuestionRepository : IQuestionRepository
     {
         private readonly UserDbContext _context;

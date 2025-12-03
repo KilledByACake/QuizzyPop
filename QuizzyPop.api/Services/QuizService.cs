@@ -95,48 +95,124 @@ namespace QuizzyPop.Services
         }
 
         public async Task<QuizSubmissionResultDto> SubmitAsync(int quizId, QuizSubmissionDto submission)
-{
-        var quiz = await _repo.GetQuizWithQuestionsAsync(quizId);
-        if (quiz == null)
-            throw new ArgumentException($"Quiz {quizId} not found");
-
-        int correctCount = 0;
-        int total = quiz.Questions.Count;
-        var messages = new List<string>();
-
-        int questionNumber = 1;
-        foreach (var q in quiz.Questions)
         {
-            var answer = submission.Answers.FirstOrDefault(a => a.QuestionId == q.Id);
+            var quiz = await _repo.GetQuizWithQuestionsAsync(quizId);
+            if (quiz == null)
+                throw new ArgumentException($"Quiz {quizId} not found");
 
-            if (answer == null)
+            int correctCount = 0;
+            int total = quiz.Questions.Count;
+            var messages = new List<string>();
+
+            int questionNumber = 1;
+            foreach (var q in quiz.Questions)
             {
-                messages.Add($"Question {questionNumber}: no answer");
-            }
-            else if (answer.SelectedChoiceIndex == q.CorrectAnswerIndex)
-            {
-                correctCount++;
-                messages.Add($"Question {questionNumber}: correct");
-            }
-            else
-            {
-                string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
-                string selectedText = q.Choices.ElementAtOrDefault(answer.SelectedChoiceIndex) ?? "invalid";
-                messages.Add($"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')");
+                var answer = submission.Answers.FirstOrDefault(a => a.QuestionId == q.Id);
+
+                if (answer == null)
+                {
+                    messages.Add($"Question {questionNumber}: no answer");
+                    questionNumber++;
+                    continue;
+                }
+
+                bool isCorrect = false;
+                string feedbackMsg;
+
+                switch (q.Type)
+                {
+                    case "multiple-choice":
+                        if (answer.SelectedChoiceIndex.HasValue &&
+                            answer.SelectedChoiceIndex.Value == q.CorrectAnswerIndex)
+                        {
+                            isCorrect = true;
+                            feedbackMsg = $"Question {questionNumber}: correct";
+                        }
+                        else
+                        {
+                            string correctText = q.Choices.ElementAtOrDefault(q.CorrectAnswerIndex) ?? "unknown";
+                            string selectedText = answer.SelectedChoiceIndex.HasValue
+                                ? q.Choices.ElementAtOrDefault(answer.SelectedChoiceIndex.Value) ?? "invalid"
+                                : "none";
+                            feedbackMsg = $"Question {questionNumber}: wrong (your answer: '{selectedText}', correct answer: '{correctText}')";
+                        }
+                        break;
+
+                    case "multi-select":
+                        if (answer.SelectedChoiceIndexes != null && q.CorrectAnswerIndexes != null)
+                        {
+                            var userAnswers = answer.SelectedChoiceIndexes.OrderBy(x => x).ToList();
+                            var correctAnswers = q.CorrectAnswerIndexes.OrderBy(x => x).ToList();
+
+                            if (userAnswers.SequenceEqual(correctAnswers))
+                            {
+                                isCorrect = true;
+                                feedbackMsg = $"Question {questionNumber}: correct";
+                            }
+                            else
+                            {
+                                var correctTexts = correctAnswers.Select(i => q.Choices.ElementAtOrDefault(i) ?? "?");
+                                var selectedTexts = userAnswers.Select(i => q.Choices.ElementAtOrDefault(i) ?? "?");
+                                feedbackMsg = $"Question {questionNumber}: wrong (your answers: {string.Join(", ", selectedTexts)}, correct answers: {string.Join(", ", correctTexts)})";
+                            }
+                        }
+                        else
+                        {
+                            feedbackMsg = $"Question {questionNumber}: wrong (invalid or no answer)";
+                        }
+                        break;
+
+                    case "true-false":
+                        if (answer.SelectedBool.HasValue && q.CorrectBool.HasValue &&
+                            answer.SelectedBool.Value == q.CorrectBool.Value)
+                        {
+                            isCorrect = true;
+                            feedbackMsg = $"Question {questionNumber}: correct";
+                        }
+                        else
+                        {
+                            string userAnswer = answer.SelectedBool.HasValue ? (answer.SelectedBool.Value ? "True" : "False") : "none";
+                            string correctAnswer = q.CorrectBool.HasValue ? (q.CorrectBool.Value ? "True" : "False") : "unknown";
+                            feedbackMsg = $"Question {questionNumber}: wrong (your answer: {userAnswer}, correct answer: {correctAnswer})";
+                        }
+                        break;
+
+                    case "fill-blank":
+                    case "short":
+                    case "long":
+                        if (!string.IsNullOrWhiteSpace(answer.EnteredAnswer) &&
+                            !string.IsNullOrWhiteSpace(q.CorrectAnswer) &&
+                            string.Equals(answer.EnteredAnswer.Trim(), q.CorrectAnswer.Trim(), StringComparison.OrdinalIgnoreCase))
+                        {
+                            isCorrect = true;
+                            feedbackMsg = $"Question {questionNumber}: correct";
+                        }
+                        else
+                        {
+                            string userAnswer = answer.EnteredAnswer ?? "none";
+                            string correctAnswer = q.CorrectAnswer ?? "unknown";
+                            feedbackMsg = $"Question {questionNumber}: wrong (your answer: '{userAnswer}', correct answer: '{correctAnswer}')";
+                        }
+                        break;
+
+                    default:
+                        feedbackMsg = $"Question {questionNumber}: unknown question type '{q.Type}'";
+                        break;
+                }
+
+                if (isCorrect) correctCount++;
+                messages.Add(feedbackMsg);
+                questionNumber++;
             }
 
-            questionNumber++;
+            return new QuizSubmissionResultDto
+            {
+                Score = total > 0 ? (int)((double)correctCount / total * 100) : 0,
+                CorrectAnswers = correctCount,
+                TotalQuestions = total,
+                Difficulty = quiz.Difficulty,
+                FeedbackMessages = messages
+            };
         }
-
-        // Return result using only properties present in QuizSubmissionResultDto
-        return new QuizSubmissionResultDto
-        {
-            Score = total > 0 ? (int)((double)correctCount / total * 100) : 0,
-            CorrectAnswers = correctCount,
-            TotalQuestions = total,
-            Difficulty = quiz.Difficulty,
-            FeedbackMessages = messages
-        };
-    }
     }
 }

@@ -7,19 +7,36 @@ namespace QuizzyPop.Validators
     {
         public QuizQuestionCreateDtoValidator()
         {
-            RuleFor(q => q.Text)
-                .NotEmpty().WithMessage("Question text is required")
-                .MinimumLength(5).WithMessage("Question must be at least 5 characters");
+            RuleFor(x => x.QuizId).GreaterThan(0);
+            RuleFor(x => x.Text).NotEmpty().MaximumLength(500);
+            
+            RuleFor(x => x.Type)
+                .NotEmpty()
+                .Must(t => new[] { "multiple-choice", "true-false", "fill-blank", "short", "long", "multi-select" }.Contains(t))
+                .WithMessage("Invalid question type");
 
-            RuleFor(q => q.Choices)
-                .NotNull().WithMessage("Choices are required")
-                .Must(c => c.Count >= 2).WithMessage("There must be at least 2 choices");
+            // Validate based on type
+            When(x => x.Type == "multiple-choice", () =>
+            {
+                RuleFor(x => x.Choices).NotEmpty().Must(c => c != null && c.Count >= 2);
+                RuleFor(x => x.CorrectAnswerIndex).GreaterThanOrEqualTo(0);
+            });
 
-            RuleFor(q => q.CorrectAnswerIndex)
-                .InclusiveBetween(0, int.MaxValue)
-                .WithMessage("CorrectAnswerIndex must be a valid index in Choices")
-                .Must((dto, index) => dto.Choices != null && index < dto.Choices.Count)
-                .WithMessage("CorrectAnswerIndex must match one of the choices");
+            When(x => x.Type == "multi-select", () =>
+            {
+                RuleFor(x => x.Choices).NotEmpty().Must(c => c != null && c.Count >= 2);
+                RuleFor(x => x.CorrectAnswerIndexes).NotEmpty();
+            });
+
+            When(x => x.Type == "true-false", () =>
+            {
+                RuleFor(x => x.CorrectBool).NotNull();
+            });
+
+            When(x => x.Type == "fill-blank" || x.Type == "short" || x.Type == "long", () =>
+            {
+                RuleFor(x => x.CorrectAnswer).NotEmpty();
+            });
         }
     }
 }

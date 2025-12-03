@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+  <!-- Global using for xUnit so test files can omit 'using Xunit;' -->
     <Using Include="Xunit" />
   </ItemGroup>
 

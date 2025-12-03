@@ -10,6 +10,7 @@ using Microsoft.Extensions.Options;
 
 namespace QuizzyPop.Api.Controllers;
 
+// API controller for user authentication and JWT token management
 [Authorize]
 [ApiController]
 [Route("api/[controller]")]
@@ -26,10 +27,12 @@ public class AuthController : ControllerBase
         _cfg = cfg.Value;
     }
 
+    // POST: api/auth/register - register a new user account
     [HttpPost("register")]
     [AllowAnonymous]
     public async Task<ActionResult> Register([FromBody] RegisterRequest req)
     {
+        // Enforce unique email before creating a new user
         if (await _db.Users.AnyAsync(u => u.Email == req.Email))
             return Conflict(new { message = "Username already exists." });
 
@@ -48,6 +51,7 @@ public class AuthController : ControllerBase
         return CreatedAtAction(nameof(Register), new { id = user.Id }, new { user.Id, user.Email, user.Role });
     }
 
+    // POST: api/auth/login - authenticate user and issue access/refresh tokens
     [HttpPost("login")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenResponse>> Login([FromBody] LoginRequest req)
@@ -79,6 +83,7 @@ public class AuthController : ControllerBase
         return Ok(new TokenResponse(access, refresh.Token, exp));
     }
 
+    // POST: api/auth/refresh - exchange a valid refresh token for a new access token
     [HttpPost("refresh")]
     [AllowAnonymous]
     public async Task<ActionResult<TokenResponse>> Refresh([FromBody] RefreshRequest req)
@@ -97,6 +102,7 @@ public class AuthController : ControllerBase
 
         var (access, exp) = _tokens.GenerateAccessToken(claims);
 
+        // Rotate the refresh token: revoke old and issue a new one
         rt.RevokedAt = DateTimeOffset.UtcNow;
         var newRt = new RefreshToken
         {
@@ -111,6 +117,7 @@ public class AuthController : ControllerBase
         return Ok(new TokenResponse(access, newRt.Token, exp));
     }
 
+    // POST: api/auth/logout - revoke a specific refresh token for the current user
     [Authorize]
     [HttpPost("logout")]
     public async Task<IActionResult> Logout([FromBody] RefreshRequest req)
@@ -118,6 +125,7 @@ public class AuthController : ControllerBase
         var rt = await _db.RefreshTokens.SingleOrDefaultAsync(r => r.Token == req.RefreshToken);
         if (rt is null) return NoContent();   
 
+        // Ensure the refresh token belongs to the current authenticated user
         var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         if (rt.UserId != userId) return Forbid();
 
@@ -126,6 +134,7 @@ public class AuthController : ControllerBase
         return NoContent();
     }
 
+    // GET: api/auth/me - returns basic information about the current user
     [Authorize]
     [HttpGet("me")]
     public IActionResult Me() => Ok(new { user = User.Identity?.Name });

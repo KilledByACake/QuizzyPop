@@ -1,9 +1,9 @@
 import styles from './Loader.module.css';
 
 interface LoaderProps {
-  /** Spinner size - small, medium, or large */
+  // Spinner size - small, medium, or large
   size?: 'small' | 'medium' | 'large';
-  /** Optional loading message displayed below spinner */
+  // Optional loading message displayed below spinner
   text?: string;
 }
 

@@ -2,15 +2,15 @@ import { useEffect, type ReactNode } from 'react';
 import styles from './Modal.module.css';
 
 interface ModalProps {
-  /** Controls modal visibility */
+  // Controls modal visibility
   isOpen: boolean;
-  /** Callback fired when modal should close */
+  // Callback fired when modal should close
   onClose: () => void;
-  /** Optional modal title displayed in header */
+  // Optional modal title displayed in header
   title?: string;
-  /** Modal content */
+  // Modal content
   children: ReactNode;
-  /** Optional footer content (typically action buttons) */
+  // Optional footer content (typically action buttons) 
   footer?: ReactNode;
 }
 

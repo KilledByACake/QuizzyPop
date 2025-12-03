@@ -3,19 +3,19 @@ import type { KeyboardEvent, ChangeEvent } from 'react';
 import styles from './TagInput.module.css';
 
 interface TagInputProps {
-  /** Label text displayed above the input */
+  // Label text displayed above the input 
   label?: string;
-  /** Array of current tags */
+  // Array of current tags 
   value: string[];
-  /** Callback fired when tags array changes */
+  // Callback fired when tags array changes 
   onChange: (tags: string[]) => void;
-  /** Error message to display */
+  // Error message to display 
   error?: string;
-  /** Maximum number of tags allowed */
+  // Maximum number of tags allowed
   maxTags?: number;
-  /** Placeholder text for the input field */
+  // Placeholder text for the input field
   placeholder?: string;
-  /** Helper text displayed below label */
+  // Helper text displayed below label 
   hint?: string;
 }
 
@@ -36,7 +36,7 @@ export default function TagInput({
   const [input, setInput] = useState('');
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  /** Add a new tag if valid (not empty, not duplicate, under max limit) */
+  // Add a new tag if valid (not empty, not duplicate, under max limit) 
   const addTag = useCallback((raw: string) => {
     const tag = raw.trim();
     if (!tag) return;
@@ -46,12 +46,12 @@ export default function TagInput({
     setInput('');
   }, [value, onChange, maxTags]);
 
-  /** Remove a specific tag from the array */
+  // Remove a specific tag from the array 
   const removeTag = (tag: string) => {
     onChange(value.filter(t => t !== tag));
   };
 
-  /** Handle keyboard shortcuts: Enter/comma to add, Backspace to remove last */
+  // Handle keyboard shortcuts: Enter/comma to add, Backspace to remove last 
   const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -65,7 +65,7 @@ export default function TagInput({
     }
   };
 
-  /** Add tag on blur if input has content */
+  // Add tag on blur if input has content 
   const handleBlur = () => {
     if (input) addTag(input);
   };

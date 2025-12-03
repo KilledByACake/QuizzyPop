@@ -1,40 +1,40 @@
 import type { ChangeEvent } from "react";
 
 export type QuizQuestionProps = {
-  /** Question index in the list */
+  // Question index in the list
   index: number;
-  /** Question text/prompt */
+  // Question text/prompt 
   text: string;
-  /** Optional image file attached to question */
+  // Optional image file attached to question 
   image?: File | null;
-  /** Array of answer options */
+  // Array of answer options 
   options: string[];
-  /** Point value for this question */
+  // Point value for this question 
   points: number;
-  /** Time limit for answering (string format) */
+  // Time limit for answering (string format)
   timeLimit: string;
-  /** Explanation shown after answering */
+  // Explanation shown after answering
   explanation: string;
-  /** Whether to randomize answer order */
+  // Whether to randomize answer order
   shuffleAnswers: boolean;
-  /** Whether question must be answered */
+  // Whether question must be answered
   required: boolean;
-  /** Handler for text/number/checkbox input changes */
+  // Handler for text/number/checkbox input changes
   onChange: (
     e: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >,
     index: number
   ) => void;
-  /** Handler for updating a specific answer option */
+  // Handler for updating a specific answer option
   onOptionChange: (index: number, optIndex: number, value: string) => void;
-  /** Handler for adding a new answer option */
+  // Handler for adding a new answer option
   onAddOption: (index: number) => void;
-  /** Handler for removing this question */
+  // Handler for removing this question
   onRemove: (index: number) => void;
-  /** Handler for moving question up in the list */
+  // Handler for moving question up in the list
   onMoveUp: (index: number) => void;
-  /** Handler for moving question down in the list */
+  // Handler for moving question down in the list
   onMoveDown: (index: number) => void;
 };
 

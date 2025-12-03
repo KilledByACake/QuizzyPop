@@ -2,13 +2,13 @@ import { useState, useRef, useEffect } from 'react';
 import styles from './FilterDropdown.module.css';
 
 interface FilterDropdownProps {
-  /** Button label text when nothing is selected */
+  // Button label text when nothing is selected
   label: string;
-  /** Available filter options to display */
+  // Available filter options to display
   options: string[];
-  /** Currently selected option (if any) */
+  // Currently selected option (if any)
   selected?: string;
-  /** Callback fired when an option is selected */
+  // Callback fired when an option is selected
   onSelect: (value: string) => void;
 }
 

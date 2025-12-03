@@ -4,11 +4,11 @@ import Button from './Button';
 import styles from './LoginPromptModal.module.css';
 
 interface LoginPromptModalProps {
-  /** Controls modal visibility */
+  // Controls modal visibility
   isOpen: boolean;
-  /** Callback to close the modal */
+  // Callback to close the modal
   onClose: () => void;
-  /** Optional callback to save draft data before navigating to login/register */
+  // Optional callback to save draft data before navigating to login/register
   onSaveDraft?: () => void;
 }
 
@@ -20,7 +20,7 @@ interface LoginPromptModalProps {
 export default function LoginPromptModal({ isOpen, onClose, onSaveDraft }: LoginPromptModalProps) {
   const navigate = useNavigate();
 
-  /** Navigate to login page and save draft */
+  // Navigate to login page and save draft
   const handleLogin = () => {
     if (onSaveDraft) {
       onSaveDraft(); // Save form data to localStorage
@@ -28,7 +28,7 @@ export default function LoginPromptModal({ isOpen, onClose, onSaveDraft }: Login
     navigate('/login', { state: { from: window.location.pathname } });
   };
 
-  /** Navigate to registration page and save draft */
+  // Navigate to registration page and save draft
   const handleSignUp = () => {
     if (onSaveDraft) {
       onSaveDraft(); // Save form data to localStorage

@@ -15,10 +15,10 @@ export default function NavBar() {
   );
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  /** Check if given path matches current route for active link styling */
+  // Check if given path matches current route for active link styling
   const isActive = (path: string) => pathname === path;
 
-  /** Clear token and redirect to login page */
+  // Clear token and redirect to login page 
   function logout() {
     localStorage.removeItem("token");
     setToken(null);

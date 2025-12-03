@@ -2,11 +2,11 @@ import { type TextareaHTMLAttributes, forwardRef } from 'react';
 import styles from './Textarea.module.css';
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
-  /** Optional label text displayed above textarea */
+  // Optional label text displayed above textarea 
   label?: string;
-  /** Error message to display - also applies error styling */
+  // Error message to display - also applies error styling
   error?: string;
-  /** Helper text displayed below textarea when no error */
+  // Helper text displayed below textarea when no error 
   hint?: string;
 }
 

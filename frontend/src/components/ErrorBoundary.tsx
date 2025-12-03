@@ -4,7 +4,7 @@ import Error from "./Error";
 
 interface Props {
   children: ReactNode;
-  /** Optional custom error message to display instead of the caught error message */
+  // Optional custom error message to display instead of the caught error message
   fallbackMessage?: string;
 }
 
@@ -24,12 +24,12 @@ export default class ErrorBoundary extends Component<Props, State> {
     this.state = { hasError: false, errorMessage: undefined };
   }
 
-  /** Called when an error is thrown in a child component */
+  // Called when an error is thrown in a child component
   static getDerivedStateFromError(error: Error): State {
     return { hasError: true, errorMessage: error.message };
   }
 
-  /** Lifecycle method for logging errors - called after error is caught */
+  // Lifecycle method for logging errors - called after error is caught
   componentDidCatch(error: Error, info: React.ErrorInfo) {
     console.error("ErrorBoundary caught an error:", error, info);
     // Optional: send error to backend logging service

@@ -2,17 +2,17 @@ import styles from './QuizCard.module.css';
 import Button from './Button';
 
 interface QuizCardProps {
-  /** Quiz ID for routing/tracking */
+  // Quiz ID for routing/tracking
   id: number;
-  /** Quiz title displayed prominently */
+  // Quiz title displayed prominently
   title: string;
-  /** Optional cover image URL - falls back to default if missing or fails to load */
+  // Optional cover image URL - falls back to default if missing or fails to load
   imageUrl?: string;
-  /** Difficulty level badge */
+  // Difficulty level badge
   difficulty: 'easy' | 'medium' | 'hard';
-  /** Number of questions in the quiz */
+  // Number of questions in the quiz
   questionCount: number;
-  /** Callback fired when user clicks "Take quiz" button */
+  // Callback fired when user clicks "Take quiz" button
   onTakeQuiz: () => void;
 }
 

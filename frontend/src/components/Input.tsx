@@ -3,11 +3,11 @@ import { type InputHTMLAttributes, forwardRef } from 'react';
 import styles from './Input.module.css';
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  /** Optional label text displayed above the input */
+  // Optional label text displayed above the input
   label?: string;
-  /** Error message to display - also applies error styling */
+  // Error message to display - also applies error styling
   error?: string;
-  /** Helper text displayed below input when no error */
+  // Helper text displayed below input when no error
   hint?: string;
 }
 

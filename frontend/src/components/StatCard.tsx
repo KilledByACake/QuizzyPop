@@ -1,11 +1,11 @@
 import styles from './StatCard.module.css';
 
 interface StatCardProps {
-  /** Statistic value (number or formatted string like "85%") */
+  // Statistic value (number or formatted string like "85%")
   number: number | string;
-  /** Description label for the statistic */
+  // Description label for the statistic 
   label: string;
-  /** Color/style variant */
+  // Color/style variant 
   variant?: 'primary' | 'secondary';
 }
 

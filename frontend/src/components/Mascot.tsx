@@ -1,11 +1,11 @@
 import styles from './Mascot.module.css';
 
 interface MascotProps {
-  /** Mascot image variant - different poses/expressions */
+  // Mascot image variant - different poses/expressions
   variant?: 'blueberry' | 'celebrate' | 'no-arms' | 'default';
-  /** Image size preset */
+  // Image size preset
   size?: 'small' | 'medium' | 'large';
-  /** Alt text for accessibility */
+  // Alt text for accessibility 
   alt?: string;
 }
 

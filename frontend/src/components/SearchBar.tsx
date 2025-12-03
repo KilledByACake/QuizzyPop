@@ -1,11 +1,11 @@
 import styles from './SearchBar.module.css';
 
 interface SearchBarProps {
-  /** Current search input value */
+  // Current search input value
   value: string;
-  /** Callback fired when search input changes */
+  // Callback fired when search input changes
   onChange: (value: string) => void;
-  /** Placeholder text displayed when input is empty */
+  // Placeholder text displayed when input is empty
   placeholder?: string;
 }
 

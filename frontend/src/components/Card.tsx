@@ -3,11 +3,11 @@ import styles from './Card.module.css';
 
 interface CardProps {
   children: ReactNode;
-  /** Card styling variant - default, elevated (with shadow), or outlined (with border) */
+  // Card styling variant - default, elevated (with shadow), or outlined (with border)
   variant?: 'default' | 'elevated' | 'outlined';
-  /** Additional CSS classes */
+  // Additional CSS classes
   className?: string;
-  /** Optional click handler - makes card interactive */
+  // Optional click handler - makes card interactive
   onClick?: () => void;
 }
 

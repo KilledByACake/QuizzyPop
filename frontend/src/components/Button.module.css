@@ -13,7 +13,7 @@
   line-height: 1.2;
 }
 
-/* ========== SIZES ========== */
+/* === SIZES === */
 .icon {
   padding: 0.5rem;
   font-size: 1rem;
@@ -43,7 +43,7 @@
   box-shadow: 0 8px 0 var(--qp-primary-dark), 0 0 0 4px var(--qp-white) inset;
 }
 
-/* ========== VARIANTS ========== */
+/* === VARIANTS === */
 
 /* Primary - Green */
 .primary {
@@ -200,7 +200,7 @@
   transform: none;
 }
 
-/* ========== MODIFIERS ========== */
+/* === MODIFIERS === */
 .full {
   width: 100%;
 }

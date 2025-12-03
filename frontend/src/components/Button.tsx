@@ -11,9 +11,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     | "success" // Bright green (finish/publish)
     | "gray" // Gray (cancel/previous)
     | "link"; // Text-only button
-  /** Button size preset */
+
+  // Button size preset
   size?: "small" | "medium" | "large" | "xl" | "icon";
-  /** Whether button should stretch to fill container width */
+  // Whether button should stretch to fill container width
   fullWidth?: boolean;
   children: React.ReactNode;
 }

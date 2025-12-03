@@ -2,22 +2,22 @@ import { type SelectHTMLAttributes, forwardRef } from 'react';
 import styles from './Select.module.css';
 
 interface SelectOption {
-  /** Option value submitted with form */
+  // Option value submitted with form
   value: string | number;
-  /** Display text for the option */
+  // Display text for the option
   label: string;
 }
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
-  /** Optional label text displayed above select */
+  // Optional label text displayed above select 
   label?: string;
-  /** Error message to display - also applies error styling */
+  // Error message to display - also applies error styling 
   error?: string;
-  /** Helper text displayed below select when no error */
+  // Helper text displayed below select when no error
   hint?: string;
-  /** Array of option objects to render */
+  // Array of option objects to render
   options: SelectOption[];
-  /** Placeholder text shown as disabled first option */
+  // Placeholder text shown as disabled first option
   placeholder?: string;
 }
 

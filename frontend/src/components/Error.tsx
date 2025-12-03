@@ -1,9 +1,9 @@
 import styles from "./Error.module.css";
 
 interface ErrorProps {
-  /** Error message to display - defaults to generic error text */
+  // Error message to display - defaults to generic error text
   message?: string;
-  /** Optional request/trace ID for debugging */
+  // Optional request/trace ID for debugging
   requestId?: string;
 }
 

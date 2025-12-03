@@ -11,8 +11,8 @@ using QuizzyPop.DAL;
 namespace QuizzyPop.api.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20251203142626_AddTagsSystem")]
-    partial class AddTagsSystem
+    [Migration("20251203150900_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,13 +63,27 @@ namespace QuizzyPop.api.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("CorrectAnswer")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("CorrectAnswerIndex")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("CorrectAnswerIndexes")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool?>("CorrectBool")
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("QuizId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Text")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("TEXT");
 

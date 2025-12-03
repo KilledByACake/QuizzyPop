@@ -26,6 +26,19 @@ namespace QuizzyPop.api.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Tags",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tags", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -109,8 +122,12 @@ namespace QuizzyPop.api.Migrations
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Text = table.Column<string>(type: "TEXT", nullable: false),
+                    Type = table.Column<string>(type: "TEXT", nullable: false),
                     Choices = table.Column<string>(type: "TEXT", nullable: false),
                     CorrectAnswerIndex = table.Column<int>(type: "INTEGER", nullable: false),
+                    CorrectAnswerIndexes = table.Column<string>(type: "TEXT", nullable: false),
+                    CorrectBool = table.Column<bool>(type: "INTEGER", nullable: true),
+                    CorrectAnswer = table.Column<string>(type: "TEXT", nullable: true),
                     QuizId = table.Column<int>(type: "INTEGER", nullable: false)
                 },
                 constraints: table =>
@@ -120,6 +137,30 @@ namespace QuizzyPop.api.Migrations
                         name: "FK_Questions_Quiz_QuizId",
                         column: x => x.QuizId,
                         principalTable: "Quiz",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "QuizTags",
+                columns: table => new
+                {
+                    QuizId = table.Column<int>(type: "INTEGER", nullable: false),
+                    TagId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_QuizTags", x => new { x.QuizId, x.TagId });
+                    table.ForeignKey(
+                        name: "FK_QuizTags_Quiz_QuizId",
+                        column: x => x.QuizId,
+                        principalTable: "Quiz",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_QuizTags_Tags_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tags",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -140,6 +181,11 @@ namespace QuizzyPop.api.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_QuizTags_TagId",
+                table: "QuizTags",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_RefreshTokens_UserId",
                 table: "RefreshTokens",
                 column: "UserId");
@@ -152,10 +198,16 @@ namespace QuizzyPop.api.Migrations
                 name: "Questions");
 
             migrationBuilder.DropTable(
+                name: "QuizTags");
+
+            migrationBuilder.DropTable(
                 name: "RefreshTokens");
 
             migrationBuilder.DropTable(
                 name: "Quiz");
+
+            migrationBuilder.DropTable(
+                name: "Tags");
 
             migrationBuilder.DropTable(
                 name: "Categories");

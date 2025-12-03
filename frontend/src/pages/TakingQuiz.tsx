@@ -1,22 +1,13 @@
 /**
  * TakingQuiz Page
- * 
+ *
  * Interactive quiz player where users answer questions one at a time. Features question
  * navigation (previous/next), progress tracking, and answer validation. On completion,
- * submits answers to backend for scoring and redirects to results page.
- * 
- * IMPLEMENTATION STATUS:
- * 
- * FULLY IMPLEMENTED:
- * - Multiple-choice questions with radio button selection
- * - True/false questions with True/False button selection
- * - Fill-blank, short, long answer questions with text input
- * - Multi-select questions with checkbox selection
- * - Progress tracking and question navigation
- * - Answer submission and scoring
- * 
- * NOTE: Backend scoring currently only supports multiple-choice questions.
- * Other question types are displayed and answered but may not be scored correctly.
+ * submits answers to backend for scoring and redirects to the results page.
+ *
+ * Implementation status:
+ * - UI supports: multiple-choice, multi-select, true/false, fill-blank, short, long
+ * - Backend scoring: currently fully supports multiple-choice only
  */
 
 import { useEffect, useState } from "react";
@@ -33,74 +24,66 @@ import Input from "../components/Input";
 import styles from "./TakingQuiz.module.css";
 
 /**
- * Structure of a quiz question with various types
+ * Structure of a quiz question with various supported types
  */
 interface Question {
-  /** Unique question identifier */
+  //Unique question identifier
   id: number;
-  /** Question text displayed to user */
+  // Question text displayed to the user 
   text: string;
-  /** Question type */
+  // Question type (e.g. multiple-choice, true-false) 
   type: string;
-  /** Array of possible answer choices (for multiple-choice, multi-select) */
+  // Array of possible answer choices (for multiple-choice, multi-select) */
   choices: string[];
-  /** Correct answer index for multiple-choice */
+  // Correct answer index for multiple-choice 
   correctAnswerIndex?: number;
-  /** Correct answer indexes for multi-select */
+  // Correct answer indexes for multi-select 
   correctAnswerIndexes?: number[];
-  /** Correct boolean for true/false */
+  // Correct boolean for true/false 
   correctBool?: boolean;
-  /** Correct text answer for fill-blank, short, long */
+  // Correct text answer for fill-blank, short, long 
   correctAnswer?: string;
 }
 
-/**
- * Quiz object with full question data
- */
+//Quiz object with full question data
 interface QuizWithQuestions {
-  /** Unique quiz identifier */
+  // Unique quiz identifier
   id: number;
-  /** Quiz display title */
+  // Quiz display title
   title: string;
-  /** Array of all questions in the quiz */
+  // Array of all questions in the quiz 
   questions: Question[];
 }
 
-/**
- * Answer type - can be number, boolean, string, or array
- */
+// Answer type - can be number, boolean, string, or array
 type AnswerValue = number | boolean | string | number[] | null;
 
-/**
- * Answer submission payload structure for backend
- */
+// Answer submission payload structure for backend
 interface SubmitAnswer {
-  /** ID of the question being answered */
+  // ID of the question being answered
   questionId: number;
-  /** Index of the selected choice (for multiple-choice) */
+  // Index of the selected choice (for multiple-choice)
   selectedChoiceIndex?: number;
-  /** Selected indexes (for multi-select) */
+  // Selected indexes (for multi-select)
   selectedChoiceIndexes?: number[];
-  /** Selected boolean (for true/false) */
+  // Selected boolean (for true/false)
   selectedBool?: boolean;
-  /** Entered text (for fill-blank, short, long) */
+  // Entered text (for fill-blank, short, long)
   enteredAnswer?: string;
 }
 
 /**
  * TakingQuiz Component
- * 
+ *
  * Main quiz-taking interface with question navigation and answer selection.
- * Supports multiple question types: multiple-choice, true/false, fill-blank, short, long, multi-select.
- * 
- * @returns Interactive quiz player with navigation and progress tracking
+ * Supports multiple question types and sends a summary of answers to the backend.
  */
 const TakingQuiz = () => {
   // Extract quiz ID from URL parameters
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
-  // State management
+  // Core quiz state
   const [quiz, setQuiz] = useState<QuizWithQuestions | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<number, AnswerValue>>({});
@@ -108,12 +91,12 @@ const TakingQuiz = () => {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Update document title for browser tab
+  // Set browser tab title when entering the page
   useEffect(() => {
     document.title = "Take Quiz - Quizzy Pop";
   }, []);
 
-  // Fetch quiz data and questions from backend
+  // Fetch quiz data and questions from backend when id changes
   useEffect(() => {
     if (!id) return;
 
@@ -180,9 +163,7 @@ const TakingQuiz = () => {
 
   // ====== EVENT HANDLERS ======
 
-  /**
-   * Handle answer selection/change for current question
-   */
+  // Handle answer selection/change for current question
   const handleAnswerChange = (questionId: number, value: AnswerValue) => {
     setSelectedAnswers((prev) => ({
       ...prev,
@@ -190,9 +171,7 @@ const TakingQuiz = () => {
     }));
   };
 
-  /**
-   * Handle multi-select checkbox toggle
-   */
+  // Handle multi-select checkbox toggle
   const handleMultiSelectToggle = (questionId: number, index: number) => {
     setSelectedAnswers((prev) => {
       const current = (prev[questionId] as number[]) || [];
@@ -215,9 +194,7 @@ const TakingQuiz = () => {
     setCurrentIndex((prev) => Math.min(prev + 1, quiz.questions.length - 1));
   };
 
-  /**
-   * Submit all answers to backend for scoring
-   */
+  //Submit all answers to backend for scoring
   const handleSubmit = async () => {
     if (!quiz) return;
 

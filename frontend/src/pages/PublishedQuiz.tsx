@@ -1,4 +1,3 @@
-// frontend/src/pages/PublishedQuiz.tsx
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import api from "../api";
@@ -8,7 +7,7 @@ import Loader from "../components/Loader";
 import Error from "../components/Error";
 import styles from "./PublishedQuiz.module.css";
 
-/** Quiz summary data for published quiz display */
+// Quiz summary data for the published quiz page
 interface PublishedQuizState {
   id: number;
   title: string;
@@ -17,12 +16,7 @@ interface PublishedQuizState {
   questionsCount: number;
 }
 
-/**
- * Quiz published success page
- * Shown after successfully creating and publishing a quiz
- * Displays quiz summary, celebration message, and sharing options
- * Navigated to from AddQuestions page after question submission
- */
+// Success page shown after a quiz is created and published
 export default function PublishedQuiz() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();

@@ -1,4 +1,3 @@
-// frontend/src/pages/TakeQuiz.tsx
 import {
   useEffect,
   useMemo,
@@ -7,6 +6,8 @@ import {
 } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuizContext } from "../contexts/QuizContext";
+import { useAuth } from "../contexts/AuthContext";
+import api from "../api";
 import Button from "../components/Button";
 import FilterDropdown from "../components/FilterDropdown";
 import SearchBar from "../components/SearchBar";
@@ -29,6 +30,7 @@ type QuizSummary = {
  */
 export default function TakeQuiz() {
   const { quizzes, loading, error, fetchQuizzes } = useQuizContext();
+  const { token } = useAuth();
 
   const [search, setSearch] = useState("");
   const [difficultyFilter, setDifficultyFilter] = useState("");
@@ -37,6 +39,20 @@ export default function TakeQuiz() {
   const [selectedSort, setSelectedSort] = useState<string | undefined>();
 
   const navigate = useNavigate();
+
+  // Decode JWT token to get user role
+  const getUserRole = (): string | null => {
+    if (!token) return null;
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || payload.role || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const userRole = getUserRole();
+  const isTeacher = userRole === 'teacher' || userRole === 'admin';
 
   useEffect(() => {
     document.title = "Explore Quizzes - Quizzy Pop";
@@ -78,9 +94,18 @@ export default function TakeQuiz() {
     });
   }, [quizzes, search, difficultyFilter]);
 
-  /** Navigate to quiz-taking page */
-  const handleTakeQuiz = (id: number) => {
-    navigate(`/quiz/${id}/take`);
+  /** Handle quiz deletion (teachers/admins only) */
+  const handleDeleteQuiz = async (id: number) => {
+    if (!confirm('Are you sure you want to delete this quiz?')) return;
+    
+    try {
+      await api.delete(`/api/quizzes/${id}`);
+      // Refresh quiz list
+      await fetchQuizzes();
+    } catch (err) {
+      console.error('Failed to delete quiz:', err);
+      alert('Failed to delete quiz. Please try again.');
+    }
   };
 
   const difficultyLabel =
@@ -192,15 +217,25 @@ export default function TakeQuiz() {
                       {questionsCount} Questions
                     </p>
 
-                    <Button
-                      className={styles["btn-take"]}
-                      type="button"
-                      variant="primary"
-                      onClick={() => handleTakeQuiz(quiz.id)}
-                      aria-label={`Take quiz: ${quiz.title}`}
-                    >
-                      Take quiz
-                    </Button>
+                    <div className={styles["quiz-actions"]}>
+                      <Button
+                        type="button"
+                        variant="primary"
+                        onClick={() => navigate(`/quiz/${quiz.id}/take`)}
+                      >
+                        Take Quiz
+                      </Button>
+                      
+                      {isTeacher && (
+                        <Button
+                          type="button"
+                          variant="danger"
+                          onClick={() => handleDeleteQuiz(quiz.id)}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </div>
                   </article>
                 );
               })}

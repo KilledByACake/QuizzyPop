@@ -35,7 +35,7 @@ export default function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  /** Handle form submission - authenticate user and store token */
+  // Handle form submission - authenticate user and store token
   const onSubmit = async (data: LoginFormData) => {
     try {
       setServerError("");

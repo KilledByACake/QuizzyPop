@@ -44,7 +44,7 @@ export default function Register() {
   // Watch role to conditionally show extra fields
   const role = watch("role");
 
-  /** Handle form submission - create account and redirect to login */
+  // Handle form submission - create account and redirect to login
   const onSubmit = async (data: RegisterFormData) => {
     setServerError("");
 

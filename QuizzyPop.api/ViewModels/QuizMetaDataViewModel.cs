@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;  // Add this line
 
 namespace QuizzyPop.ViewModels
 {
+    // View model for quiz metadata, settings, and associated questions in MVC views
     public class QuizMetaDataViewModel
     {
         public int Id { get; set; }

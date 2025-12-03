@@ -1,9 +1,9 @@
 # How to run the project
 Backend:
-1.	Open QuizzyPop.sln in Visual Studio or VS Code.
-$cd QuizzyPop.Api   
-2.	Press F5 to start in debug mode or write in the terminal $dotnet run
-3.	The backend will start on http://localhost:5239. 
+1.	Open a terminal
+2.  $ cd QuizzyPop.Api   
+3.	$ dotnet run
+4.	The backend will start on http://localhost:5239. 
 
 Frontend:
 1.	Open a terminal

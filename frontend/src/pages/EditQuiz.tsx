@@ -13,7 +13,7 @@ import Card from "../components/Card";
 import TagInput from "../components/TagInput";
 import styles from "./EditQuiz.module.css";
 
-/** Question structure for editing */
+// Question structure for editing
 interface EditQuestion {
   id: number; // existing DB id (positive) or temporary negative id for newly added questions
   text: string;
@@ -21,7 +21,7 @@ interface EditQuestion {
   correctChoiceIndex: number;
 }
 
-/** Quiz data structure with questions for editing */
+// Quiz data structure with questions for editing
 interface EditQuizDto {
   id: number;
   title: string;
@@ -33,34 +33,6 @@ interface EditQuizDto {
   questions: EditQuestion[];
 }
 
-/**
- * EditQuiz Page
- *
- * Allows editing quiz metadata (title, description, category, difficulty, tags, image)
- * and associated multiple-choice questions.
- *
- * IMPLEMENTATION STATUS:
- * 
- * FULLY IMPLEMENTED:
- * - Load quiz with questions (GET /api/quizzes/{id}/with-questions)
- * - Edit quiz metadata (title, description, category, difficulty, tags)
- * - Image upload with preview and removal
- * - Add/edit/remove questions
- * - Add/edit answer choices with correct answer selection
- * - Save changes (PUT quiz metadata, POST/PUT/DELETE questions)
- * - Navigation back to MyPage
- * 
- * PARTIALLY IMPLEMENTED:
- * - Only supports multiple-choice questions (no true/false, fill-in-blank, etc.)
- * - Question types limited by backend schema
- * 
- * Backend expectations (aligned with AddQuestions page):
- * - GET  /api/quizzes/{id}/with-questions
- * - PUT  /api/quizzes/{id}            (quiz metadata & image)
- * - PUT  /api/quiz-questions/{id}     (update existing question)
- * - POST /api/quiz-questions          (create new question)
- * - DELETE /api/quiz-questions/{id}   (delete question)
- */
 const EditQuiz = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -117,7 +89,7 @@ const EditQuiz = () => {
   // Handlers - metadata
   // ---------------------------
 
-  /** Handle changes to quiz metadata fields (title, description, category, difficulty) */
+  // Handle changes to quiz metadata fields (title, description, category, difficulty)
   const handleMetaChange = (
     e:
       | ChangeEvent<HTMLInputElement>
@@ -135,12 +107,12 @@ const EditQuiz = () => {
     );
   };
 
-  /** Handle changes to tags array */
+  // Handle changes to tags array 
   const handleTagsChange = (tags: string[]) => {
     setQuiz((prev) => (prev ? { ...prev, tags } : prev));
   };
 
-  /** Handle image file selection and preview generation */
+  // Handle image file selection and preview generation
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -157,7 +129,7 @@ const EditQuiz = () => {
   // Handlers - questions
   // ---------------------------
 
-  /** Update question text */
+  // Update question text
   const handleQuestionTextChange = (qIndex: number, value: string) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -165,7 +137,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Update a specific answer choice */
+  // Update a specific answer choice
   const handleChoiceChange = (
     qIndex: number,
     cIndex: number,
@@ -179,7 +151,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Mark an answer choice as correct */
+  // Mark an answer choice as correct
   const handleCorrectChoiceChange = (qIndex: number, cIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -187,7 +159,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Add a new answer choice to a question */
+  // Add a new answer choice to a question
   const handleAddChoice = (qIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -196,7 +168,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Add a new question (temporary negative id, backend will create real id on POST) */
+  // Add a new question (temporary negative id, backend will create real id on POST)
   const handleAddQuestion = () => {
     if (!quiz) return;
     const newQuestion: EditQuestion = {
@@ -208,7 +180,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions: [...quiz.questions, newQuestion] });
   };
 
-  /** Remove a question (and track deletions for existing DB questions) */
+  // Remove a question (and track deletions for existing DB questions)
   const handleRemoveQuestion = (qIndex: number) => {
     if (!quiz) return;
     const questions = [...quiz.questions];
@@ -225,7 +197,7 @@ const EditQuiz = () => {
     setQuiz({ ...quiz, questions });
   };
 
-  /** Cancel editing and return to MyPage */
+  // Cancel editing and return to MyPage
   const handleCancel = () => {
     navigate("/mypage");
   };
@@ -338,7 +310,7 @@ const EditQuiz = () => {
     );
   }
 
-  /** Category options - should match backend seeded categories */
+  // Category options - should match backend seeded categories
   const categories = [
     { value: "", label: "Select a category" },
     { value: "1", label: "Math" },
@@ -348,7 +320,7 @@ const EditQuiz = () => {
     { value: "5", label: "Entertainment" },
   ];
 
-  /** Difficulty level options */
+  // Difficulty level options
   const difficulties = [
     { value: "easy", label: "Easy" },
     { value: "medium", label: "Medium" },

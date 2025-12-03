@@ -85,20 +85,21 @@ public static class DBInit
                         new Question
                         {
                             Text = "What is the sum of the interior angles of a triangle?",
+                            Type = "multiple-choice",
                             Choices = new List<string> { "90 degrees", "180 degrees", "270 degrees", "360 degrees" },
                             CorrectAnswerIndex = 1
                         },
                         new Question
                         {
-                            Text = "What is the area of a circle with radius r?",
-                            Choices = new List<string> { "πr", "2πr", "πr²", "2r²" },
-                            CorrectAnswerIndex = 2
+                            Text = "What do you call a polygon with eight sides?",
+                            Type = "fill-blank",
+                            CorrectAnswer = "Octagon"
                         },
                         new Question
                         {
-                            Text = "What do you call a polygon with eight sides?",
-                            Choices = new List<string> { "Hexagon", "Heptagon", "Octagon", "Nonagon" },
-                            CorrectAnswerIndex = 2
+                            Text = "A square has 4 equal sides. True or False?",
+                            Type = "true-false",
+                            CorrectBool = true
                         }
                     }
                 },
@@ -115,18 +116,21 @@ public static class DBInit
                             new Question
                             {
                                 Text = "Who is the main character in 'The Little Mermaid'?",
+                                Type = "multiple-choice",
                                 Choices = new List<string> { "Belle", "Ariel", "Cinderella", "Jasmine" },
                                 CorrectAnswerIndex = 1
                             },
                             new Question
                             {
-                                Text = "Which Disney movie features a wooden puppet named Pinocchio?",
-                                Choices = new List<string> { "Mathias", "Mulan", "Hercules", "Pinnochio" },
-                                CorrectAnswerIndex = 3
+                                Text = "Which of these characters are disney characters?",
+                                Type = "multi-select",
+                                Choices = new List<string> { "Mathias", "Mulan", "Knut", "Pinnochio" },
+                                CorrectAnswerIndexes = new List<int> {1, 3}
                             },
                             new Question
                             {
                                 Text = "In 'The Lion King', what is the name of Simba's father?",
+                                Type = "multiple-choice",
                                 Choices = new List<string> { "Mufasa", "Scar", "Timon", "Pumbaa" },
                                 CorrectAnswerIndex = 0
                             }

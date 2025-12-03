@@ -11,8 +11,8 @@ using QuizzyPop.DAL;
 namespace QuizzyPop.api.Migrations
 {
     [DbContext(typeof(UserDbContext))]
-    [Migration("20251203173051_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251203184614_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

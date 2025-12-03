@@ -11,7 +11,7 @@ import { addQuestionsSchema } from '../schemas/questionSchemas';
 import type { AddQuestionsForm } from '../schemas/questionSchemas';
 import styles from './AddQuestions.module.css';
 
-/** Prefix for localStorage draft keys - unique per quiz */
+// Prefix for localStorage draft keys - unique per quiz
 const DRAFT_KEY_PREFIX = 'questions_draft_';
 
 /**
@@ -64,13 +64,13 @@ export default function AddQuestions() {
     }
   }, [DRAFT_KEY, location.state, reset]);
 
-  /** Save current form state to localStorage as draft */
+  // Save current form state to localStorage as draft
   const saveDraft = () => {
     const data = watch();
     localStorage.setItem(DRAFT_KEY, JSON.stringify(data));
   };
 
-  /** Add a new empty multiple-choice question to the form */
+  // Add a new empty multiple-choice question to the form
   const addNewQuestion = () => {
     append({
       type: 'multiple-choice',
@@ -80,7 +80,7 @@ export default function AddQuestions() {
     } as any);
   };
 
-  /** Submit questions - only publishes multiple-choice, saves others as draft */
+  // Submit questions - only publishes multiple-choice, saves others as draft
   const onSubmit = async (data: AddQuestionsForm) => {
     if (!quizId) {
       setNotice('Missing quiz id in the URL.');
@@ -135,7 +135,7 @@ export default function AddQuestions() {
     }
   };
 
-  /** Available question type options */
+  // Available question type options
   const typeOptions = [
     { value: 'multiple-choice', label: 'Multiple Choice' },
     { value: 'true-false', label: 'True / False' },

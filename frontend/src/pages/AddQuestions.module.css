@@ -1,3 +1,4 @@
+/* === LAYOUT CONTAINER === */
 .container {
   max-width: 1000px;
   margin: 0 auto;
@@ -6,6 +7,7 @@
   z-index: 1;
 }
 
+/* === HEADER === */
 .header {
   text-align: center;
   margin-bottom: var(--qp-space-xl);
@@ -22,6 +24,7 @@
   margin-top: var(--qp-space-xs);
 }
 
+/* === NOTICE BANNER === */
 .notice {
   background: #fffaf0;
   color: #92400e;
@@ -32,11 +35,14 @@
   font-weight: 700;
 }
 
+/* === FORM LAYOUT === */
 .form {
   display: flex;
   flex-direction: column;
   gap: var(--qp-space-xl);
 }
+
+/* === QUESTION CARD === */
 
 .questionCard {
   background: var(--qp-white);
@@ -58,6 +64,7 @@
   font-size: 0.95rem;
 }
 
+/* === OPTIONS & ERRORS === */
 .optionsGrid {
   display: grid;
   grid-template-columns: 1fr;
@@ -85,12 +92,14 @@
   margin-top: var(--qp-space-xs);
 }
 
+/* === CARD ACTIONS === */
 .cardActions {
   display: flex;
   justify-content: flex-end;
   margin-top: var(--qp-space-md);
 }
 
+/* === FOOTER ACTIONS === */
 .footerActions {
   display: flex;
   justify-content: space-between;
@@ -103,6 +112,7 @@
   gap: var(--qp-space-sm);
 }
 
+/* === RESPONSIVE === */
 @media (max-width: 700px) {
   .container { padding: var(--qp-space-xl) var(--qp-space-md); }
   .questionCard { padding: var(--qp-space-lg); }
@@ -110,6 +120,7 @@
   .rightActions { justify-content: space-between; }
 }
 
+/* === TRUE / FALSE CONTROLS === */
 .tfRow {
   margin-top: var(--qp-space-md);
   display: flex;

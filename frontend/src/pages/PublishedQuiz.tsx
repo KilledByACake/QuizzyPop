@@ -136,19 +136,19 @@ export default function PublishedQuiz() {
 
         <div className={styles.summary}>
           <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Title</span>
+            <span className={styles.summaryLabel}>Title: </span>
             <span className={styles.summaryValue}>{quiz.title}</span>
           </div>
           <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Questions</span>
+            <span className={styles.summaryLabel}>Questions: </span>
             <span className={styles.summaryValue}>{quiz.questionsCount}</span>
           </div>
           <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Difficulty</span>
+            <span className={styles.summaryLabel}>Difficulty: </span>
             <span className={styles.summaryValue}>{quiz.difficulty}</span>
           </div>
           <div className={styles.summaryItem}>
-            <span className={styles.summaryLabel}>Category</span>
+            <span className={styles.summaryLabel}>Category: </span>
             <span className={styles.summaryValue}>{quiz.category}</span>
           </div>
         </div>

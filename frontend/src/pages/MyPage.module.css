@@ -18,7 +18,7 @@
   gap: 1rem;
   padding: 1.25rem 1.5rem;
   border-radius: 16px;
-  background: #ecfeff; /* lys turkis */
+  background: #ecfeff; /* light turquoise */
   box-shadow: 0 10px 25px rgba(15, 118, 110, 0.12);
 }
 
@@ -50,7 +50,7 @@
   gap: 2rem;
 }
 
-/* Hver seksjon (Created / Taken) */
+/* Each section (Created / Taken) */
 .grid > section {
   background: #ffffff;
   border-radius: 18px;
@@ -72,7 +72,7 @@
   gap: 1rem;
 }
 
-/* Card-komponenten får ekstra layout her */
+/* Card component gets extra layout here */
 .quizCard {
   display: flex;
   flex-direction: column;
@@ -136,6 +136,7 @@
     padding: 0.9rem 1rem;
   }
 }
+
 /* Wrapper around the scroll area – gives background and padding */
 .takenListWrapper {
   margin-top: 0.75rem;
@@ -150,9 +151,9 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  max-height: 280px; /* ca. 3 kort av normal høyde */
+  max-height: 280px; /* approximately 3 cards of normal height */
   overflow-y: auto;
-  padding-right: 0.25rem; /* litt plass til scrollbar */
+  padding-right: 0.25rem; /* a little space for the scrollbar */
 }
 
 /* Optional: nice slim scrollbar */

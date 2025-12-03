@@ -9,7 +9,7 @@ import Button from "../components/Button";
 import Mascot from "../components/Mascot";
 import styles from "./MyPage.module.css";
 
-/** User profile returned by /api/auth/me */
+// User profile shape returned by /api/auth/me
 interface MeResponse {
   id: number;
   displayName: string;
@@ -18,7 +18,7 @@ interface MeResponse {
   avatarUrl?: string | null;
 }
 
-/** Quiz summary for the "My Created Quizzes" list */
+// Quiz summary shape for "My Created Quizzes"
 interface QuizSummary {
   id: number;
   title: string;
@@ -31,43 +31,27 @@ interface QuizSummary {
   createdDate?: string;
   difficulty?: string;
 
-  // Owner fallback fields (backend may use different names)
+  // Possible owner fields
   createdByUserId?: number | null;
   ownerId?: number | null;
   userId?: number | null;
 
-  // NOT FULLY IMPLEMENTED: Statistics fields exist but backend doesn't provide them yet
+  // Optional statistics
   attemptsCount?: number;
   averageScore?: number;
 }
 
-/** Local quiz attempt stored by QuizCompleted in localStorage */
+// Local quiz attempt stored by QuizCompleted in localStorage
 interface LocalQuizAttempt {
   quizId: number;
   quizTitle: string;
-  score: number; // normalized percentage
+
+  // Optional statistics 
+  score: number; 
   completedAt: string;
 }
 
-/**
- * MyPage (User Dashboard)
- *
- * FULLY IMPLEMENTED:
- * - User profile display (email, member since date) 
- * - List of quizzes created by logged-in user 
- * - Delete quiz functionality 
- * - Quiz statistics (created count, taken count, average score) 
- *
- * PARTIALLY IMPLEMENTED:
- * - Taken quizzes tracking (uses localStorage, not database)
- * - Edit quiz button (redirects to edit page but edit page may not be fully functional)
- *
- * NOT IMPLEMENTED:
- * - Backend /api/auth/me endpoint (returns basic info but may fail due to missing CreatedAt field in User model)
- * - Backend userId filter for quizzes (may not work correctly)
- * - Quiz statistics from backend (attemptsCount, averageScore not sent by backend)
- * - User avatar support
- */
+// User dashboard page: profile, created quizzes, and taken-quiz history
 const MyPage = () => {
   const { isAuthenticated } = useAuth();
 
@@ -77,7 +61,7 @@ const MyPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  /** Safely formats an ISO date string - FULLY IMPLEMENTED  */
+  // Format ISO date string into a readable date
   const formatDate = (value?: string) => {
     if (!value) return "Unknown";
     const d = new Date(value);
@@ -89,12 +73,7 @@ const MyPage = () => {
     });
   };
 
-  /**
-   * Load local attempts from localStorage - FULLY IMPLEMENTED 
-   *
-   * NOTE: This uses localStorage instead of database.
-   * Taken quizzes are not persisted to backend, so they're lost if localStorage is cleared.
-   */
+  // Load quiz attempts recorded in localStorage
   const loadLocalAttempts = (): LocalQuizAttempt[] => {
     try {
       const raw = localStorage.getItem("quiz_attempts");
@@ -108,13 +87,7 @@ const MyPage = () => {
     }
   };
 
-  /**
-   * Fetch user, their quizzes, and local attempts
-   *
-   * PARTIALLY IMPLEMENTED:
-   * - /api/auth/me endpoint may fail due to missing User.CreatedAt field in database
-   * - /api/quizzes?userId={id} filtering may not work correctly in backend
-   */
+  // Fetch user profile, their quizzes, and local attempts
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -128,20 +101,16 @@ const MyPage = () => {
           return;
         }
 
-        // --- Fetch user profile ---
-        // NOT FULLY IMPLEMENTED: Backend /api/auth/me may fail if User.CreatedAt doesn't exist
         const meRes = await api.get<MeResponse>("/api/auth/me");
         const user = meRes.data;
         setMe(user);
 
-        // --- Fetch quizzes created by the user ---
-        // PARTIALLY IMPLEMENTED: Backend userId filtering may not be fully functional
         const quizzesRes = await api.get<QuizSummary[]>(
           `/api/quizzes?userId=${user.id}`
         );
         const rawQuizzes = quizzesRes.data || [];
 
-        // Extra safety: filter by owner on client as well
+        // Extra safety: also filter by owner on the client
         const filtered = rawQuizzes.filter((q) => {
           const ownerId =
             q.createdByUserId ?? q.ownerId ?? q.userId ?? null;
@@ -150,8 +119,7 @@ const MyPage = () => {
 
         setQuizzes(filtered);
 
-        // --- Load taken quizzes from localStorage (recorded by QuizCompleted) ---
-        // NOT FULLY IMPLEMENTED: Uses localStorage instead of database
+        // Load taken quizzes from localStorage (recorded by QuizCompleted)
         setTakenQuizzes(loadLocalAttempts());
       } catch (err) {
         console.error(err);
@@ -164,7 +132,7 @@ const MyPage = () => {
     void fetchData();
   }, [isAuthenticated]);
 
-  /** Statistics - FULLY IMPLEMENTED  */
+  // Derived statistics for dashboard header
   const quizzesCreated = quizzes.length;
   const quizzesTaken = takenQuizzes.length;
 
@@ -177,20 +145,17 @@ const MyPage = () => {
     return `${Math.round(total / takenQuizzes.length)}%`;
   }, [takenQuizzes]);
 
-  /** Navigate to quiz taking page - FULLY IMPLEMENTED  */
+  // Navigate to quiz taking page
   const handleViewQuiz = (id: number) => {
     window.location.href = `/quiz/${id}/take`;
   };
 
-  /**
-   * Navigate to quiz edit page - PARTIALLY IMPLEMENTED
-   * Edit page exists but may not be fully functional (connects to backend but workflow incomplete)
-   */
+  // Navigate to quiz edit page
   const handleEditQuiz = (id: number) => {
     window.location.href = `/quiz/${id}/edit`;
   };
 
-  /** Delete quiz - FULLY IMPLEMENTED  */
+  // Delete quiz and remove it from the list
   const handleDeleteQuiz = async (id: number) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this quiz? This action cannot be undone."
@@ -204,11 +169,10 @@ const MyPage = () => {
       await api.delete(`/api/quizzes/${id}`);
     } catch (err) {
       console.error(err);
-      // NOTE: Could add toast/snackbar notification here
     }
   };
 
-  /** Loading state */
+  // Loading state
   if (loading) {
     return (
       <section className={styles.page}>
@@ -217,7 +181,7 @@ const MyPage = () => {
     );
   }
 
-  /** Error / not logged in state */
+  // Error or unauthenticated state
   if (error || !me) {
     return (
       <section className={styles.page}>
@@ -230,7 +194,7 @@ const MyPage = () => {
 
   return (
     <section className={styles.page}>
-      {/* Header with profile and stats - FULLY IMPLEMENTED  */}
+      {/* Header with profile and stats */}
       <header className={styles.header}>
         <div className={styles.profile}>
           <Mascot variant="blueberry" size="medium" />
@@ -257,7 +221,7 @@ const MyPage = () => {
       </header>
 
       <div className={styles.grid}>
-        {/* My Created Quizzes - FULLY IMPLEMENTED  */}
+        {/* My Created Quizzes */}
         <section>
           <h2>My Created Quizzes</h2>
 

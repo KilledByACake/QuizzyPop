@@ -25,7 +25,7 @@ import Card from "../components/Card";
 import StatCard from "../components/StatCard";
 
 import styles from "./TakingQuiz.module.css";
-import { safeDecode } from "zod";
+
 
 /**
  * Structure of a quiz question with multiple-choice options

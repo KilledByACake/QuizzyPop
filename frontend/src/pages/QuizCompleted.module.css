@@ -6,47 +6,9 @@
   position: relative;
   overflow: hidden;
 }
-
-/* Subtle confetti overlay */
-.qp-publish-success::before,
-.qp-publish-success::after {
-  content: "";
-  position: absolute;
-  inset: -20%;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle at 10% 20%, #f97316 2px, transparent 0),
-    radial-gradient(circle at 30% 80%, #22c55e 2px, transparent 0),
-    radial-gradient(circle at 70% 30%, #3b82f6 2px, transparent 0),
-    radial-gradient(circle at 90% 70%, #e11d48 2px, transparent 0);
-  background-size: 80px 80px;
-  opacity: 0.4;
-  animation: qp-confetti-fall 8s linear infinite;
+.qp-publish__header {
+  margin-bottom: 1.5rem;
 }
-
-.qp-publish-success::after {
-  animation-duration: 10s;
-  animation-delay: -3s;
-  opacity: 0.5;
-}
-
-@keyframes qp-confetti-fall {
-  from {
-    transform: translateY(-10%);
-  }
-  to {
-    transform: translateY(10%);
-  }
-}
-
-/* Reduce motion support */
-@media (prefers-reduced-motion: reduce) {
-  .qp-publish-success::before,
-  .qp-publish-success::after {
-    animation: none;
-  }
-}
-
 .qp-publish__header h1 {
   font-size: 2.4rem;
   color: var(--qp-blue);
@@ -59,9 +21,15 @@
   font-size: 1.2rem;
 }
 
+.qp-publish__mascot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 2rem auto;
+}
+
 .qp-publish__mascot img {
   width: 150px;
-  margin: 2rem 0;
 }
 
 .qp-quiz-card {

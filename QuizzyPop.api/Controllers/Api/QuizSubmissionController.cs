@@ -13,7 +13,8 @@ public class QuizSubmissionController : ControllerBase
     private readonly IQuizService _service;
     public QuizSubmissionController(IQuizService service) => _service = service;
 
-    [HttpPost("{quizId:int}/submit")]  //Full route in method
+    [HttpPost("{quizId:int}/submit")]
+    [AllowAnonymous]  //  - allows anonymous quiz submission
     public async Task<ActionResult<QuizSubmissionResultDto>> Submit(
         int quizId,
         [FromBody] QuizSubmissionDto dto)

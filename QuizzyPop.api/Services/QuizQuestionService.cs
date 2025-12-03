@@ -26,38 +26,38 @@ public sealed class QuizQuestionService : IQuizQuestionService
     //nytt sorlsmål for quiz
     public async Task<Question> CreateAsync(QuizQuestionCreateDto dto)
     {
-        if (dto.QuizId <= 0) throw new ArgumentException("QuizId is required", nameof(dto.QuizId));
-        if (string.IsNullOrWhiteSpace(dto.Text)) throw new ArgumentException("Text is required", nameof(dto.Text));
-
-        // Normaliser choices: trim og fjern tomme
-        var normalized = (dto.Choices ?? new())
-            .Select(c => c?.Trim() ?? string.Empty)
-            .Where(c => !string.IsNullOrWhiteSpace(c))
-            .ToList();
-
-        if (normalized.Count < 2)
-            throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
-
-        if (dto.CorrectAnswerIndex < 0 || dto.CorrectAnswerIndex >= normalized.Count)
-            throw new ArgumentOutOfRangeException(nameof(dto.CorrectAnswerIndex),
-                "CorrectAnswerIndex must be a valid index into Choices.");
-
-        var quiz = await _quizRepo.GetByIdAsync(dto.QuizId);
-        if (quiz is null) throw new InvalidOperationException($"Quiz {dto.QuizId} not found");
-
-        var entity = new Question
+        var question = new Question
         {
             QuizId = dto.QuizId,
-            Text = dto.Text.Trim(),
-            Choices = normalized,
-            CorrectAnswerIndex = dto.CorrectAnswerIndex,
+            Text = dto.Text,
+            Type = dto.Type
         };
 
-        // Hvis IQuestionRepository.AddAsync ikke returnerer entity, gjør vi slik:
-        await _repo.AddAsync(entity);
-        return entity;
-        // Hvis AddAsync faktisk returnerer Question hos deg, kan du bytte til:
-        // return await _repo.AddAsync(entity);
+        // Set fields based on question type
+        switch (dto.Type)
+        {
+            case "multiple-choice":
+                question.Choices = dto.Choices ?? new();
+                question.CorrectAnswerIndex = dto.CorrectAnswerIndex ?? 0;
+                break;
+            
+            case "multi-select":
+                question.Choices = dto.Choices ?? new();
+                question.CorrectAnswerIndexes = dto.CorrectAnswerIndexes ?? new();
+                break;
+            
+            case "true-false":
+                question.CorrectBool = dto.CorrectBool;
+                break;
+            
+            case "fill-blank":
+            case "short":
+            case "long":
+                question.CorrectAnswer = dto.CorrectAnswer;
+                break;
+        }
+
+        return await _repo.AddAsync(question);
     }
 
     public Task<Question?> GetAsync(int id) => _repo.GetByIdAsync(id);
@@ -73,32 +73,77 @@ public sealed class QuizQuestionService : IQuizQuestionService
         if (!string.IsNullOrWhiteSpace(dto.Text))
             existing.Text = dto.Text.Trim();
 
-        if (dto.Choices is not null)
+        if (!string.IsNullOrWhiteSpace(dto.Type))
+            existing.Type = dto.Type.Trim();
+
+        // Update fields based on question type
+        switch (existing.Type)
         {
-            var normalized = dto.Choices
-                .Select(c => c?.Trim() ?? string.Empty)
-                .Where(c => !string.IsNullOrWhiteSpace(c))
-                .ToList();
+            case "multiple-choice":
+                if (dto.Choices is not null)
+                {
+                    var normalized = dto.Choices
+                        .Select(c => c?.Trim() ?? string.Empty)
+                        .Where(c => !string.IsNullOrWhiteSpace(c))
+                        .ToList();
 
-            if (normalized.Count < 2)
-                throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
+                    if (normalized.Count < 2)
+                        throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
 
-            existing.Choices = normalized;
+                    existing.Choices = normalized;
 
-            // Sørg for at korrekt indeks fortsatt er gyldig om den ikke eksplisitt settes
-            if (existing.CorrectAnswerIndex < 0 || existing.CorrectAnswerIndex >= existing.Choices.Count)
-            {
-                existing.CorrectAnswerIndex = 0; // fallback
-            }
-        }
+                    // Ensure correct index is valid
+                    if (existing.CorrectAnswerIndex < 0 || existing.CorrectAnswerIndex >= existing.Choices.Count)
+                    {
+                        existing.CorrectAnswerIndex = 0;
+                    }
+                }
 
-        if (dto.CorrectAnswerIndex is not null)
-        {
-            var idx = dto.CorrectAnswerIndex.Value;
-            if (idx < 0 || idx >= existing.Choices.Count)
-                throw new ArgumentOutOfRangeException(nameof(dto.CorrectAnswerIndex),
-                    "CorrectAnswerIndex must be a valid index into Choices.");
-            existing.CorrectAnswerIndex = idx;
+                if (dto.CorrectAnswerIndex is not null)
+                {
+                    var idx = dto.CorrectAnswerIndex.Value;
+                    if (idx < 0 || idx >= existing.Choices.Count)
+                        throw new ArgumentOutOfRangeException(nameof(dto.CorrectAnswerIndex),
+                            "CorrectAnswerIndex must be a valid index into Choices.");
+                    existing.CorrectAnswerIndex = idx;
+                }
+                break;
+
+            case "multi-select":
+                if (dto.Choices is not null)
+                {
+                    var normalized = dto.Choices
+                        .Select(c => c?.Trim() ?? string.Empty)
+                        .Where(c => !string.IsNullOrWhiteSpace(c))
+                        .ToList();
+
+                    if (normalized.Count < 2)
+                        throw new ArgumentException("Provide at least two choices.", nameof(dto.Choices));
+
+                    existing.Choices = normalized;
+                }
+
+                if (dto.CorrectAnswerIndexes is not null)
+                {
+                    existing.CorrectAnswerIndexes = dto.CorrectAnswerIndexes;
+                }
+                break;
+
+            case "true-false":
+                if (dto.CorrectBool is not null)
+                {
+                    existing.CorrectBool = dto.CorrectBool;
+                }
+                break;
+
+            case "fill-blank":
+            case "short":
+            case "long":
+                if (dto.CorrectAnswer is not null)
+                {
+                    existing.CorrectAnswer = dto.CorrectAnswer.Trim();
+                }
+                break;
         }
 
         return await _repo.UpdateAsync(existing);

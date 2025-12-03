@@ -13,9 +13,7 @@ using Xunit;
 
 namespace QuizzyPop.Tests;
 
-/// <summary>
-/// Unit tests for QuizQuestionService - tests CRUD operations for quiz questions
-/// </summary>
+// Tests for QuizQuestionService CRUD operations for quiz questions
 public class QuizQuestionServiceTests
 {
     private readonly Mock<IQuestionRepository> _questionRepoMock;
@@ -33,6 +31,7 @@ public class QuizQuestionServiceTests
         );
     }
 
+     // Scenario: creating a question with valid data should return the created question and use the repository to persist it
     [Fact]
     public async Task CreateQuestion_ValidData_ReturnsCreatedQuestion()
     {
@@ -53,15 +52,15 @@ public class QuizQuestionServiceTests
             UserId = 1
         };
 
-        // Mock: Quiz exists
+        // Quiz with the given id exists
         _quizRepoMock
             .Setup(r => r.GetByIdAsync(1))
             .ReturnsAsync(quiz);
 
-        // Mock: AddAsync succeeds and returns the question
+        // Return the same question that was passed in to simulate successful persistence
         _questionRepoMock
             .Setup(r => r.AddAsync(It.IsAny<Question>()))
-            .ReturnsAsync((Question q) => q); // Return the same question that was passed in
+            .ReturnsAsync((Question q) => q);
 
         // Act - call the method
         var result = await _service.CreateAsync(dto);
@@ -74,7 +73,7 @@ public class QuizQuestionServiceTests
         result.CorrectAnswerIndex.Should().Be(1);
         result.QuizId.Should().Be(1);
 
-        // Verify repository was called
+        // Ensure repository was called with the expected entity
         _questionRepoMock.Verify(r => r.AddAsync(It.Is<Question>(q =>
             q.Text == dto.Text &&
             q.QuizId == dto.QuizId &&
@@ -82,6 +81,7 @@ public class QuizQuestionServiceTests
         )), Times.Once);
     }
 
+    // Scenario: creating a question with empty text should throw and never call the repository
     [Fact]
     public async Task CreateQuestion_EmptyText_ThrowsArgumentException()
     {
@@ -105,6 +105,7 @@ public class QuizQuestionServiceTests
         _questionRepoMock.Verify(r => r.AddAsync(It.IsAny<Question>()), Times.Never);
     }
 
+    // Scenario: creating a question with fewer than two choices should throw
     [Fact]
     public async Task CreateQuestion_LessThanTwoChoices_ThrowsArgumentException()
     {
@@ -128,6 +129,7 @@ public class QuizQuestionServiceTests
             .WithMessage("*at least two choices*");
     }
 
+    // Scenario: getting a question by an existing id should return the question
     [Fact]
     public async Task GetQuestion_ExistingId_ReturnsQuestion()
     {
@@ -155,6 +157,7 @@ public class QuizQuestionServiceTests
         result.Choices.Should().HaveCount(4);
     }
 
+    // Scenario: getting a question by a non-existing id should return null
     [Fact]
     public async Task GetQuestion_NonExistingId_ReturnsNull()
     {
@@ -170,6 +173,7 @@ public class QuizQuestionServiceTests
         result.Should().BeNull();
     }
 
+    // Scenario: updating an existing question with valid data should return true and update the stored entity
     [Fact]
     public async Task UpdateQuestion_ValidData_ReturnsTrue()
     {
@@ -212,6 +216,7 @@ public class QuizQuestionServiceTests
         )), Times.Once);
     }
 
+    // Scenario: updating a non-existing question should return false and not call Update on the repository
     [Fact]
     public async Task UpdateQuestion_NonExistingId_ReturnsFalse()
     {
@@ -233,6 +238,7 @@ public class QuizQuestionServiceTests
         _questionRepoMock.Verify(r => r.UpdateAsync(It.IsAny<Question>()), Times.Never);
     }
 
+    // Scenario: deleting an existing question should return true and call Delete on the repository
     [Fact]
     public async Task DeleteQuestion_ExistingId_ReturnsTrue()
     {
@@ -249,6 +255,7 @@ public class QuizQuestionServiceTests
         _questionRepoMock.Verify(r => r.DeleteAsync(7), Times.Once);
     }
 
+    // Scenario: deleting a non-existing question should return false
     [Fact]
     public async Task DeleteQuestion_NonExistingId_ReturnsFalse()
     {
@@ -264,6 +271,7 @@ public class QuizQuestionServiceTests
         result.Should().BeFalse();
     }
 
+    // Scenario: listing questions by quiz id should return all questions for that quiz
     [Fact]
     public async Task ListByQuiz_ReturnsAllQuestionsForQuiz()
     {

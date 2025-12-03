@@ -89,38 +89,43 @@ export default function AddQuestions() {
 
     setNotice(null);
 
-    // Warn about unsupported question types
-    const unsupported = data.questions.filter(q => q.type !== 'multiple-choice');
-    if (unsupported.length > 0) {
-      setNotice('Note: Only multiple-choice questions are published now. Other types are saved locally for now.');
-      saveDraft();
-    }
-
-    // Filter and prepare multiple-choice questions for backend
-    const mcQuestions = data.questions
-      .map((q, idx) => ({ q, idx }))
-      .filter(({ q }) => q.type === 'multiple-choice') as any[];
-
     try {
-      // Post each question to backend
-      await Promise.all(
-        mcQuestions.map(({ q }) => {
-          const payload = {
-            text: q.text,
-            choices: q.options,
-            correctAnswerIndex: q.correctIndex,
-          };
-          return api.post(`/api/quiz-questions`, {
-            ...payload,
-            quizId: parseInt(quizId)
-          });
-        })
-      );
+      // Send questions SEQUENTIALLY to avoid SQLite lock issues
+      for (const q of data.questions) {
+        const payload: any = {
+          quizId: parseInt(quizId),
+          text: q.text,
+          type: q.type
+        };
 
-      // Clear draft if all questions were published
-      if (unsupported.length === 0) {
-        localStorage.removeItem(DRAFT_KEY);
+        switch (q.type) {
+          case 'multiple-choice':
+            payload.choices = q.options;
+            payload.correctAnswerIndex = q.correctIndex;
+            break;
+          
+          case 'multi-select':
+            payload.choices = q.options;
+            payload.correctAnswerIndexes = q.correctIndexes;
+            break;
+          
+          case 'true-false':
+            payload.correctBool = q.correctBool;
+            break;
+          
+          case 'fill-blank':
+          case 'short':
+          case 'long':
+            payload.correctAnswer = q.answer;
+            break;
+        }
+
+        // Send one at a time (await inside loop)
+        await api.post(`/api/quiz-questions`, payload);
       }
+
+      // Clear draft after successful publish
+      localStorage.removeItem(DRAFT_KEY);
 
       // Navigate to success page
       navigate(`/quiz/${quizId}/published`);

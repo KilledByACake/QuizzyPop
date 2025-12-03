@@ -9,9 +9,10 @@ public static class DBInit
     public static void Seed(IApplicationBuilder app)
     {
         using var serviceScope = app.ApplicationServices.CreateScope();
-        UserDbContext context = serviceScope.ServiceProvider.GetRequiredService<UserDbContext>();
-        
-       
+        var context = serviceScope.ServiceProvider.GetRequiredService<UserDbContext>();
+
+        // Ensure the schema exists before any queries
+        context.Database.EnsureCreated();
 
         if (!context.Users.Any())
         {

@@ -8,7 +8,18 @@ namespace QuizzyPop.Models.Dtos
     public sealed class QuizSubmissionAnswerDto
     {
         public int QuestionId { get; set; }
-        public int SelectedChoiceIndex { get; set; }
+
+        // Multiple-choice
+        public int? SelectedChoiceIndex { get; set; }
+
+        // Multi-select
+        public List<int>? SelectedChoiceIndexes { get; set; }
+
+        // True/False
+        public bool? SelectedBool { get; set; }
+
+        // Fill-blank / Short / Long
+        public string? EnteredAnswer { get; set; }
     }
 
     public sealed class QuizSubmissionResultDto

@@ -178,3 +178,10 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+using (var scope = app.Services.CreateScope())
+{
+    var ctx = scope.ServiceProvider.GetRequiredService<UserDbContext>();
+    ctx.Database.EnsureCreated();
+}
+DBInit.Seed(app);

@@ -1,4 +1,4 @@
-  .taking-quiz-page {
+.taking-quiz-page {
     /* background: var(--qp-blue-soft); */
     min-height: 85vh;
     padding: 3rem 2rem 5rem;
@@ -195,4 +195,34 @@
     height: 100%;
     background: linear-gradient(90deg, var(--qp-primary), var(--qp-primary-light));
     transition: width 0.3s ease-out;
+  }
+
+  /* True/False buttons */
+  .tfRow {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .tfChoice {
+    flex: 1;
+    padding: 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .tfChoice:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .tfChoiceActive {
+    border-color: var(--primary);
+    background: var(--primary);
+    color: white;
   }

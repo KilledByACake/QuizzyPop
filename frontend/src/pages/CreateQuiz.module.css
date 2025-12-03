@@ -1,3 +1,4 @@
+/* === CONTAINER === */
 .container {
   max-width: 800px;
   margin: 0 auto;
@@ -6,6 +7,7 @@
   z-index: 1;
 }
 
+/* === HEADER === */
 .header {
   text-align: center;
   margin-bottom: var(--qp-space-2xl);
@@ -23,6 +25,7 @@
   color: var(--qp-gray-600);
 }
 
+/* === ERROR BANNER === */
 .errorBanner {
   background: #fef2f2;
   border: 2px solid #dc2626;
@@ -33,110 +36,12 @@
   font-weight: 600;
 }
 
+/* === FORM === */
 .form {
   background: var(--qp-white);
   padding: var(--qp-space-2xl);
   border-radius: var(--qp-radius-xl);
   box-shadow: var(--qp-shadow-lg);
-}
-
-.imageUpload {
-  margin: var(--qp-space-xl) 0;
-}
-
-.imageLabel {
-  display: block;
-  font-weight: 700;
-  color: var(--qp-gray-700);
-  margin-bottom: var(--qp-space-sm);
-  font-family: var(--qp-font-main);
-}
-
-.optional {
-  font-weight: 400;
-  color: var(--qp-gray-500);
-  font-size: 0.9rem;
-  margin-left: var(--qp-space-xs);
-}
-
-.imagePreviewContainer {
-  margin-top: var(--qp-space-sm);
-}
-
-.uploadBox {
-  display: block;
-  border: 3px dashed var(--qp-gray-300);
-  border-radius: var(--qp-radius-lg);
-  padding: var(--qp-space-2xl);
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--qp-gray-50);
-}
-
-.uploadBox:hover {
-  border-color: var(--qp-primary);
-  background: var(--qp-primary-light);
-}
-
-.fileInput {
-  display: none;
-}
-
-.uploadContent {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--qp-space-xs);
-}
-
-.uploadIcon {
-  font-size: 3rem;
-}
-
-.uploadText {
-  font-weight: 600;
-  color: var(--qp-gray-700);
-  font-family: var(--qp-font-main);
-}
-
-.uploadHint {
-  font-size: 0.875rem;
-  color: var(--qp-gray-500);
-}
-
-.imagePreview {
-  position: relative;
-  display: inline-block;
-  border-radius: var(--qp-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--qp-shadow-md);
-}
-
-.imagePreview img {
-  display: block;
-  max-width: 100%;
-  max-height: 300px;
-  object-fit: cover;
-}
-
-.removeImage {
-  position: absolute;
-  top: var(--qp-space-sm);
-  right: var(--qp-space-sm);
-  background: rgba(220, 38, 38, 0.9);
-  color: white;
-  border: none;
-  padding: var(--qp-space-xs) var(--qp-space-md);
-  border-radius: var(--qp-radius-md);
-  font-weight: 700;
-  cursor: pointer;
-  font-family: var(--qp-font-main);
-  transition: background 0.2s;
-}
-
-.removeImage:hover {
-  background: rgba(153, 27, 27, 1);
 }
 
 .errorText {
@@ -147,6 +52,7 @@
   font-weight: 600;
 }
 
+/* === ACTIONS === */
 .actions {
   display: flex;
   gap: var(--qp-space-md);
@@ -155,6 +61,8 @@
   padding-top: var(--qp-space-xl);
   border-top: 2px solid var(--qp-gray-200);
 }
+
+/* === RESPONSIVE === */
 
 @media (max-width: 640px) {
   .container {
